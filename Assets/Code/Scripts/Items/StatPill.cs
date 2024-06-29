@@ -25,10 +25,10 @@ namespace Items
         {
             activeStats = user.GetComponent<CharacterStats>();
             changeValue *= activeStats.GetStat(Stat.PillEfficiency);
-            StartCoroutine(LoopStats());
+            StartCoroutine(UpdatingStats());
         }
 
-        public IEnumerator LoopStats()
+        public IEnumerator UpdatingStats()
         {
             activeStats.UpdateStat(stat, changeValue);
             yield return new WaitForSeconds(duration);

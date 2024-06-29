@@ -64,7 +64,6 @@ namespace Combat
             if (target != null)
             {
                 target.TakeDamage(damage);
-                Debug.Log("Hit Enemy and dealt " + damage + " damage. Enemy Life: " + target.CurrentValue);
             }
             Destroy();
         }

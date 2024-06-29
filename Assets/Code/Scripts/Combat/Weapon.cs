@@ -45,7 +45,7 @@ namespace Combat
 
         private void FixedUpdate()
         {
-            if (timer > spawnDelayTime)
+            if (timer > spawnDelayTime && enemyFinder.EnemyInRange())
             {
                 FireProjectile();
                 timer = 0;
@@ -82,14 +82,12 @@ namespace Combat
             if(stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
             if(stat == Stat.BaseDamage)
             {
-                Debug.Log($"Updated BaseDamage from {damage} to {newValue}");
                 damage = newValue;
                 totalDamage = damage * percentDamage;
             }
 
             if(stat == Stat.PercentDamage)
             {
-                 Debug.Log($"Updated PercentDamage from {damage} to {newValue}");
                 percentDamage = newValue;
                 totalDamage = damage * percentDamage;
             }

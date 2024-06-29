@@ -38,11 +38,11 @@ namespace Controller
         }
 
         //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
-        public void Initialize(BaseStats baseStats, List<Item> loot)
+        public void Initialize(Dictionary<Stat, float> baseStats, List<Item> loot)
         {
             FindPlayerTarget();
 
-            stats.SetNewStatData(baseStats);
+            stats.Initialize(baseStats);
 
             health.Initialize(stats, HandleDeath);
             mover.Initialize(stats);
@@ -67,12 +67,13 @@ namespace Controller
             target = player.transform;
         }
 
-        private void HandleDeath()
+        private void HandleDeath(GameObject self)
         {
             //Todo: disable unused components
             stats.Clear();
             DropLoot();
             onDestroy(this);
+            health.onDeath = null;
         }
 
         private void SwitchAction(Action currentAction, Action newAction)
@@ -83,16 +84,23 @@ namespace Controller
 
         private void DropLoot()
         {
-            Item item = loot[Random.Range(0, loot.Count)];
-            GameObject pickup = new GameObject("ItemPickup");
-            Pickup pickupRef = pickup.AddComponent<Pickup>();
-            SphereCollider collider = pickup.AddComponent<SphereCollider>();
-            pickup.layer = LayerMask.NameToLayer("EnemyProjectile");
+            float dropChance = 0.05f; 
+            float randomFloat = Random.Range(0f,1f);
+            Debug.Log(randomFloat);
 
-            pickup.transform.position = transform.position;
-            pickupRef.Generate(item);
-            collider.radius = pickupRef.collectRadius;
-            collider.isTrigger = true;
+            if (randomFloat <= dropChance)
+            {   
+                Item item = loot[Random.Range(0, loot.Count)];
+                GameObject pickup = new GameObject("ItemPickup");
+                Pickup pickupRef = pickup.AddComponent<Pickup>();
+                SphereCollider collider = pickup.AddComponent<SphereCollider>();
+                pickup.layer = LayerMask.NameToLayer("EnemyProjectile");
+
+                pickup.transform.position = transform.position;
+                pickupRef.Generate(item);
+                collider.radius = pickupRef.collectRadius;
+                collider.isTrigger = true;
+            }
         }
     }
 }

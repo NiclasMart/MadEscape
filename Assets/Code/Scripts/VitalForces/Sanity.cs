@@ -62,7 +62,6 @@ namespace VitalForces
         private void UpdateSanityStat(Stat stat, float newValue)
         {   
             if(stat != Stat.Sanity) return;
-            Debug.Log($"Updated BaseDamage from {sanity} to {newValue}");
             sanity = newValue;
             UpdateDisplay(sanity);
         }

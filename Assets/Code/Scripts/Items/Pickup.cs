@@ -41,9 +41,9 @@ namespace Items
         private void CollectItem(PlayerController player)
         {
             if (!itemRef.CollectConditionIsFullfilled(player.gameObject)) return;
-
-            player.Inventory.Add(itemRef);
-            Destroy(gameObject);
+            
+            bool itemWasConsumed = player.Inventory.Add(itemRef);
+            if (itemWasConsumed) Destroy(gameObject);
         }
     }
 }

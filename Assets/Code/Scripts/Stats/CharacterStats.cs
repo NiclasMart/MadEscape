@@ -7,9 +7,7 @@
 // -------------------------------------------*/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using UnityEngine;
 
 namespace Stats
@@ -35,20 +33,23 @@ namespace Stats
 
     public class CharacterStats : MonoBehaviour
     {
-        [SerializeField] BaseStats baseStatValues;
         private Dictionary<Stat, float> activeStats = new Dictionary<Stat, float>();
 
         public Action<Stat, float> onStatsChanged;
 
-        private void Awake()
+        public void Initialize(Dictionary<Stat, float> baseStatDict)
         {
-            ReadInBaseStats();
+            SetNewStatData(baseStatDict);
         }
 
-        public void SetNewStatData(BaseStats newStats)
+        public void SetNewStatData(Dictionary<Stat, float> newStats)
         {
-            baseStatValues = newStats;
-            ReadInBaseStats();
+            activeStats = new Dictionary<Stat, float>(newStats);
+
+            foreach (KeyValuePair<Stat, float> stat in activeStats)
+            {
+                onStatsChanged?.Invoke(stat.Key, stat.Value);
+            }
         }
 
         public bool StatIsAvailable(Stat stat)
@@ -65,12 +66,12 @@ namespace Stats
             }
             else
             {
-                Debug.LogWarning($"The stat {stat} on {gameObject.name}is used, but not set.");
+                Debug.LogWarning($"The stat {stat} on {gameObject.name} is used, but not set.");
                 return 0;
             }
         }
 
-        public void UpdateStat (Stat stat, float changeMultiplier)
+        public void UpdateStat(Stat stat, float changeMultiplier)
         {
             if (StatIsAvailable(stat))
             {
@@ -86,30 +87,6 @@ namespace Stats
         public void Clear()
         {
             activeStats.Clear();
-        }
-
-        void AddStatValue(Stat stat, float value)
-        {
-            if (StatIsAvailable(stat))
-            {
-                activeStats[stat] += value;
-            }
-            else
-            {
-                activeStats.Add(stat, value);
-            }
-        }
-
-        void ReadInBaseStats()
-        {
-            if (baseStatValues == null)
-                return;
-
-            foreach (StatInputData statInput in baseStatValues.inputStats)
-            {
-                AddStatValue(statInput.stat, statInput.value);
-                Debug.Log($"Added the stat {statInput.stat} with the value {statInput.value} to {gameObject.name}");
-            }
         }
     }
 }

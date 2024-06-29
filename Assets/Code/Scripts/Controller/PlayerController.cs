@@ -46,6 +46,7 @@ namespace Controller
 
         private void Start()
         {
+            stats.Initialize(LoadStats.LoadPlayerStats()[0].statDict);
             mover.Initialize(stats);
             health.Initialize(stats, HandleDeath);
             enemyFinder.Initialize(stats);
@@ -54,9 +55,16 @@ namespace Controller
             inventory.Initialize(gameObject);
         }
 
-        private void HandleDeath()
+        private void HandleDeath(GameObject self)
         {
             onDeath();
+        }
+
+        //this is just for reference to see how it could be done later
+        public void SwitchPlayer(int playerId)
+        {
+            StatRecord playerData = LoadStats.LoadPlayerStats()[playerId];
+            stats.SetNewStatData(playerData.statDict);
         }
     }
 }

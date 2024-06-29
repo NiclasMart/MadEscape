@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Stats;
 using UnityEngine;
+using VitalForces;
 
 namespace Combat
 {
@@ -48,10 +49,16 @@ namespace Combat
             return closestEnemy;
         }
 
+        public bool EnemyInRange()
+        {
+            return enemies.Count != 0;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
+                other.gameObject.GetComponent<Health>().onDeath += RemoveEnemyFromList;
                 enemies.Add(other.gameObject);
             }
         }
@@ -60,13 +67,19 @@ namespace Combat
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
+                other.gameObject.GetComponent<Health>().onDeath -= RemoveEnemyFromList;
                 enemies.Remove(other.gameObject);
             }
         }
+
+        private void RemoveEnemyFromList(GameObject enemy)
+        {
+            enemies.Remove(enemy);
+        }
+
         private void UpdateAttackRange(Stat stat, float newValue)
         {
             if (stat != Stat.AttackRange) return;
-            Debug.Log($"Updated Attack range from {detectionArea.radius} to {newValue}");
             detectionArea.radius = newValue;
         }
     }

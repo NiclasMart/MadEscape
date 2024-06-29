@@ -1,38 +1,36 @@
 // /*-------------------------------------------
 // ---------------------------------------------
-// Creation Date: 17.06.23
+// Creation Date: 25.11.23
 // Author: salcintram07@web.de
 // Origin Project: MadEscape
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EnemyActions
+namespace Items
 {
-    public class Action : MonoBehaviour
+    public class ItemSlot
     {
-        internal bool active = false;
+        Item item = null;
+        public bool hasItem => item != null;
 
-        public bool isActive
+        public ItemSlot(Item item)
         {
-            get { return active; }
+            this.item = item;
         }
 
-        public virtual void Initialize(CharacterStats stats)
-        { }
-
-        public void Activate()
+        public Item GetItem()
         {
-            active = true;
+            return item;
         }
 
-        public void Deactivate()
+        public void UseItem(GameObject user)
         {
-            active = false;
+            if (!hasItem) return;
+            item.Use(user);
         }
     }
 }

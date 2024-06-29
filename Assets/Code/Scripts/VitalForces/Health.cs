@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Stats;
+using UI;
 using UnityEngine;
 
 namespace VitalForces
@@ -21,11 +22,11 @@ namespace VitalForces
         private float life;
         public bool isAlive => CurrentValue > 0;
 
-        public Action onDeath;
+        public Action<GameObject> onDeath;
         private float timer = 0f;
 
-        public void Initialize(CharacterStats stats, Action onDeath)
-        {
+        public void Initialize(CharacterStats stats, Action<GameObject> onDeath)
+        {   
             life = stats.GetStat(Stat.Life);
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             stats.onStatsChanged += UpdateHealthStat;
@@ -47,7 +48,7 @@ namespace VitalForces
         public bool TakeDamage(float amount)
         {
             Change(-amount);
-            if (!isAlive) onDeath();
+            if (!isAlive) onDeath(gameObject);
 
             return !isAlive;
         }
@@ -60,7 +61,6 @@ namespace VitalForces
         public void UpdateHealthStat(Stat stat, float newValue)
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen) return;
-            Debug.Log($"Updated MaxHealth from {life} to {newValue}");
 
             if (stat == Stat.Life) life = newValue; UpdateDisplay(life);
             if (stat == Stat.LifeRegen) lifeRegen = newValue;

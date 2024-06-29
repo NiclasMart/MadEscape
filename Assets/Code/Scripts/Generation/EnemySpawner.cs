@@ -7,24 +7,22 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Core;
-using Data;
 using Controller;
-using UnityEngine.AI;
 using Items;
+using Stats;
 
 namespace Generation
 {
     [RequireComponent(typeof(ObjectPool))]
     public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private List<EnemyData> enemyInfo = new List<EnemyData>();
-        [SerializeField] private List<Item> lootTable = new List<Item>();
+        [SerializeField] private List<Item> lootTable = new();
         [SerializeField] private float spawnInterval = 3f;
 
+        private List<StatRecord> enemyInfo = new();
         private float timer = 0;
 
         private ObjectPool enemyPool;
@@ -32,6 +30,7 @@ namespace Generation
         private void Awake()
         {
             enemyPool = GetComponent<ObjectPool>();
+            enemyInfo = LoadStats.LoadEnemyStats();
         }
 
         private void FixedUpdate()
@@ -59,12 +58,12 @@ namespace Generation
         private void SetUpEnemy(GameObject enemy)
         {
             EnemyController enemyController = enemy.GetComponent<EnemyController>();
-            EnemyData type = GetRandomEnemyType();
-            enemyController.Initialize(type.stats, lootTable);
-            enemy.gameObject.name = type.typeName;
+            StatRecord type = GetRandomEnemyType();
+            enemy.gameObject.name = type.name;
+            enemyController.Initialize(type.statDict, lootTable);
         }
 
-        private EnemyData GetRandomEnemyType()
+        private StatRecord GetRandomEnemyType()
         {
             return enemyInfo[Random.Range(0, enemyInfo.Count)];
         }

@@ -56,7 +56,6 @@ namespace Movement
         private void UpdateMovementspeed(Stat stat, float newValue)
         {
             if (stat != Stat.MovementSpeed) return;
-            Debug.Log($"Updated movementspeed from {movementSpeed} to {newValue}");
             movementSpeed = newValue;
         }
     }

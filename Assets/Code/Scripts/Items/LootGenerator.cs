@@ -22,6 +22,7 @@ namespace Items
             Item item = lootTable[0];
             Pickup pickup = Instantiate(pickupPrefab, transform.position, Quaternion.identity);
             pickup.Generate(item);
+            
         }
     }
 }

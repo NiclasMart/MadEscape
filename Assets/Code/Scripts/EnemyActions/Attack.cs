@@ -7,7 +7,6 @@
 // -------------------------------------------*/
 
 using Controller;
-using Data;
 using VitalForces;
 using Stats;
 using UnityEngine;
@@ -54,7 +53,6 @@ namespace EnemyActions
                     //TODO: maybe we can add a function to get the health directly via the player controller, so we only need one GetComponent call
                     Health targetHealth = target.GetComponent<Health>();
                     targetHealth.TakeDamage(attackDamage);
-                    Debug.Log("Hit Player and dealt " + attackDamage + " damage. Player Life: " + targetHealth.CurrentValue);
                     nextAttackTime = Time.time + attackInterval;
                     attacked = true;
                 }
