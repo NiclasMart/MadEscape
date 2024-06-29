@@ -1,0 +1,29 @@
+// /*-------------------------------------------
+// ---------------------------------------------
+// Creation Date: #CREATIONDATE#
+// Author: #DEVELOPER#
+// Origin Project: #PROJECTNAME#
+// ---------------------------------------------
+// -------------------------------------------*/
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+    #ROOTNAMESPACEBEGIN#
+namespace #NAMESPACE#
+{
+    public class #SCRIPTNAME# : MonoBehaviour
+    {
+        void Start()
+        {
+            #NOTRIM#
+        }
+
+        void Update()
+        {
+            #NOTRIM#
+        }
+    }
+}
+#ROOTNAMESPACEEND#

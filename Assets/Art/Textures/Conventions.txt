@@ -1,0 +1,4 @@
+Diffuse		name_DIF
+Normal		name_NRM
+Metallic	name_MET
+Roughness	name_ROG
