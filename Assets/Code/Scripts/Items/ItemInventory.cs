@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 
 namespace Items
 {
+    //this is a test
     public class ItemInventory : MonoBehaviour
     {
         [SerializeField] Queue<ItemSlot> slots = new();
@@ -48,7 +49,7 @@ namespace Items
         }
 
         public void UseItem(InputAction.CallbackContext context)
-        {
+        {   //test 2
             if (context.phase != InputActionPhase.Started || slots.Count < 1) return;
 
             ItemSlot activatedSlot = slots.Dequeue();
