@@ -467,7 +467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273425084882371535, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
       propertyPath: lootTable.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7273425084882371535, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
       propertyPath: enemyInfo.Array.data[0]
@@ -488,7 +488,7 @@ PrefabInstance:
     - target: {fileID: 7273425084882371535, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
       propertyPath: lootTable.Array.data[2]
       value: 
-      objectReference: {fileID: 6678040134146156270, guid: 2abf5905edb6d68439156f3f3436de83, type: 3}
+      objectReference: {fileID: 6678040134146156270, guid: c3081cd8cf04c504abe826d04c3ac7cb, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
