@@ -48,7 +48,7 @@ namespace Items
             {
                 ItemSlot newSlot = new ItemSlot(newItem);
                 slots.Enqueue(newSlot);
-                if (display != null) display.AddItem(newSlot, slots.Count - 1);
+                if (display != null) display.AddItem(newSlot);
                 Debug.Log($"Item {newItem.name} was stored in inventory.");
             }
             return true;
@@ -60,7 +60,7 @@ namespace Items
 
             ItemSlot activatedSlot = slots.Dequeue();
             activatedSlot.UseItem(owner);
-            if (display != null) display.RemoveItem(activatedSlot);
+            if (display != null) display.RemoveItem();
         }
     }
 }

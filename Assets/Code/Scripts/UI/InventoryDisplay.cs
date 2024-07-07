@@ -18,6 +18,7 @@ namespace UI
     public class InventoryDisplay : MonoBehaviour
     {
         List<Image> slots = new List<Image>();
+        int itemAmount = 0;
 
         private void Awake()
         {
@@ -31,24 +32,37 @@ namespace UI
 
         public void AddItems(List<ItemSlot> items)
         {
+            itemAmount = items.Count;
             for (int i = 0; i < items.Count; i++)
             {
-                //TODO: assign image
                 slots[i].gameObject.SetActive(true);
                 slots[i].color = items[i].GetItem().debugColor;
             }
         }
 
-        public void AddItem(ItemSlot item, int position)
+        public void AddItem(ItemSlot item)
         {
-            Debug.Log("Add item " + item.GetItem().name);
-            slots[position].gameObject.SetActive(true);
-            slots[position].color = item.GetItem().debugColor;
+            slots[itemAmount].gameObject.SetActive(true);
+            slots[itemAmount].color = item.GetItem().debugColor;
+            itemAmount++;
         }
 
-        public void RemoveItem(ItemSlot item)
+        public void RemoveItem()
         {
-            //reorder items in display
+            if (itemAmount <= 1) slots[0].gameObject.SetActive(false);
+            for (int i = 0; i < itemAmount; i++)
+            {
+                int nextIndex = i + 1;
+                slots[i].color = slots[nextIndex].color;
+
+                //if next item is the last one, disable display for it and exit
+                if (nextIndex == itemAmount - 1) 
+                {
+                    slots[nextIndex].gameObject.SetActive(false);
+                    itemAmount--;
+                    break;
+                }
+            }
         }
     }
 }
