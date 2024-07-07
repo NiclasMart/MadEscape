@@ -16,6 +16,7 @@ namespace Items
     {
         [SerializeField] new string name;
         [SerializeField] bool instantUse;
+        public Color debugColor;
         public bool isUsedInstantly => instantUse;
         //icon
 
