@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 public class CSVReader
 {
@@ -18,6 +19,8 @@ public class CSVReader
 
     public static List<Dictionary<string, object>> Read(string file)
     {
+        CultureInfo.CurrentCulture = new CultureInfo("de-DE");
+
         var list = new List<Dictionary<string, object>>();
         TextAsset data = Resources.Load<TextAsset>(file);
 
