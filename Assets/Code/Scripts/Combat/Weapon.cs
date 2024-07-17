@@ -25,7 +25,6 @@ namespace Combat
 
         private float damage;
         private float percentDamage;
-        private float totalDamage;
         private float spawnDelayTime;
         private float timer = 0;
 
@@ -37,9 +36,9 @@ namespace Combat
         public void Initialize(CharacterStats stats)
         {   
             stats.onStatsChanged += UpdateDamage;
+            stats.onStatsChanged += UpdateAttackSpeed;
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
-            totalDamage = damage * percentDamage;
             spawnDelayTime = 1f / stats.GetStat(Stat.AttackSpeed);
         }
 
@@ -68,6 +67,7 @@ namespace Combat
         {
             Projectile projectile = projectilePool.GetObject().GetComponent<Projectile>();
             projectile.transform.position = projectileSpawnPoint.position;
+            float totalDamage = damage * percentDamage;
             projectile.Fire(projectileSpawnPoint.transform.forward, totalDamage);
         }
 
@@ -80,18 +80,16 @@ namespace Combat
         private void UpdateDamage(Stat stat, float newValue)
         {   
             if(stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
-            if(stat == Stat.BaseDamage)
-            {
-                damage = newValue;
-                totalDamage = damage * percentDamage;
-            }
+            if(stat == Stat.BaseDamage) damage = newValue;
+            if(stat == Stat.PercentDamage) percentDamage = newValue;            
+        }
 
-            if(stat == Stat.PercentDamage)
+        private void UpdateAttackSpeed(Stat stat, float newValue)
+        {
+            if(stat != Stat.AttackSpeed) return;
             {
-                percentDamage = newValue;
-                totalDamage = damage * percentDamage;
+                spawnDelayTime = 1f / newValue;
             }
-            
         }
         
     }
