@@ -62,7 +62,11 @@ namespace VitalForces
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen) return;
 
-            if (stat == Stat.Life) life = newValue; UpdateDisplay(life);
+            if (stat == Stat.Life) 
+            {
+                life = newValue;
+                UpdateDisplay(life);
+            }
             if (stat == Stat.LifeRegen) lifeRegen = newValue;
 
         }
