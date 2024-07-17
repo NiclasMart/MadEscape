@@ -37,6 +37,7 @@ namespace Combat
         public void Initialize(CharacterStats stats)
         {   
             stats.onStatsChanged += UpdateDamage;
+            stats.onStatsChanged += UpdateAttackSpeed;
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
             totalDamage = damage * percentDamage;
@@ -92,6 +93,14 @@ namespace Combat
                 totalDamage = damage * percentDamage;
             }
             
+        }
+
+        private void UpdateAttackSpeed(Stat stat, float newValue)
+        {
+            if(stat != Stat.AttackSpeed) return;
+            {
+                spawnDelayTime = 1f / newValue;
+            }
         }
         
     }
