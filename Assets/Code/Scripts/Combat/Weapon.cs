@@ -9,37 +9,37 @@
 using Core;
 using Stats;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Combat
 {
     public class Weapon : MonoBehaviour
     {
         [SerializeField] private EnemyFinder enemyFinder;
-        [SerializeField] private Transform projectileSpawnPoint;
+        [SerializeField] private ParticleSystem bullets;
         [SerializeField] private Transform playerWeaponHolder;
 
+        //stat values   
         private float damage;
         private float percentDamage;
         private float spawnDelayTime;
-        private float timer = 0;
 
-        private void Awake()
-        {
-            //TODO: initialize Particle System
-        }
+        //particle system modules
+        private ParticleSystem.EmissionModule emissionModule;
 
         public void Initialize(CharacterStats stats)
         {
+            //get particle modules
+            emissionModule = bullets.emission;
+
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
+
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
-            spawnDelayTime = 1f / stats.GetStat(Stat.AttackSpeed);
-        }
+            emissionModule.rateOverTime = 1f / stats.GetStat(Stat.AttackSpeed);
 
-        private void FixedUpdate()
-        {
-
+            SetFiringActiveState(true);
         }
 
         private void Update()
@@ -54,12 +54,14 @@ namespace Combat
             RotateTo(lookTargetPosition);
         }
 
-        private void FireProjectile()
+        public float CalculateDamage(/*TODE: calculate with armor and resi*/)
         {
-            // Projectile projectile = projectilePool.GetObject().GetComponent<Projectile>();
-            // projectile.transform.position = projectileSpawnPoint.position;
-            // float totalDamage = damage * percentDamage;
-            // projectile.Fire(projectileSpawnPoint.transform.forward, totalDamage);
+            return damage * percentDamage;
+        }
+
+        public void SetFiringActiveState(bool active)
+        {
+            emissionModule.enabled = active;
         }
 
         public void RotateTo(Vector3 position)
@@ -82,6 +84,5 @@ namespace Combat
                 spawnDelayTime = 1f / newValue;
             }
         }
-
     }
 }
