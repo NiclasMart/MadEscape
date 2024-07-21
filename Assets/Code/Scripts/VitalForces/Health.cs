@@ -45,13 +45,10 @@ namespace VitalForces
             timer += Time.fixedDeltaTime;
         }
 
-        //returns if damage is lethal
-        public bool TakeDamage(float amount)
+        public void TakeDamage(float amount)
         {
             Change(-amount);
             if (!isAlive) onDeath(gameObject);
-
-            return !isAlive;
         }
 
         public void RegenerateHealth(float regenAmount)
@@ -69,8 +66,8 @@ namespace VitalForces
                 UpdateDisplay(life);
             }
             if (stat == Stat.LifeRegen) lifeRegen = newValue;
-
         }
+
         private void OnParticleCollision(GameObject other) {
             Weapon weapon = other.transform.parent.GetComponent<Weapon>();
             if (weapon != null)
@@ -79,6 +76,5 @@ namespace VitalForces
                 TakeDamage(damage);
             }
         }
-
     }
 }

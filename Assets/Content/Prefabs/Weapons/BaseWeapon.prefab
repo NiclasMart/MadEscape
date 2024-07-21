@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6838025939900518952}
   - component: {fileID: 2974979338542094506}
   - component: {fileID: 2990071545393318309}
-  - component: {fileID: 4604984056942776}
   - component: {fileID: 6271949980969432842}
   m_Layer: 6
   m_Name: BaseWeapon
@@ -86,21 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4604984056942776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4687268025117751084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7658fb67b1cede4f857c99cda58c5f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialCapacity: 10
-  poolType: {fileID: 8657553794476631734, guid: 9a0bd2fbc5c8c9740a33b49be16fe956, type: 3}
-  poolHolder: {fileID: 0}
 --- !u!114 &6271949980969432842
 MonoBehaviour:
   m_ObjectHideFlags: 0
