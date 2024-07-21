@@ -8,20 +8,15 @@
 
 using Core;
 using Stats;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat
 {
-    [RequireComponent(typeof(ObjectPool))]
     public class Weapon : MonoBehaviour
     {
         [SerializeField] private EnemyFinder enemyFinder;
         [SerializeField] private Transform projectileSpawnPoint;
         [SerializeField] private Transform playerWeaponHolder;
-
-        private ObjectPool projectilePool;
 
         private float damage;
         private float percentDamage;
@@ -30,11 +25,11 @@ namespace Combat
 
         private void Awake()
         {
-            projectilePool = GetComponent<ObjectPool>();
+            //TODO: initialize Particle System
         }
 
         public void Initialize(CharacterStats stats)
-        {   
+        {
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
             percentDamage = stats.GetStat(Stat.PercentDamage);
@@ -44,16 +39,12 @@ namespace Combat
 
         private void FixedUpdate()
         {
-            if (timer > spawnDelayTime && enemyFinder.EnemyInRange())
-            {
-                FireProjectile();
-                timer = 0;
-            }
-            timer += Time.fixedDeltaTime;
+
         }
 
         private void Update()
         {
+            //handle weapon rotaiton
             Vector3 lookTargetPosition = transform.position + transform.forward;
             GameObject closestEnemy = enemyFinder.GetClosestEnemy();
             if (closestEnemy != null)
@@ -65,10 +56,10 @@ namespace Combat
 
         private void FireProjectile()
         {
-            Projectile projectile = projectilePool.GetObject().GetComponent<Projectile>();
-            projectile.transform.position = projectileSpawnPoint.position;
-            float totalDamage = damage * percentDamage;
-            projectile.Fire(projectileSpawnPoint.transform.forward, totalDamage);
+            // Projectile projectile = projectilePool.GetObject().GetComponent<Projectile>();
+            // projectile.transform.position = projectileSpawnPoint.position;
+            // float totalDamage = damage * percentDamage;
+            // projectile.Fire(projectileSpawnPoint.transform.forward, totalDamage);
         }
 
         public void RotateTo(Vector3 position)
@@ -78,19 +69,19 @@ namespace Combat
         }
 
         private void UpdateDamage(Stat stat, float newValue)
-        {   
-            if(stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
-            if(stat == Stat.BaseDamage) damage = newValue;
-            if(stat == Stat.PercentDamage) percentDamage = newValue;            
+        {
+            if (stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
+            if (stat == Stat.BaseDamage) damage = newValue;
+            if (stat == Stat.PercentDamage) percentDamage = newValue;
         }
 
         private void UpdateAttackSpeed(Stat stat, float newValue)
         {
-            if(stat != Stat.AttackSpeed) return;
+            if (stat != Stat.AttackSpeed) return;
             {
                 spawnDelayTime = 1f / newValue;
             }
         }
-        
+
     }
 }
