@@ -6,7 +6,6 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Movement;
@@ -18,14 +17,12 @@ using Items;
 
 namespace Controller
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : BaseController
     {
         [SerializeField] private int playerID = 0;
         [SerializeField] private Weapon weapon;
-        private CharacterStats stats;
 
         private PlayerMover mover;
-        private Health health;
         private EnemyFinder enemyFinder;
 
         private ItemInventory inventory;
@@ -34,12 +31,10 @@ namespace Controller
         public Action onDeath;
         private Sanity sanity;
 
-        private void Awake()
+        protected override void Awake()
         {
-            stats = GetComponent<CharacterStats>();
-
+            base.Awake();
             mover = GetComponent<PlayerMover>();
-            health = GetComponent<Health>();
             enemyFinder = GetComponentInChildren<EnemyFinder>();
             sanity = GetComponent<Sanity>();
             inventory = GetComponentInChildren<ItemInventory>();
@@ -49,24 +44,27 @@ namespace Controller
         {
             //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
             List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
-            if (loadedStatData.Count - 1 < playerID){
-                stats.Initialize(loadedStatData[0].statDict);
+            Dictionary<Stat, float> baseStats;
+            if (loadedStatData.Count - 1 < playerID)
+            {
+                baseStats = loadedStatData[0].statDict;
                 Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
-            } 
-            else {
-                stats.Initialize(loadedStatData[playerID].statDict);
             }
-            
+            else
+            {
+                baseStats = loadedStatData[playerID].statDict;
+            }
+
+            base.Initialize(baseStats);
 
             mover.Initialize(stats);
-            health.Initialize(stats, HandleDeath);
             enemyFinder.Initialize(stats);
             sanity.Initialize(stats); //TODO: connect SanityDecSpeed
             weapon.Initialize(stats);
             inventory.Initialize(gameObject);
         }
 
-        private void HandleDeath(GameObject self)
+        protected override void HandleDeath(GameObject self)
         {
             onDeath();
         }
