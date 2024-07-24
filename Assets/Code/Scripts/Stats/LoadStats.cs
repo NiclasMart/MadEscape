@@ -49,16 +49,6 @@ namespace Stats
                 statRecordList.Add(MergeStatRecord(id, name, statDict));
             }
             return statRecordList;
-            // //TODO: remove Debug logging
-            // for (var i = 0; i < statRecordList.Count; i++)
-            // {
-            //     string debugString = "Database for " + statRecordList[i].name + ":\n";
-            //     foreach (KeyValuePair<Stat, float> kvp in statRecordList[i].statDict)
-            //     {
-            //         debugString += "Key = " + kvp.Key + ", Value = " + kvp.Value + "\n";
-            //     }
-            //     Debug.Log(debugString);
-            // }
         }
 
         private static Dictionary<Stat, float> ConvertDictionary(Dictionary<string, object> dict)

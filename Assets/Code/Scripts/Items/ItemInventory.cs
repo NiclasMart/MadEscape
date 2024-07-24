@@ -49,7 +49,6 @@ namespace Items
                 ItemSlot newSlot = new ItemSlot(newItem);
                 slots.Enqueue(newSlot);
                 if (display != null) display.AddItem(newSlot);
-                Debug.Log($"Item {newItem.name} was stored in inventory.");
             }
             return true;
         }

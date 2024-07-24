@@ -20,6 +20,7 @@ namespace Controller
 {
     public class PlayerController : MonoBehaviour
     {
+        [SerializeField] private int playerID = 0;
         [SerializeField] private Weapon weapon;
         private CharacterStats stats;
 
@@ -46,7 +47,17 @@ namespace Controller
 
         private void Start()
         {
-            stats.Initialize(LoadStats.LoadPlayerStats()[0].statDict);
+            //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
+            List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
+            if (loadedStatData.Count - 1 < playerID){
+                stats.Initialize(loadedStatData[0].statDict);
+                Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
+            } 
+            else {
+                stats.Initialize(loadedStatData[playerID].statDict);
+            }
+            
+
             mover.Initialize(stats);
             health.Initialize(stats, HandleDeath);
             enemyFinder.Initialize(stats);
