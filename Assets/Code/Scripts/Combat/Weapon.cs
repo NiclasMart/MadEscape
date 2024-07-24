@@ -8,52 +8,43 @@
 
 using Core;
 using Stats;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Combat
 {
-    [RequireComponent(typeof(ObjectPool))]
     public class Weapon : MonoBehaviour
     {
         [SerializeField] private EnemyFinder enemyFinder;
-        [SerializeField] private Transform projectileSpawnPoint;
+        [SerializeField] private ParticleSystem bullets;
         [SerializeField] private Transform playerWeaponHolder;
 
-        private ObjectPool projectilePool;
-
+        //stat values   
         private float damage;
         private float percentDamage;
         private float spawnDelayTime;
-        private float timer = 0;
 
-        private void Awake()
-        {
-            projectilePool = GetComponent<ObjectPool>();
-        }
+        //particle system modules
+        private ParticleSystem.EmissionModule emissionModule;
 
         public void Initialize(CharacterStats stats)
-        {   
+        {
+            //get particle modules
+            emissionModule = bullets.emission;
+
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
+
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
-            spawnDelayTime = 1f / stats.GetStat(Stat.AttackSpeed);
-        }
+            emissionModule.rateOverTime = 1f / stats.GetStat(Stat.AttackSpeed);
 
-        private void FixedUpdate()
-        {
-            if (timer > spawnDelayTime && enemyFinder.EnemyInRange())
-            {
-                FireProjectile();
-                timer = 0;
-            }
-            timer += Time.fixedDeltaTime;
+            SetFiringActiveState(true);
         }
 
         private void Update()
         {
+            //handle weapon rotaiton
             Vector3 lookTargetPosition = transform.position + transform.forward;
             GameObject closestEnemy = enemyFinder.GetClosestEnemy();
             if (closestEnemy != null)
@@ -63,12 +54,14 @@ namespace Combat
             RotateTo(lookTargetPosition);
         }
 
-        private void FireProjectile()
+        public float CalculateDamage(/*TODE: calculate with armor and resi*/)
         {
-            Projectile projectile = projectilePool.GetObject().GetComponent<Projectile>();
-            projectile.transform.position = projectileSpawnPoint.position;
-            float totalDamage = damage * percentDamage;
-            projectile.Fire(projectileSpawnPoint.transform.forward, totalDamage);
+            return damage * percentDamage;
+        }
+
+        public void SetFiringActiveState(bool active)
+        {
+            emissionModule.enabled = active;
         }
 
         public void RotateTo(Vector3 position)
@@ -78,19 +71,18 @@ namespace Combat
         }
 
         private void UpdateDamage(Stat stat, float newValue)
-        {   
-            if(stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
-            if(stat == Stat.BaseDamage) damage = newValue;
-            if(stat == Stat.PercentDamage) percentDamage = newValue;            
+        {
+            if (stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
+            if (stat == Stat.BaseDamage) damage = newValue;
+            if (stat == Stat.PercentDamage) percentDamage = newValue;
         }
 
         private void UpdateAttackSpeed(Stat stat, float newValue)
         {
-            if(stat != Stat.AttackSpeed) return;
+            if (stat != Stat.AttackSpeed) return;
             {
                 spawnDelayTime = 1f / newValue;
             }
         }
-        
     }
 }

@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Combat;
 using Stats;
 using UI;
 using UnityEngine;
@@ -44,13 +45,10 @@ namespace VitalForces
             timer += Time.fixedDeltaTime;
         }
 
-        //returns if damage is lethal
-        public bool TakeDamage(float amount)
+        public void TakeDamage(float amount)
         {
             Change(-amount);
             if (!isAlive) onDeath(gameObject);
-
-            return !isAlive;
         }
 
         public void RegenerateHealth(float regenAmount)
@@ -68,7 +66,15 @@ namespace VitalForces
                 UpdateDisplay(life);
             }
             if (stat == Stat.LifeRegen) lifeRegen = newValue;
+        }
 
+        private void OnParticleCollision(GameObject other) {
+            Weapon weapon = other.transform.parent.GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                float damage = weapon.CalculateDamage();
+                TakeDamage(damage);
+            }
         }
     }
 }
