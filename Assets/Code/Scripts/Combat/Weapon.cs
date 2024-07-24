@@ -6,6 +6,7 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using Controller;
 using Core;
 using Stats;
 using UnityEngine;
@@ -15,9 +16,8 @@ namespace Combat
 {
     public class Weapon : MonoBehaviour
     {
-        [SerializeField] private EnemyFinder enemyFinder;
         [SerializeField] private ParticleSystem bullets;
-        [SerializeField] private Transform playerWeaponHolder;
+        [SerializeField] private Transform weaponHolder;
 
         //stat values   
         private float damage;
@@ -26,12 +26,15 @@ namespace Combat
 
         //particle system modules
         private ParticleSystem.EmissionModule emissionModule;
+        private EnemyFinder enemyFinder;
 
-        public void Initialize(CharacterStats stats)
+        public void Initialize(BaseController owner, CharacterStats stats)
         {
-            //get particle modules
             emissionModule = bullets.emission;
+            enemyFinder = owner.gameObject.GetComponentInChildren<EnemyFinder>();
 
+            weaponHolder = transform.parent;
+            
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
 
@@ -44,7 +47,7 @@ namespace Combat
 
         private void Update()
         {
-            //handle weapon rotaiton
+            //handle weapon rotation
             Vector3 lookTargetPosition = transform.position + transform.forward;
             GameObject closestEnemy = enemyFinder.GetClosestEnemy();
             if (closestEnemy != null)
@@ -66,8 +69,8 @@ namespace Combat
 
         public void RotateTo(Vector3 position)
         {
-            Vector3 targetPosition = new Vector3(position.x, playerWeaponHolder.transform.position.y, position.z);
-            playerWeaponHolder.transform.LookAt(targetPosition);
+            Vector3 targetPosition = new Vector3(position.x, weaponHolder.transform.position.y, position.z);
+            weaponHolder.transform.LookAt(targetPosition);
         }
 
         private void UpdateDamage(Stat stat, float newValue)

@@ -20,7 +20,7 @@ namespace Controller
     public class PlayerController : BaseController
     {
         [SerializeField] private int playerID = 0;
-        [SerializeField] private Weapon weapon;
+        [SerializeField] private Weapon startWeapon; //TODO: should be later selected ingame
 
         private PlayerMover mover;
         private EnemyFinder enemyFinder;
@@ -60,8 +60,19 @@ namespace Controller
             mover.Initialize(stats);
             enemyFinder.Initialize(stats);
             sanity.Initialize(stats); //TODO: connect SanityDecSpeed
-            weapon.Initialize(stats);
             inventory.Initialize(gameObject);
+
+            MountWeapon();
+        }
+
+        private void MountWeapon()
+        {
+            WeaponHolder holder = gameObject.GetComponentInChildren<WeaponHolder>();
+            if (holder != null)
+            {
+                Weapon weapon = Instantiate(startWeapon, holder.transform);
+                weapon.Initialize(this, stats);
+            }
         }
 
         protected override void HandleDeath(GameObject self)
