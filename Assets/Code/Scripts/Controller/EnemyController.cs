@@ -9,7 +9,6 @@
 using EnemyActions;
 using System.Collections.Generic;
 using UnityEngine;
-using VitalForces;
 using Generation;
 using Stats;
 using Items;
@@ -17,34 +16,30 @@ using Items;
 //TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
 {
-    public class EnemyController : MonoBehaviour, IPoolable
+    public class EnemyController : BaseController, IPoolable
     {
         //TODO: switch transform to find player in scene
         private Transform target;
         private Move mover;
         private Attack attack;
-        private Health health;
-        private CharacterStats stats;
         public List<Item> loot = new List<Item>();
 
         public event System.Action<IPoolable> onDestroy;
 
-        private void Awake()
+        protected override void Awake()
         {
-            stats = GetComponent<CharacterStats>();
+            base.Awake();
             mover = GetComponent<Move>();
             attack = GetComponent<Attack>();
-            health = GetComponent<Health>();
         }
 
         //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
         public void Initialize(Dictionary<Stat, float> baseStats, List<Item> loot)
         {
+            base.Initialize(baseStats);
+
             FindPlayerTarget();
 
-            stats.Initialize(baseStats);
-
-            health.Initialize(stats, HandleDeath);
             mover.Initialize(stats);
             mover.Activate();
             mover.SetTarget(target);
@@ -67,7 +62,7 @@ namespace Controller
             target = player.transform;
         }
 
-        private void HandleDeath(GameObject self)
+        protected override void HandleDeath(GameObject self)
         {
             //Todo: disable unused components
             stats.Clear();
@@ -76,6 +71,7 @@ namespace Controller
             health.onDeath = null;
         }
 
+        //this is just for reference, how actions could be switched if they are mutually exclusive
         private void SwitchAction(Action currentAction, Action newAction)
         {
             currentAction.Deactivate();
@@ -84,12 +80,12 @@ namespace Controller
 
         private void DropLoot()
         {
-            float dropChance = 0.05f; 
-            float randomFloat = Random.Range(0f,1f);
+            float dropChance = 0.05f;
+            float randomFloat = Random.Range(0f, 1f);
             Debug.Log(randomFloat);
 
             if (randomFloat <= dropChance)
-            {   
+            {
                 Item item = loot[Random.Range(0, loot.Count)];
                 GameObject pickup = new GameObject("ItemPickup");
                 Pickup pickupRef = pickup.AddComponent<Pickup>();
