@@ -27,20 +27,20 @@ namespace Combat
         private void Awake()
         {
             detectionArea = GetComponent<SphereCollider>();
-            if (enemiesParent == null)
-            {
-                enemiesParent = GameObject.Find("EnemySpawner").transform;
-                if (enemiesParent == null)
-                {
-                    Debug.LogError("EnemiesParent not found in the scene!");
-                }
-            }
         }
 
         internal void Initialize(CharacterStats stats)
         {
             detectionArea.radius = stats.GetStat(Stat.AttackRange);
             stats.onStatsChanged += UpdateAttackRange;
+            if (enemiesParent == null)
+            {   
+                enemiesParent = GameObject.Find("Pool").transform;
+                if (enemiesParent == null)
+                {
+                    Debug.LogError("EnemiesParent not found in the scene!");
+                }
+            }
         }
 
         public GameObject GetClosestEnemy()
@@ -50,6 +50,7 @@ namespace Combat
 
             foreach (Transform enemyTransform in enemiesParent)
             {
+                if (!enemyTransform.gameObject.activeSelf) continue;
                 float distanceSqr = (enemyTransform.position - transform.position).sqrMagnitude;
                 if (distanceSqr < closestDistanceSqr)
                 {
