@@ -20,6 +20,8 @@ namespace VitalForces
     {
         private float lifeRegen;
         private float life;
+
+        private float armor;
         public bool isAlive => CurrentValue > 0;
 
         public Action<GameObject> onDeath;
@@ -29,6 +31,7 @@ namespace VitalForces
         {   
             life = stats.GetStat(Stat.Life);
             lifeRegen = stats.GetStat(Stat.LifeRegen);
+            armor = stats.GetStat(Stat.Armor);
             stats.onStatsChanged += UpdateHealthStat;
             Initialize(life, life);
             this.onDeath = onDeath;
@@ -46,8 +49,11 @@ namespace VitalForces
 
         //returns if damage is lethal
         public bool TakeDamage(float amount)
-        {
-            Change(-amount);
+        {   
+            if (armor < amount)
+            {
+                Change(-amount + armor);
+            }
             if (!isAlive) onDeath(gameObject);
 
             return !isAlive;
