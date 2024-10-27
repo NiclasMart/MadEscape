@@ -14,16 +14,16 @@ using VitalForces;
 using System;
 using Stats;
 using Items;
+using UnityEditor.PackageManager;
 
 namespace Controller
 {
     public class PlayerController : BaseController
     {
         [SerializeField] private int playerID = 0;
-        [SerializeField] private Weapon startWeapon; //TODO: should be later selected ingame
 
         private PlayerMover mover;
-        private EnemyFinder enemyFinder;
+        private EnemyFinderAll enemyFinder;
 
         private ItemInventory inventory;
         public ItemInventory Inventory => inventory;
@@ -35,12 +35,24 @@ namespace Controller
         {
             base.Awake();
             mover = GetComponent<PlayerMover>();
-            enemyFinder = GetComponentInChildren<EnemyFinder>();
+            enemyFinder = GetComponentInChildren<EnemyFinderAll>();
             sanity = GetComponent<Sanity>();
             inventory = GetComponentInChildren<ItemInventory>();
         }
 
         private void Start()
+        {
+            LoadCharacterStats();
+
+            mover.Initialize(stats);
+            enemyFinder.Initialize(stats);
+            sanity.Initialize(stats); //TODO: connect SanityDecSpeed
+            inventory.Initialize(gameObject);
+
+            MountWeapon();
+        }
+
+        private void LoadCharacterStats()
         {
             //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
             List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
@@ -54,25 +66,18 @@ namespace Controller
             {
                 baseStats = loadedStatData[playerID].statDict;
             }
-
             base.Initialize(baseStats);
-
-            mover.Initialize(stats);
-            enemyFinder.Initialize(stats);
-            sanity.Initialize(stats); //TODO: connect SanityDecSpeed
-            inventory.Initialize(gameObject);
-
-            MountWeapon();
         }
 
         private void MountWeapon()
         {
             WeaponHolder holder = gameObject.GetComponentInChildren<WeaponHolder>();
-            if (holder != null)
+            if (holder != null && startWeapon != null)
             {
                 Weapon weapon = Instantiate(startWeapon, holder.transform);
                 weapon.Initialize(this, stats);
             }
+            else Debug.LogError("Player character has no weapon older or weapon assigned.");
         }
 
         protected override void HandleDeath(GameObject self)

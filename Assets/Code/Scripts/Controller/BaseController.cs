@@ -7,6 +7,7 @@
 // -------------------------------------------*/
 
 using System.Collections.Generic;
+using Combat;
 using Stats;
 using UnityEngine;
 using VitalForces;
@@ -15,6 +16,7 @@ namespace Controller
 {
     public abstract class BaseController : MonoBehaviour
     {
+        [SerializeField] protected Weapon startWeapon;
         protected CharacterStats stats;
         protected Health health;
 

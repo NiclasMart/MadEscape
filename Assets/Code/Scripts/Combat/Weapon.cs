@@ -7,17 +7,14 @@
 // -------------------------------------------*/
 
 using Controller;
-using Core;
 using Stats;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Combat
 {
     public class Weapon : MonoBehaviour
     {
-        [SerializeField] private ParticleSystem bullets;
-        [SerializeField] private Transform weaponHolder;
+        [SerializeField] private ParticleSystem bulletSystem;
 
         //stat values   
         private float damage;
@@ -26,35 +23,19 @@ namespace Combat
 
         //particle system modules
         private ParticleSystem.EmissionModule emissionModule;
-        private EnemyFinder enemyFinder;
 
         public void Initialize(BaseController owner, CharacterStats stats)
         {
-            emissionModule = bullets.emission;
-            enemyFinder = owner.gameObject.GetComponentInChildren<EnemyFinder>();
-
-            weaponHolder = transform.parent;
+            emissionModule = bulletSystem.emission;
             
+            //set stats
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
-
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
             emissionModule.rateOverTime = 1f / stats.GetStat(Stat.AttackSpeed);
 
             SetFiringActiveState(true);
-        }
-
-        private void Update()
-        {
-            //handle weapon rotation
-            Vector3 lookTargetPosition = transform.position + transform.forward;
-            GameObject closestEnemy = enemyFinder.GetClosestEnemy();
-            if (closestEnemy != null)
-            {
-                lookTargetPosition = closestEnemy.transform.position;
-            }
-            RotateTo(lookTargetPosition);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
@@ -65,12 +46,6 @@ namespace Combat
         public void SetFiringActiveState(bool active)
         {
             emissionModule.enabled = active;
-        }
-
-        public void RotateTo(Vector3 position)
-        {
-            Vector3 targetPosition = new Vector3(position.x, weaponHolder.transform.position.y, position.z);
-            weaponHolder.transform.LookAt(targetPosition);
         }
 
         private void UpdateDamage(Stat stat, float newValue)
