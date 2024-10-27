@@ -36,7 +36,7 @@ namespace Combat
             stats.onStatsChanged += UpdateAttackRange;
         }
 
-        public GameObject GetClosestEnemy()
+        public void GetClosestEnemy(out GameObject closestEnemy, out float distance)
         {
             closestEnemy = null;
             float closestDistanceSqr = Mathf.Infinity;
@@ -52,8 +52,7 @@ namespace Combat
                     closestDistanceSqr = distanceSqr;
                 }
             }
-
-            return closestEnemy;
+            distance = (float)Math.Sqrt(closestDistanceSqr);
         }
 
         private void UpdateAttackRange(Stat stat, float newValue)

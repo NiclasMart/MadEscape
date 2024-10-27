@@ -76,6 +76,8 @@ namespace Controller
             {
                 Weapon weapon = Instantiate(startWeapon, holder.transform);
                 weapon.Initialize(this, stats);
+                holder.SetWeapon(weapon);
+                holder.SetWeaponActiveState(true);
             }
             else Debug.LogError("Player character has no weapon older or weapon assigned.");
         }

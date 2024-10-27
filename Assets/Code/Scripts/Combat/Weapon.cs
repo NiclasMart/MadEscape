@@ -19,6 +19,7 @@ namespace Combat
         //stat values   
         private float damage;
         private float percentDamage;
+        public float AttackRange { get; private set; }
         private float spawnDelayTime;
 
         //particle system modules
@@ -31,11 +32,11 @@ namespace Combat
             //set stats
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
+            stats.onStatsChanged += UpdateAttackRange;
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
             emissionModule.rateOverTime = 1f / stats.GetStat(Stat.AttackSpeed);
-
-            SetFiringActiveState(true);
+            AttackRange = stats.GetStat(Stat.AttackRange);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
@@ -43,9 +44,14 @@ namespace Combat
             return damage * percentDamage;
         }
 
-        public void SetFiringActiveState(bool active)
+        public void PullTrigger()
         {
-            emissionModule.enabled = active;
+            emissionModule.enabled = true;
+        }
+
+        public void ReleaseTrigger()
+        {
+            emissionModule.enabled = false;
         }
 
         private void UpdateDamage(Stat stat, float newValue)
@@ -58,9 +64,14 @@ namespace Combat
         private void UpdateAttackSpeed(Stat stat, float newValue)
         {
             if (stat != Stat.AttackSpeed) return;
-            {
-                spawnDelayTime = 1f / newValue;
-            }
+            spawnDelayTime = 1f / newValue;
+        }
+
+        private void UpdateAttackRange(Stat stat, float newValue)
+        {
+            if (stat != Stat.AttackRange) return;
+            AttackRange = newValue;
+
         }
     }
 }
