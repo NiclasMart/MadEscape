@@ -9,6 +9,7 @@
 using Controller;
 using Stats;
 using UnityEngine;
+using yourNamespaceName;
 
 namespace Combat
 {
@@ -50,6 +51,7 @@ namespace Combat
             if (emissionModule.rateOverTime.constant != 0) return;
             emissionModule.rateOverTime = attackSpeed;
             bulletSystem.Play();
+            FindObjectOfType<AudioManager>().Play("gun sound");
         }
 
         public void ReleaseTrigger()
