@@ -11,7 +11,7 @@ using UnityEngine;
 using System;
 using Audio;
 
-namespace yourNamespaceName //TODO: Please set your Namespace here
+namespace Audio
 {
     public class AudioManager : MonoBehaviour
     {
