@@ -82,7 +82,6 @@ namespace Controller
         {
             float dropChance = 0.05f;
             float randomFloat = Random.Range(0f, 1f);
-            Debug.Log(randomFloat);
 
             if (randomFloat <= dropChance)
             {

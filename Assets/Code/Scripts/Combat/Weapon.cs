@@ -14,28 +14,30 @@ namespace Combat
 {
     public class Weapon : MonoBehaviour
     {
-        [SerializeField] private ParticleSystem bulletSystem;
-
         //stat values   
         private float damage;
         private float percentDamage;
-        private float spawnDelayTime;
+        private float attackSpeed;
+        public float AttackRange { get; private set; }
 
         //particle system modules
+        private ParticleSystem bulletSystem;
         private ParticleSystem.EmissionModule emissionModule;
 
-        public void Initialize(BaseController owner, CharacterStats stats)
+        public void Initialize(CharacterStats stats)
         {
+            bulletSystem = GetComponentInChildren<ParticleSystem>();
             emissionModule = bulletSystem.emission;
-            
+
             //set stats
             stats.onStatsChanged += UpdateDamage;
             stats.onStatsChanged += UpdateAttackSpeed;
+            stats.onStatsChanged += UpdateAttackRange;
+
             percentDamage = stats.GetStat(Stat.PercentDamage);
             damage = stats.GetStat(Stat.BaseDamage);
-            emissionModule.rateOverTime = 1f / stats.GetStat(Stat.AttackSpeed);
-
-            SetFiringActiveState(true);
+            attackSpeed = stats.GetStat(Stat.AttackSpeed);
+            AttackRange = stats.GetStat(Stat.AttackRange);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
@@ -43,9 +45,17 @@ namespace Combat
             return damage * percentDamage;
         }
 
-        public void SetFiringActiveState(bool active)
+        public void PullTrigger()
         {
-            emissionModule.enabled = active;
+            if (emissionModule.rateOverTime.constant != 0) return;
+            emissionModule.rateOverTime = attackSpeed;
+            bulletSystem.Play();
+        }
+
+        public void ReleaseTrigger()
+        {
+            if (emissionModule.rateOverTime.constant == 0) return;
+            emissionModule.rateOverTime = 0;
         }
 
         private void UpdateDamage(Stat stat, float newValue)
@@ -58,9 +68,14 @@ namespace Combat
         private void UpdateAttackSpeed(Stat stat, float newValue)
         {
             if (stat != Stat.AttackSpeed) return;
-            {
-                spawnDelayTime = 1f / newValue;
-            }
+            attackSpeed = newValue;
+        }
+
+        private void UpdateAttackRange(Stat stat, float newValue)
+        {
+            if (stat != Stat.AttackRange) return;
+            AttackRange = newValue;
+
         }
     }
 }
