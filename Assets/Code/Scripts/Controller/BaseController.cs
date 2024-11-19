@@ -16,7 +16,7 @@ namespace Controller
 {
     public abstract class BaseController : MonoBehaviour
     {
-        [SerializeField] protected Weapon startWeapon;
+        [SerializeField] protected Weapon startWeapon; //Todo: Should be replaced with an weaponID
         protected CharacterStats stats;
         protected Health health;
 

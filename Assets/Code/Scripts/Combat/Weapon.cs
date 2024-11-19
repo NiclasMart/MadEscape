@@ -16,33 +16,40 @@ namespace Combat
     {
         //stat values   
         private float damage;
-        private float percentDamage;
         private float attackSpeed;
+        private float accuracy;
+        private float bulletSpeed;
+
         public float AttackRange { get; private set; }
 
         //particle system modules
         private ParticleSystem bulletSystem;
+        private ParticleSystem.MainModule mainModule;
         private ParticleSystem.EmissionModule emissionModule;
+        private ParticleSystem.ShapeModule shapeModule;
 
-        public void Initialize(CharacterStats stats)
+        public void Initialize(float damage, float attackSpeed, float accuracy, float bulletSpeed, float attackRange)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
             emissionModule = bulletSystem.emission;
+            mainModule = bulletSystem.main;
+            shapeModule = bulletSystem.shape;
+            
 
-            //set stats
-            stats.onStatsChanged += UpdateDamage;
-            stats.onStatsChanged += UpdateAttackSpeed;
-            stats.onStatsChanged += UpdateAttackRange;
+            this.damage = damage;
+            this.attackSpeed = attackSpeed;
+            this.accuracy = accuracy;
+            this.bulletSpeed = bulletSpeed;
+            AttackRange = attackRange;
 
-            percentDamage = stats.GetStat(Stat.PercentDamage);
-            damage = stats.GetStat(Stat.BaseDamage);
-            attackSpeed = stats.GetStat(Stat.AttackSpeed);
-            AttackRange = stats.GetStat(Stat.AttackRange);
+            mainModule.startSpeed = bulletSpeed;
+            mainModule.startLifetime = 50f/bulletSpeed;
+            shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f*accuracy + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
         {
-            return damage * percentDamage;
+            return damage;
         }
 
         public void PullTrigger()
@@ -56,26 +63,6 @@ namespace Combat
         {
             if (emissionModule.rateOverTime.constant == 0) return;
             emissionModule.rateOverTime = 0;
-        }
-
-        private void UpdateDamage(Stat stat, float newValue)
-        {
-            if (stat != Stat.BaseDamage && stat != Stat.PercentDamage) return;
-            if (stat == Stat.BaseDamage) damage = newValue;
-            if (stat == Stat.PercentDamage) percentDamage = newValue;
-        }
-
-        private void UpdateAttackSpeed(Stat stat, float newValue)
-        {
-            if (stat != Stat.AttackSpeed) return;
-            attackSpeed = newValue;
-        }
-
-        private void UpdateAttackRange(Stat stat, float newValue)
-        {
-            if (stat != Stat.AttackRange) return;
-            AttackRange = newValue;
-
         }
     }
 }
