@@ -15,16 +15,16 @@ namespace Combat
 {
     public static class WeaponBuilder
     {
-        public static Weapon BuildWeapon(Weapon weapon) //Todo: should get an weaponID and initialize the weapon with these stats
+        public static Weapon BuildWeapon(Weapon weapon, WeaponTemplate weaponConfig) 
         {
             //Todo: load stats from file
             float damage = 3f;
             float attackSpeed = 10f;
-            float accuracy = 30f;
+            float accuracy = 50f;
             float bulletSpeed = 20;
             float attackRange = 5f;
 
-            weapon.Initialize(damage, attackSpeed, accuracy, bulletSpeed, attackRange);
+            weapon.Initialize(damage, attackSpeed, accuracy, bulletSpeed, attackRange, weaponConfig.bulletColor);
             return weapon;
         }
     }

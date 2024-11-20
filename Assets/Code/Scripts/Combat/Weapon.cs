@@ -28,14 +28,13 @@ namespace Combat
         private ParticleSystem.EmissionModule emissionModule;
         private ParticleSystem.ShapeModule shapeModule;
 
-        public void Initialize(float damage, float attackSpeed, float accuracy, float bulletSpeed, float attackRange)
+        public void Initialize(float damage, float attackSpeed, float accuracy, float bulletSpeed, float attackRange, Color bulletColor)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
             emissionModule = bulletSystem.emission;
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
             
-
             this.damage = damage;
             this.attackSpeed = attackSpeed;
             this.accuracy = accuracy;
@@ -44,6 +43,7 @@ namespace Combat
 
             mainModule.startSpeed = bulletSpeed;
             mainModule.startLifetime = 50f/bulletSpeed;
+            mainModule.startColor = bulletColor;
             shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f*accuracy + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
         }
 
