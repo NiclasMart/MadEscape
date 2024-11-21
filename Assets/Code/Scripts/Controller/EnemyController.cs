@@ -12,6 +12,7 @@ using UnityEngine;
 using Generation;
 using Stats;
 using Items;
+using Audio;
 
 //TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
@@ -22,6 +23,7 @@ namespace Controller
         private Transform target;
         private Move mover;
         private Attack attack;
+        private AudioManager audioManager;
         public List<Item> loot = new List<Item>();
 
         public event System.Action<IPoolable> onDestroy;
@@ -31,6 +33,7 @@ namespace Controller
             base.Awake();
             mover = GetComponent<Move>();
             attack = GetComponent<Attack>();
+            audioManager = GetComponent<AudioManager>();
         }
 
         //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
@@ -69,6 +72,8 @@ namespace Controller
             DropLoot();
             onDestroy(this);
             health.onDeath = null;
+            FindObjectOfType<AudioManager>().Play("enemy death");
+
         }
 
         //this is just for reference, how actions could be switched if they are mutually exclusive

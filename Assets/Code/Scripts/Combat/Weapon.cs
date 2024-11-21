@@ -9,6 +9,7 @@
 using Controller;
 using Stats;
 using UnityEngine;
+using Audio;
 
 namespace Combat
 {
@@ -22,6 +23,8 @@ namespace Combat
 
         public float AttackRange { get; private set; }
 
+        private AudioManager audioManager;
+        
         //particle system modules
         private ParticleSystem bulletSystem;
         private ParticleSystem.MainModule mainModule;
@@ -31,6 +34,7 @@ namespace Combat
         public void Initialize(float damage, float attackSpeed, float accuracy, float bulletSpeed, float attackRange, Color bulletColor)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
+            audioManager = FindObjectOfType<AudioManager>();
             emissionModule = bulletSystem.emission;
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
@@ -57,6 +61,7 @@ namespace Combat
             if (emissionModule.rateOverTime.constant != 0) return;
             emissionModule.rateOverTime = attackSpeed;
             bulletSystem.Play();
+            audioManager.Play("gun bearbeitet");
         }
 
         public void ReleaseTrigger()
