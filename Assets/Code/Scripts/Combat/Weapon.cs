@@ -51,7 +51,7 @@ namespace Combat
             if (emissionModule.rateOverTime.constant != 0) return;
             emissionModule.rateOverTime = attackSpeed;
             bulletSystem.Play();
-            FindObjectOfType<AudioManager>().Play("gun sound");
+            FindObjectOfType<AudioManager>().Play("gun bearbeitet");
         }
 
         public void ReleaseTrigger()
