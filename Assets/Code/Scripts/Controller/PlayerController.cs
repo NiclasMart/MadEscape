@@ -74,11 +74,11 @@ namespace Controller
             WeaponHolder holder = gameObject.GetComponentInChildren<WeaponHolder>();
             if (holder != null && startWeapon != null)
             {
-                Weapon weapon = Instantiate(startWeapon, holder.transform);
-                weapon.Initialize(stats);
+                Weapon weapon = holder.GetComponentInChildren<Weapon>();
+                WeaponBuilder.BuildWeapon(weapon, startWeapon);
                 holder.SetWeapon(weapon);
             }
-            else Debug.LogError("Player character has no weapon older or weapon assigned.");
+            else Debug.LogError("Player character has no weapon holder or weapon assigned.");
         }
 
         protected override void HandleDeath(GameObject self)

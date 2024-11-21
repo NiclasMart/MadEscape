@@ -16,7 +16,7 @@ namespace Controller
 {
     public abstract class BaseController : MonoBehaviour
     {
-        [SerializeField] protected Weapon startWeapon;
+        [SerializeField] protected WeaponTemplate startWeapon;
         protected CharacterStats stats;
         protected Health health;
 

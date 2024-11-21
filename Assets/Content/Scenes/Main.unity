@@ -568,6 +568,10 @@ PrefabInstance:
       propertyPath: startHealth
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 729231206346974393, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
+      propertyPath: startWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c7289a20b0b28d439c67de4d6b8bcce, type: 2}
     - target: {fileID: 2366386277362078477, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay
       value: 
@@ -2192,6 +2196,14 @@ PrefabInstance:
     - target: {fileID: 8333545848673706170, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8881867046008325193, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 118.55005
+      objectReference: {fileID: 0}
+    - target: {fileID: 8881867046008325193, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -43.30005
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8879446584780435429, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}

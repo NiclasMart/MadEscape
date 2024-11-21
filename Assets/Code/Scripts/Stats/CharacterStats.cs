@@ -14,20 +14,20 @@ namespace Stats
 {
     public enum Stat
     {
+        //Weapon Stats
         BaseDamage,
-        PercentDamage,
         AttackSpeed,
         AttackRange,
+        Accuracy,
 
+        //Character Stats
         Life,
         LifeRegen,
         Armor,
-
         Sanity,
         SanityDecAmount,
         MovementSpeed,
         SanityConversionFactor,
-
         PillEfficiency
     }
 
