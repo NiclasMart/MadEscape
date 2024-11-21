@@ -21,6 +21,8 @@ namespace Combat
         private float attackSpeed;
         public float AttackRange { get; private set; }
 
+        private AudioManager audioManager;
+        
         //particle system modules
         private ParticleSystem bulletSystem;
         private ParticleSystem.EmissionModule emissionModule;
@@ -28,6 +30,7 @@ namespace Combat
         public void Initialize(CharacterStats stats)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
+            audioManager = FindObjectOfType<AudioManager>();
             emissionModule = bulletSystem.emission;
 
             //set stats
@@ -51,7 +54,7 @@ namespace Combat
             if (emissionModule.rateOverTime.constant != 0) return;
             emissionModule.rateOverTime = attackSpeed;
             bulletSystem.Play();
-            FindObjectOfType<AudioManager>().Play("gun bearbeitet");
+            audioManager.Play("gun bearbeitet");
         }
 
         public void ReleaseTrigger()
