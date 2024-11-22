@@ -50,6 +50,8 @@ namespace Controller
             attack.Initialize(stats);
             attack.Activate();
 
+            MountWeapon(target.gameObject);
+
             this.loot = loot;
         }
 

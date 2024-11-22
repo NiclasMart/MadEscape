@@ -45,7 +45,7 @@ namespace Controller
             sanity.Initialize(stats); //TODO: connect SanityDecSpeed
             inventory.Initialize(gameObject);
 
-            MountWeapon();
+            MountWeapon(null);
         }
 
         private void LoadCharacterStats()
@@ -63,17 +63,6 @@ namespace Controller
                 baseStats = loadedStatData[playerID].statDict;
             }
             base.Initialize(baseStats);
-        }
-
-        private void MountWeapon()
-        {
-            WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
-            if (weaponController != null && startWeapon != null)
-            {
-                weaponController.Initialize();
-                weaponController.EquipNewWeapon(startWeapon);
-            }
-            else Debug.LogError("Player character has no weapon holder or weapon assigned.");
         }
 
         protected override void HandleDeath(GameObject self)

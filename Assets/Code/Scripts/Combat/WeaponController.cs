@@ -18,11 +18,14 @@ namespace Combat
         private EnemyFinderAll enemyFinderAll;
         private Weapon weapon;
 
-        public void Initialize(GameObject target = null)
+        private void Awake() 
         {
             enemyFinderAll = GetComponent<EnemyFinderAll>();
             weapon = GetComponentInChildren<Weapon>();
+        }
 
+        public void Initialize(GameObject target = null)
+        {
             enemyFinderAll.Initialize(target);
         }
 
