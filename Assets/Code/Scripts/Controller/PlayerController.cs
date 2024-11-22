@@ -23,8 +23,6 @@ namespace Controller
         [SerializeField] private int playerID = 0;
 
         private PlayerMover mover;
-        private EnemyFinderAll enemyFinder;
-
         private ItemInventory inventory;
         public ItemInventory Inventory => inventory;
 
@@ -35,7 +33,6 @@ namespace Controller
         {
             base.Awake();
             mover = GetComponent<PlayerMover>();
-            enemyFinder = GetComponentInChildren<EnemyFinderAll>();
             sanity = GetComponent<Sanity>();
             inventory = GetComponentInChildren<ItemInventory>();
         }
@@ -45,7 +42,6 @@ namespace Controller
             LoadCharacterStats();
 
             mover.Initialize(stats);
-            enemyFinder.Initialize(stats);
             sanity.Initialize(stats); //TODO: connect SanityDecSpeed
             inventory.Initialize(gameObject);
 
@@ -71,12 +67,11 @@ namespace Controller
 
         private void MountWeapon()
         {
-            WeaponHolder holder = gameObject.GetComponentInChildren<WeaponHolder>();
-            if (holder != null && startWeapon != null)
+            WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
+            if (weaponController != null && startWeapon != null)
             {
-                Weapon weapon = holder.GetComponentInChildren<Weapon>();
-                WeaponBuilder.BuildWeapon(weapon, startWeapon);
-                holder.SetWeapon(weapon);
+                weaponController.Initialize();
+                weaponController.EquipNewWeapon(startWeapon);
             }
             else Debug.LogError("Player character has no weapon holder or weapon assigned.");
         }

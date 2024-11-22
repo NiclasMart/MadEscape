@@ -13,14 +13,17 @@ using UnityEngine;
 
 namespace Combat
 {
-    public class WeaponHolder : MonoBehaviour
+    public class WeaponController : MonoBehaviour
     {
         private EnemyFinderAll enemyFinderAll;
         private Weapon weapon;
 
-        private void Awake()
+        public void Initialize(GameObject target = null)
         {
             enemyFinderAll = GetComponent<EnemyFinderAll>();
+            weapon = GetComponentInChildren<Weapon>();
+
+            enemyFinderAll.Initialize(target);
         }
 
         private void Update()
@@ -39,14 +42,14 @@ namespace Combat
         public void SetWeaponActiveState(bool active)
         {
             if (!weapon) return;
-            
+
             if (active) weapon.PullTrigger();
             else weapon.ReleaseTrigger();
         }
 
-        public void SetWeapon(Weapon weapon)
+        public void EquipNewWeapon(WeaponTemplate weaponData)
         {
-            this.weapon = weapon;
+            WeaponBuilder.BuildWeapon(weapon, weaponData);
         }
 
         public void RotateTo(Vector3 position)
