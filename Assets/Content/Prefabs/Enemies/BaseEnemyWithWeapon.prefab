@@ -59,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 2763244388602220510, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
       propertyPath: startWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 6c7289a20b0b28d439c67de4d6b8bcce, type: 2}
+      objectReference: {fileID: 11400000, guid: aa5d08681d442a745bdd81b70b88cecb, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

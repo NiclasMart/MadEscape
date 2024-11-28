@@ -18,7 +18,7 @@ namespace Combat
         private Transform enemiesParent;
 
 
-        public void Initialize(GameObject target = null)
+        public void Initialize(GameObject target)
         {
             overrideTarget = target;
             if (overrideTarget == null)

@@ -24,7 +24,7 @@ namespace Combat
             weapon = GetComponentInChildren<Weapon>();
         }
 
-        public void Initialize(GameObject target = null)
+        public void Initialize(GameObject target)
         {
             enemyFinderAll.Initialize(target);
         }

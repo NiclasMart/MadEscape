@@ -38,7 +38,7 @@ namespace Controller
             WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
             if (weaponController != null && startWeapon != null)
             {
-                weaponController.Initialize();
+                weaponController.Initialize(target);
                 weaponController.EquipNewWeapon(startWeapon);
             }
         }
