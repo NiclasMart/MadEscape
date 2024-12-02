@@ -30,9 +30,9 @@ namespace Items
 
         public IEnumerator UpdatingStats()
         {
-            activeStats.UpdateStat(stat, changeValue);
+            activeStats.MultipliStatValue(stat, changeValue);
             yield return new WaitForSeconds(duration);
-            activeStats.UpdateStat(stat, 1 / changeValue);
+            activeStats.MultipliStatValue(stat, 1 / changeValue);
             Destroy(gameObject);
         }
 

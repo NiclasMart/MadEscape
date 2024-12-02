@@ -18,15 +18,9 @@ namespace Combat
         private EnemyFinderAll enemyFinderAll;
         private Weapon weapon;
 
-        private void Awake() 
+        private void Awake()
         {
             enemyFinderAll = GetComponent<EnemyFinderAll>();
-            weapon = GetComponentInChildren<Weapon>();
-        }
-
-        public void Initialize(GameObject target)
-        {
-            enemyFinderAll.Initialize(target);
         }
 
         private void Update()
@@ -42,6 +36,11 @@ namespace Combat
             RotateTo(lookTargetPosition);
         }
 
+        public void SetTarget(GameObject target)
+        {
+            enemyFinderAll.Initialize(target);
+        }
+
         public void SetWeaponActiveState(bool active)
         {
             if (!weapon) return;
@@ -50,9 +49,11 @@ namespace Combat
             else weapon.ReleaseTrigger();
         }
 
-        public void EquipNewWeapon(WeaponTemplate weaponData)
+        public Weapon EquipNewWeapon(WeaponTemplate weaponData)
         {
+            weapon = Instantiate(weaponData.weaponModel, transform).GetComponentInChildren<Weapon>();
             WeaponBuilder.BuildWeapon(weapon, weaponData);
+            return weapon;
         }
 
         public void RotateTo(Vector3 position)

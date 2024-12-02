@@ -71,7 +71,20 @@ namespace Stats
             }
         }
 
-        public void UpdateStat(Stat stat, float changeMultiplier)
+        public void SetStat(Stat stat, float value)
+        {
+            if (StatIsAvailable(stat))
+            {
+                activeStats[stat] = value;
+            }
+            else
+            {
+                Debug.LogWarning($"The stat {stat} on {gameObject.name} couldn't be updated.");
+
+            }
+        }
+
+        public void MultipliStatValue(Stat stat, float changeMultiplier)
         {
             if (StatIsAvailable(stat))
             {
