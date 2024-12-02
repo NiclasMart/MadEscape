@@ -413,6 +413,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 553510527114062668, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
+      propertyPath: poolType
+      value: 
+      objectReference: {fileID: 250717545093598476, guid: 7e2db644ec96abd41a61710b4bf7ee82, type: 3}
     - target: {fileID: 3293089737139755911, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
       propertyPath: m_RootOrder
       value: 4

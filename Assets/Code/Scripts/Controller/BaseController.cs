@@ -33,6 +33,16 @@ namespace Controller
             health.Initialize(stats, HandleDeath);
         }
 
+        protected void MountWeapon(GameObject target)
+        {
+            WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
+            if (weaponController != null && startWeapon != null)
+            {
+                weaponController.Initialize(target);
+                weaponController.EquipNewWeapon(startWeapon);
+            }
+        }
+
         abstract protected void HandleDeath(GameObject self);
     }
 }

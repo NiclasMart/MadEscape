@@ -7,9 +7,6 @@
 // -------------------------------------------*/
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Generation;
 using Stats;
 using UnityEngine;
 
@@ -17,27 +14,35 @@ namespace Combat
 {
     public class EnemyFinderAll : MonoBehaviour
     {
-        GameObject closestEnemy;
+        private GameObject overrideTarget;
         private Transform enemiesParent;
-        private float attackRange;
 
-        private void Start()
+
+        public void Initialize(GameObject target)
         {
-            enemiesParent = GameObject.Find("Pool").transform;
-            if (enemiesParent == null)
+            overrideTarget = target;
+            if (overrideTarget == null)
             {
-                Debug.LogError("EnemiesParent not found in the scene!");
+                enemiesParent = GameObject.Find("Pool").transform;
+                if (enemiesParent == null)
+                {
+                    Debug.LogError("EnemiesParent not found in the scene!");
+                }
             }
-        }
-
-        internal void Initialize(CharacterStats stats)
-        {
-            attackRange = stats.GetStat(Stat.AttackRange);
-            stats.onStatsChanged += UpdateAttackRange;
+                
         }
 
         public void GetClosestEnemy(out GameObject closestEnemy, out float distance)
         {
+            //handling for finder on enemies
+            if (overrideTarget != null)
+            {
+                closestEnemy = overrideTarget;
+                distance = Vector3.Distance(transform.position, overrideTarget.transform.position);
+                return;
+            }
+
+            //handling for finder on player
             closestEnemy = null;
             float closestDistanceSqr = Mathf.Infinity;
 
@@ -53,12 +58,6 @@ namespace Combat
                 }
             }
             distance = (float)Math.Sqrt(closestDistanceSqr);
-        }
-
-        private void UpdateAttackRange(Stat stat, float newValue)
-        {
-            if (stat != Stat.AttackRange) return;
-            attackRange = newValue;
         }
     }
 }
