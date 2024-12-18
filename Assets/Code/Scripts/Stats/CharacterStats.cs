@@ -18,6 +18,7 @@ namespace Stats
         BaseDamage,
         AttackSpeed,
         AttackRange,
+        BulletSpeed,
         Accuracy,
 
         //Character Stats
