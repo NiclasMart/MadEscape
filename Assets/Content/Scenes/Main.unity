@@ -560,6 +560,14 @@ PrefabInstance:
       propertyPath: sanityConversionFactor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 447910644759840951, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
+      propertyPath: m_Constraints
+      value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 447910644759840951, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 729231206346974393, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: maxSanity
       value: 100

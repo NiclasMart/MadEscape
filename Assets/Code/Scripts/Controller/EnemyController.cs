@@ -13,6 +13,7 @@ using Generation;
 using Stats;
 using Items;
 using Audio;
+using Combat;
 
 //TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
@@ -43,6 +44,9 @@ namespace Controller
 
             FindPlayerTarget();
 
+            Weapon weapon = MountWeapon(target.gameObject);
+            if (weapon) stats.SetStat(Stat.AttackRange, weapon.AttackRange);
+
             mover.Initialize(stats);
             mover.Activate();
             mover.SetTarget(target);
@@ -50,7 +54,7 @@ namespace Controller
             attack.Initialize(stats);
             attack.Activate();
 
-            MountWeapon(target.gameObject);
+            
 
             this.loot = loot;
         }

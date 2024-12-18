@@ -37,6 +37,7 @@ namespace EnemyActions
         {
             base.Initialize(stats);
             agent.speed = stats.GetStat(Stat.MovementSpeed);
+            agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
         }
 
         public void SetTarget(Transform newTarget)

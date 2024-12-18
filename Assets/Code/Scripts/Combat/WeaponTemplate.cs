@@ -17,6 +17,6 @@ namespace Combat
     {
         public float weaponID;
         public Color bulletColor;
-        public Mesh weaponModel;
+        public GameObject weaponModel;
     }
 }

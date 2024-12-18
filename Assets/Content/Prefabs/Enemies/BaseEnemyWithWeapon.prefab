@@ -138,7 +138,8 @@ PrefabInstance:
       value: WeaponHolder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9142288408208176063, guid: 41480970b45ddaa47931be6d2dd820c9, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41480970b45ddaa47931be6d2dd820c9, type: 3}
