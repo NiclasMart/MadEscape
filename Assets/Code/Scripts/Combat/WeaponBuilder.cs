@@ -17,14 +17,20 @@ namespace Combat
     {
         public static Weapon BuildWeapon(Weapon weapon, WeaponTemplate weaponConfig) 
         {
-            //Todo: load stats from file
-            float damage = 3f;
-            float attackSpeed = 10f;
-            float accuracy = 50f;
-            float bulletSpeed = 20;
-            float attackRange = 5f;
+            int weaponID = (int) weaponConfig.weaponID;
+            List<StatRecord> loadedStatData = LoadStats.LoadWeaponStats();
+            Dictionary<Stat, float> baseStats;
+            if (loadedStatData.Count - 1 < weaponID)
+            {
+                baseStats = loadedStatData[0].statDict;
+                Debug.LogWarning("For the set weaponID no data is availabe. Loaded default weapon insted.");
+            }
+            else
+            {
+                baseStats = loadedStatData[weaponID].statDict;
+            }
 
-            weapon.Initialize(damage, attackSpeed, accuracy, bulletSpeed, attackRange, weaponConfig.bulletColor);
+            weapon.Initialize(baseStats, weaponConfig.bulletColor);
             return weapon;
         }
     }

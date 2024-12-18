@@ -20,13 +20,17 @@ namespace Stats
     public static class LoadStats
     {
         private const string PLAYER_INPUT_CSV = "PlayerStats";
+        private const string WEAPON_INPUT_CSV = "WeaponStats";
         private const string ENEMY_INPUT_CSV = "EnemyStats";
 
         public static List<StatRecord> LoadPlayerStats()
         {
             return LoadStatsFromFile(PLAYER_INPUT_CSV);
         }
-
+        public static List<StatRecord> LoadWeaponStats()
+        {
+            return LoadStatsFromFile(WEAPON_INPUT_CSV);
+        }
         public static List<StatRecord> LoadEnemyStats()
         {
             return LoadStatsFromFile(ENEMY_INPUT_CSV);

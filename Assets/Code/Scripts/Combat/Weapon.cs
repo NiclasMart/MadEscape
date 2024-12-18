@@ -10,6 +10,7 @@ using Controller;
 using Stats;
 using UnityEngine;
 using Audio;
+using System.Collections.Generic;
 
 namespace Combat
 {
@@ -31,7 +32,7 @@ namespace Combat
         private ParticleSystem.EmissionModule emissionModule;
         private ParticleSystem.ShapeModule shapeModule;
 
-        public void Initialize(float damage, float attackSpeed, float accuracy, float bulletSpeed, float attackRange, Color bulletColor)
+        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
             audioManager = FindObjectOfType<AudioManager>();
@@ -39,11 +40,12 @@ namespace Combat
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
             
-            this.damage = damage;
-            this.attackSpeed = attackSpeed;
-            this.accuracy = accuracy;
-            this.bulletSpeed = bulletSpeed;
-            AttackRange = attackRange;
+            //TODO move to seperate method
+            this.damage = baseStats[Stat.BaseDamage];
+            this.attackSpeed = baseStats[Stat.AttackSpeed];
+            this.accuracy = baseStats[Stat.Accuracy];
+            this.bulletSpeed = baseStats[Stat.BulletSpeed];
+            AttackRange = baseStats[Stat.AttackRange];
 
             mainModule.startSpeed = bulletSpeed;
             mainModule.startLifetime = 50f/bulletSpeed;
