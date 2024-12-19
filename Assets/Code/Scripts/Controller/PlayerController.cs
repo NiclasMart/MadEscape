@@ -45,7 +45,8 @@ namespace Controller
             sanity.Initialize(stats); //TODO: connect SanityDecSpeed
             inventory.Initialize(gameObject);
 
-            MountWeapon(null);
+            String targetLayer = "Enemy";
+            MountWeapon(null, targetLayer);
         }
 
         private void LoadCharacterStats()

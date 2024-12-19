@@ -31,14 +31,16 @@ namespace Combat
         private ParticleSystem.MainModule mainModule;
         private ParticleSystem.EmissionModule emissionModule;
         private ParticleSystem.ShapeModule shapeModule;
+        private ParticleSystem.CollisionModule collisionModule;
 
-        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor)
+        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
             audioManager = FindObjectOfType<AudioManager>();
             emissionModule = bulletSystem.emission;
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
+            collisionModule = bulletSystem.collision;
             
             //TODO move to seperate method
             this.damage = baseStats[Stat.BaseDamage];
@@ -51,6 +53,8 @@ namespace Combat
             mainModule.startLifetime = 50f/bulletSpeed;
             mainModule.startColor = bulletColor;
             shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f*accuracy + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
+
+            collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)

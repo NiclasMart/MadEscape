@@ -33,13 +33,13 @@ namespace Controller
             health.Initialize(stats, HandleDeath);
         }
 
-        protected Weapon MountWeapon(GameObject target)
+        protected Weapon MountWeapon(GameObject target, string targetLayer)
         {
             WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
             if (weaponController != null && startWeapon != null)
             {
                 weaponController.SetTarget(target);
-                return weaponController.EquipNewWeapon(startWeapon);
+                return weaponController.EquipNewWeapon(startWeapon, targetLayer);
             }
             return null;
         }

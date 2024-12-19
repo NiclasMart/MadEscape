@@ -49,10 +49,10 @@ namespace Combat
             else weapon.ReleaseTrigger();
         }
 
-        public Weapon EquipNewWeapon(WeaponTemplate weaponData)
+        public Weapon EquipNewWeapon(WeaponTemplate weaponData, string targetLayer)
         {
             weapon = Instantiate(weaponData.weaponModel, transform).GetComponentInChildren<Weapon>();
-            WeaponBuilder.BuildWeapon(weapon, weaponData);
+            WeaponBuilder.BuildWeapon(weapon, weaponData, targetLayer);
             return weapon;
         }
 
