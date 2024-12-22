@@ -20,6 +20,7 @@ namespace Stats
         AttackRange,
         BulletSpeed,
         Accuracy,
+        BulletCount,
 
         //Character Stats
         Life,

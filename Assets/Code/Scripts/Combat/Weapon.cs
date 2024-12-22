@@ -45,6 +45,10 @@ namespace Combat
             attackSpeed = baseStats[Stat.AttackSpeed];
             AttackRange = baseStats[Stat.AttackRange];
 
+            ParticleSystem.Burst burst = emissionModule.GetBurst(0);
+            burst.count = baseStats[Stat.BulletCount];
+            emissionModule.SetBurst(0, burst);
+            
             mainModule.startSpeed = baseStats[Stat.BulletSpeed];
             mainModule.startLifetime = 50f/ baseStats[Stat.BulletSpeed];
             shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f* baseStats[Stat.Accuracy] + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
