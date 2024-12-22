@@ -18,12 +18,11 @@ namespace Combat
     {
         //stat values   
         private float damage;
-        private float attackSpeed;
-
+        public float AttackSpeed { get; private set; }
         public float AttackRange { get; private set; }
 
         private AudioManager audioManager;
-        
+
         //particle system modules
         private ParticleSystem bulletSystem;
         private ParticleSystem.MainModule mainModule;
@@ -39,19 +38,19 @@ namespace Combat
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
             collisionModule = bulletSystem.collision;
-            
+
             //TODO move to seperate method
             damage = baseStats[Stat.BaseDamage];
-            attackSpeed = baseStats[Stat.AttackSpeed];
+            AttackSpeed = baseStats[Stat.AttackSpeed];
             AttackRange = baseStats[Stat.AttackRange];
 
             ParticleSystem.Burst burst = emissionModule.GetBurst(0);
             burst.count = baseStats[Stat.BulletCount];
             emissionModule.SetBurst(0, burst);
-            
+
             mainModule.startSpeed = baseStats[Stat.BulletSpeed];
-            mainModule.startLifetime = 50f/ baseStats[Stat.BulletSpeed];
-            shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f* baseStats[Stat.Accuracy] + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
+            mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
+            shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
             mainModule.startColor = bulletColor;
 
             collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
@@ -62,10 +61,8 @@ namespace Combat
             return damage;
         }
 
-        public void PullTrigger()
+        public void Fire()
         {
-            if (emissionModule.rateOverTime.constant != 0) return;
-            emissionModule.rateOverTime = attackSpeed;
             bulletSystem.Play();
             audioManager.Play("gun bearbeitet");
         }
