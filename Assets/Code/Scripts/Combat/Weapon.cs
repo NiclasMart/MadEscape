@@ -19,8 +19,6 @@ namespace Combat
         //stat values   
         private float damage;
         private float attackSpeed;
-        private float accuracy;
-        private float bulletSpeed;
 
         public float AttackRange { get; private set; }
 
@@ -43,16 +41,14 @@ namespace Combat
             collisionModule = bulletSystem.collision;
             
             //TODO move to seperate method
-            this.damage = baseStats[Stat.BaseDamage];
-            this.attackSpeed = baseStats[Stat.AttackSpeed];
-            this.accuracy = baseStats[Stat.Accuracy];
-            this.bulletSpeed = baseStats[Stat.BulletSpeed];
+            damage = baseStats[Stat.BaseDamage];
+            attackSpeed = baseStats[Stat.AttackSpeed];
             AttackRange = baseStats[Stat.AttackRange];
 
-            mainModule.startSpeed = bulletSpeed;
-            mainModule.startLifetime = 50f/bulletSpeed;
+            mainModule.startSpeed = baseStats[Stat.BulletSpeed];
+            mainModule.startLifetime = 50f/ baseStats[Stat.BulletSpeed];
+            shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f* baseStats[Stat.Accuracy] + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
             mainModule.startColor = bulletColor;
-            shapeModule.angle = Mathf.Max(Mathf.Min(60f,-0.6f*accuracy + 60f),0); //100accuracy = 0angle, 0accuracy = 60angle
 
             collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
         }
