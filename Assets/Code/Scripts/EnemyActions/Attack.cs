@@ -29,14 +29,16 @@ namespace EnemyActions
             attacked = false;
         }
 
-        private void OnCollisionEnter(Collision collisionInfo)
+        private void OnTriggerEnter(Collider colliderInfo)
         {
-            PerformAttack(collisionInfo.gameObject);
+            Debug.Log("Trigger Enter" + colliderInfo.gameObject.name);
+            PerformAttack(colliderInfo.gameObject);
         }
 
-        private void OnCollisionStay(Collision collisionInfo)
+        private void OnTriggerStay(Collider colliderInfo)
         {
-            PerformAttack(collisionInfo.gameObject);
+            Debug.Log("Trigger Stay " + colliderInfo.gameObject.name);
+            PerformAttack(colliderInfo.gameObject);
         }
 
         private void PerformAttack(GameObject target)
