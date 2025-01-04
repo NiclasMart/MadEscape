@@ -560,14 +560,6 @@ PrefabInstance:
       propertyPath: sanityConversionFactor
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 447910644759840951, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 447910644759840951, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 729231206346974393, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: maxSanity
       value: 100
@@ -580,10 +572,6 @@ PrefabInstance:
       propertyPath: startWeapon
       value: 
       objectReference: {fileID: 11400000, guid: 6c7289a20b0b28d439c67de4d6b8bcce, type: 2}
-    - target: {fileID: 966432952496664662, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 2366386277362078477, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay
       value: 
@@ -601,35 +589,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
-      value: 76c8cf4c-697f-4c48-82e1-b92cde9d3fdb
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionId
       value: 799fef4f-a901-451f-b625-dafdaad43395
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
-      value: UI/OpenStatPanel[/Keyboard/tab]
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_ActionName
       value: Player/OpenInventory[/Keyboard/tab]
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
@@ -645,32 +613,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1545536451}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Toggle
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Toggle
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UI.ToggleUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: UI.ToggleUI, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
-      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6517381514170808310, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
