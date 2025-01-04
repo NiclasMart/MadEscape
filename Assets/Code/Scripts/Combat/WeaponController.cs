@@ -17,6 +17,7 @@ namespace Combat
     {
         private EnemyFinderAll enemyFinderAll;
         private Weapon weapon;
+        private float timeSinceLastShot;
 
         private void Awake()
         {
@@ -32,7 +33,7 @@ namespace Combat
             {
                 lookTargetPosition = closestEnemy.transform.position;
             }
-            SetWeaponActiveState(distance <= weapon.AttackRange);
+            if (distance <= weapon.AttackRange) FireWeapon();
             RotateTo(lookTargetPosition);
         }
 
@@ -41,18 +42,20 @@ namespace Combat
             enemyFinderAll.Initialize(target);
         }
 
-        public void SetWeaponActiveState(bool active)
+        public void FireWeapon()
         {
-            if (!weapon) return;
-
-            if (active) weapon.PullTrigger();
-            else weapon.ReleaseTrigger();
+            if (timeSinceLastShot > 1/weapon.AttackSpeed)
+            {
+                weapon.Fire();
+                timeSinceLastShot = 0;
+            }
+            timeSinceLastShot += Time.deltaTime;
         }
 
-        public Weapon EquipNewWeapon(WeaponTemplate weaponData)
+        public Weapon EquipNewWeapon(WeaponTemplate weaponData, string targetLayer)
         {
             weapon = Instantiate(weaponData.weaponModel, transform).GetComponentInChildren<Weapon>();
-            WeaponBuilder.BuildWeapon(weapon, weaponData);
+            WeaponBuilder.BuildWeapon(weapon, weaponData, targetLayer);
             return weapon;
         }
 

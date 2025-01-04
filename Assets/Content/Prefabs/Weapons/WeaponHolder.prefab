@@ -59,7 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f44665ec05361ef4f9881fd5ac0769da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideTarget: {fileID: 0}
 --- !u!82 &6901197076943655984
 AudioSource:
   m_ObjectHideFlags: 0
@@ -164,6 +163,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6105728637497143843}
     m_Modifications:
+    - target: {fileID: 1670087617357170193, guid: 481a121370b3e09479454b5f0b400ab9, type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 193
+      objectReference: {fileID: 0}
     - target: {fileID: 4687268025117751084, guid: 481a121370b3e09479454b5f0b400ab9, type: 3}
       propertyPath: m_Name
       value: BaseWeapon

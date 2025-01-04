@@ -580,6 +580,10 @@ PrefabInstance:
       propertyPath: startWeapon
       value: 
       objectReference: {fileID: 11400000, guid: 6c7289a20b0b28d439c67de4d6b8bcce, type: 2}
+    - target: {fileID: 966432952496664662, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2366386277362078477, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay
       value: 
@@ -1895,11 +1899,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: gun bearbeitet
-    clip: {fileID: 8300000, guid: bffb664fa4e99624a8d6aabbef306cd1, type: 3}
+    clip: {fileID: 8300000, guid: 871ac8e87fa15b442b07bf962bb3f7ad, type: 3}
     volume: 1
     source: {fileID: 0}
   - name: enemy death
-    clip: {fileID: 8300000, guid: 3b61a7053afb32c4896ef2002fd0130c, type: 3}
+    clip: {fileID: 8300000, guid: 4d2fe4e66177d0645802df9524616b75, type: 3}
     volume: 1
     source: {fileID: 0}
 --- !u!4 &1997224460
