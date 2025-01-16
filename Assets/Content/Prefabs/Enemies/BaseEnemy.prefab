@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74e2950cf3029640845d760d5e71338, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectedDisplay: {fileID: 0}
+  connectedDisplay: {fileID: 9211133397523055458}
 --- !u!114 &6907234524639393962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +471,7 @@ GameObject:
   - component: {fileID: 6991013792604700999}
   - component: {fileID: 4431164992949049358}
   - component: {fileID: 4036167746807669264}
+  - component: {fileID: 6495001408563318333}
   m_Layer: 5
   m_Name: EnemyHealthbar
   m_TagString: Untagged
@@ -562,6 +563,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6495001408563318333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2811846811686831218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f5e277ce876794183ef8b7e0b0298c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2934007652864702684
 GameObject:
   m_ObjectHideFlags: 0
