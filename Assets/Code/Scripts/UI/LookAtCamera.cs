@@ -22,12 +22,12 @@ namespace UI
 
        void LateUpdate()
         {
-        if (mainCamera != null)
-        {
-            // Die Health Bar so drehen, dass sie zur Kamera zeigt
-            transform.forward = mainCamera.transform.forward;
-            transform.Rotate(90f, 0f, 0f);
-        }
+            if (mainCamera != null)
+            {
+                // Die Health Bar so drehen, dass sie zur Kamera zeigt
+                transform.forward = mainCamera.transform.forward;
+                transform.Rotate(-90f, 0f, 0f);
+            }
         }
     }
 }
