@@ -39,7 +39,7 @@ namespace Controller
             if (weaponController != null && startWeapon != null)
             {
                 weaponController.SetTarget(target);
-                return weaponController.EquipNewWeapon(startWeapon, targetLayer);
+                return weaponController.InitWeapon(startWeapon, targetLayer);
             }
             return null;
         }
