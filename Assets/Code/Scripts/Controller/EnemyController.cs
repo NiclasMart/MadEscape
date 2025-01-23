@@ -45,7 +45,6 @@ namespace Controller
             FindPlayerTarget();
 
             string targetLayer = "Player";
-
             Weapon weapon = MountWeapon(target.gameObject, targetLayer);
             if (weapon) stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
@@ -55,8 +54,6 @@ namespace Controller
 
             attack.Initialize(stats);
             attack.Activate();
-
-            
 
             this.loot = loot;
         }

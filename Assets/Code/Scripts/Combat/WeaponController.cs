@@ -22,6 +22,7 @@ namespace Combat
         private void Awake()
         {
             enemyFinderAll = GetComponent<EnemyFinderAll>();
+            weapon = GetComponentInChildren<Weapon>();
         }
 
         private void Update()
@@ -44,7 +45,7 @@ namespace Combat
 
         public void FireWeapon()
         {
-            if (timeSinceLastShot > 1/weapon.AttackSpeed)
+            if (timeSinceLastShot > 1 / weapon.AttackSpeed)
             {
                 weapon.Fire();
                 timeSinceLastShot = 0;
@@ -52,10 +53,10 @@ namespace Combat
             timeSinceLastShot += Time.deltaTime;
         }
 
-        public Weapon EquipNewWeapon(WeaponTemplate weaponData, string targetLayer)
+        public Weapon InitWeapon(WeaponTemplate weaponData, string targetLayer)
         {
-            weapon = Instantiate(weaponData.weaponModel, transform).GetComponentInChildren<Weapon>();
-            WeaponBuilder.BuildWeapon(weapon, weaponData, targetLayer);
+            if (weapon == null) weapon = Instantiate(weaponData.weaponModel, transform).GetComponentInChildren<Weapon>();
+            WeaponBuilder.ConfigureWeapon(weapon, weaponData, targetLayer);
             return weapon;
         }
 

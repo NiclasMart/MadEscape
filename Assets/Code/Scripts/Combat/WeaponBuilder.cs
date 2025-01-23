@@ -15,10 +15,10 @@ namespace Combat
 {
     public static class WeaponBuilder
     {
-        public static Weapon BuildWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer) 
+        public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer)
         {
             //load weapon stats from file
-            int weaponID = (int) weaponConfig.weaponID;
+            int weaponID = (int)weaponConfig.weaponID;
             List<StatRecord> loadedStatData = LoadStats.LoadWeaponStats();
             Dictionary<Stat, float> baseStats;
             if (loadedStatData.Count - 1 < weaponID)
