@@ -65,7 +65,7 @@ namespace Controller
 
         private void FindPlayerTarget()
         {
-            PlayerController player = FindObjectOfType<PlayerController>();
+            PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player == null) Debug.LogError("Player not Found!");
             target = player.transform;
         }
@@ -77,7 +77,7 @@ namespace Controller
             DropLoot();
             onDestroy(this);
             health.onDeath = null;
-            FindObjectOfType<AudioManager>().Play("enemy death");
+            FindFirstObjectByType<AudioManager>().Play("enemy death");
 
         }
 
