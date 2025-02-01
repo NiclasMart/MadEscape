@@ -21,6 +21,7 @@ namespace Generation
     [RequireComponent(typeof(ObjectPool))]
     public class EnemySpawner : MonoBehaviour
     {
+        [SerializeField] private GameObject spawnTesterPrefab;
         [SerializeField] private List<Item> lootTable = new();
         [SerializeField] private float spawnInterval = 3f;
 
@@ -57,6 +58,7 @@ namespace Generation
             Vector3 spawnPosition = GetRandomSpawnPoint();
             enemy.transform.position = spawnPosition;
             enemy.SetActive(true);
+            Instantiate(spawnTesterPrefab, spawnPosition, Quaternion.identity);
         }
 
         private void SetUpEnemy(GameObject enemy)
