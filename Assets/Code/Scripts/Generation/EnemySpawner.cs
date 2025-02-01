@@ -13,6 +13,8 @@ using Core;
 using Controller;
 using Items;
 using Stats;
+using Generator;
+using UnityEngine.AI;
 
 namespace Generation
 {
@@ -24,6 +26,7 @@ namespace Generation
 
         private List<StatRecord> enemyInfo = new();
         private float timer = 0;
+        private Vector2 spawnArea;
 
         private ObjectPool enemyPool;
 
@@ -31,6 +34,7 @@ namespace Generation
         {
             enemyPool = GetComponent<ObjectPool>();
             enemyInfo = LoadStats.LoadEnemyStats();
+            spawnArea = FindFirstObjectByType<RoomGenerator>().roomSize;
         }
 
         private void FixedUpdate()
@@ -68,11 +72,16 @@ namespace Generation
             return enemyInfo[Random.Range(0, enemyInfo.Count)];
         }
 
-        //Todo: generate spawn point dynamically
         private Vector3 GetRandomSpawnPoint()
         {
-            int index = Random.Range(0, transform.childCount);
-            return transform.GetChild(index).position;
+            float y = (spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
+            float x = (spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
+
+            if (NavMesh.SamplePosition(new Vector3(x, 0, y), out NavMeshHit hit, 1, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+            return transform.position;
         }
     }
 }

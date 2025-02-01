@@ -33,7 +33,7 @@ namespace Combat
         public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
         {
             bulletSystem = GetComponentInChildren<ParticleSystem>();
-            audioManager = FindObjectOfType<AudioManager>();
+            audioManager = FindFirstObjectByType<AudioManager>();
             emissionModule = bulletSystem.emission;
             mainModule = bulletSystem.main;
             shapeModule = bulletSystem.shape;
