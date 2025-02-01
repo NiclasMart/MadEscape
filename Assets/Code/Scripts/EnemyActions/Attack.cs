@@ -31,14 +31,14 @@ namespace EnemyActions
 
         private void OnTriggerEnter(Collider colliderInfo)
         {
-            Debug.Log("Trigger Enter" + colliderInfo.gameObject.name);
-            PerformAttack(colliderInfo.gameObject);
+            if (colliderInfo.GetComponent<PlayerController>() != null)
+                PerformAttack(colliderInfo.gameObject);
         }
 
         private void OnTriggerStay(Collider colliderInfo)
         {
-            Debug.Log("Trigger Stay " + colliderInfo.gameObject.name);
-            PerformAttack(colliderInfo.gameObject);
+            if (colliderInfo.GetComponent<PlayerController>() != null)
+                PerformAttack(colliderInfo.gameObject);
         }
 
         private void PerformAttack(GameObject target)

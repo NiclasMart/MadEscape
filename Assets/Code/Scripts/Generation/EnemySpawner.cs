@@ -15,14 +15,15 @@ using Items;
 using Stats;
 using Generator;
 using UnityEngine.AI;
+using System.Collections;
 
 namespace Generation
 {
     [RequireComponent(typeof(ObjectPool))]
     public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private GameObject spawnTesterPrefab;
-        [SerializeField] private List<Item> lootTable = new();
+        [SerializeField] private SpawnTester _spawnTesterPrefab;
+        [SerializeField] private List<Item> _lootTable = new();
         [SerializeField] private float spawnInterval = 3f;
 
         private List<StatRecord> enemyInfo = new();
@@ -43,22 +44,25 @@ namespace Generation
             //time spawn interval
             if (timer > spawnInterval)
             {
-                SpawnEnemy();
+                StartCoroutine(SpawnEnemy());
                 timer = 0;
             }
             timer += Time.deltaTime;
         }
 
-        public void SpawnEnemy()
+        private IEnumerator SpawnEnemy()
+        {
+            Vector3 spawnPosition = GetRandomSpawnPoint();
+            SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPosition, Quaternion.identity);
+            yield return StartCoroutine(spawnTester.SpawningEnemy(spawnPosition, Spawn));
+        }
+
+        public void Spawn(Vector3 spawnPosition)
         {
             GameObject enemy = enemyPool.GetObject();
-
             SetUpEnemy(enemy);
-
-            Vector3 spawnPosition = GetRandomSpawnPoint();
             enemy.transform.position = spawnPosition;
             enemy.SetActive(true);
-            Instantiate(spawnTesterPrefab, spawnPosition, Quaternion.identity);
         }
 
         private void SetUpEnemy(GameObject enemy)
@@ -66,7 +70,7 @@ namespace Generation
             EnemyController enemyController = enemy.GetComponent<EnemyController>();
             StatRecord type = GetRandomEnemyType();
             enemy.gameObject.name = type.name;
-            enemyController.Initialize(type.statDict, lootTable);
+            enemyController.Initialize(type.statDict, _lootTable);
         }
 
         private StatRecord GetRandomEnemyType()
