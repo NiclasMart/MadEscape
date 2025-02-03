@@ -44,17 +44,21 @@ namespace Generation
             //time spawn interval
             if (timer > spawnInterval)
             {
-                StartCoroutine(SpawnEnemy());
+                SpawnEnemy(3);
                 timer = 0;
             }
             timer += Time.deltaTime;
         }
 
-        private IEnumerator SpawnEnemy()
+        private void SpawnEnemy(int amount = 1)
         {
-            Vector3 spawnPosition = GetRandomSpawnPoint();
-            SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPosition, Quaternion.identity);
-            yield return StartCoroutine(spawnTester.SpawningEnemy(spawnPosition, Spawn));
+            //Todo: use pool for testers
+            for (int i = 0; i < amount; i++)
+            {
+                Vector3 spawnPosition = GetRandomSpawnPointInRoom();
+                SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPosition, Quaternion.identity);
+                StartCoroutine(spawnTester.SpawningEnemy(spawnPosition, Spawn));
+            }
         }
 
         public void Spawn(Vector3 spawnPosition)
@@ -78,7 +82,7 @@ namespace Generation
             return enemyInfo[Random.Range(0, enemyInfo.Count)];
         }
 
-        private Vector3 GetRandomSpawnPoint()
+        private Vector3 GetRandomSpawnPointInRoom()
         {
             float y = (spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
             float x = (spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
