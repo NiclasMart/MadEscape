@@ -32,12 +32,7 @@ namespace Generator
         {
             yield return new WaitForSeconds(_spawnDelay);
             if (_canSpawn) callback?.Invoke(position);
-            else
-            {
-                Debug.Log("Enemy not spawned");
-                Destroy(gameObject);
-            }
-
+            Destroy(gameObject);
         }
     }
 }

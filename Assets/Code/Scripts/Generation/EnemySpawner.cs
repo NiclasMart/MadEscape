@@ -22,9 +22,14 @@ namespace Generation
     [RequireComponent(typeof(ObjectPool))]
     public class EnemySpawner : MonoBehaviour
     {
+        const float GROUP_AREA_SIZE = 3f;
         [SerializeField] private SpawnTester _spawnTesterPrefab;
         [SerializeField] private List<Item> _lootTable = new();
-        [SerializeField] private float spawnInterval = 3f;
+
+        [Header("Spawn Settings")]
+        [SerializeField] private float _spawnInterval = 3f;
+        [SerializeField][Min(1)] private int _spawnAmount = 1;
+        [SerializeField][Min(1)] private int _groupSize = 1;
 
         private List<StatRecord> enemyInfo = new();
         private float timer = 0;
@@ -42,22 +47,38 @@ namespace Generation
         private void FixedUpdate()
         {
             //time spawn interval
-            if (timer > spawnInterval)
+            if (timer > _spawnInterval)
             {
-                SpawnEnemy(3);
+                SpawnEnemys(_spawnAmount, _groupSize);
                 timer = 0;
             }
             timer += Time.deltaTime;
         }
 
-        private void SpawnEnemy(int amount = 1)
+        private void SpawnEnemys(int spawnAmount = 1, int goupSize = 1)
         {
             //Todo: use pool for testers
-            for (int i = 0; i < amount; i++)
+            //loop defines how many groups of enemies are spawned
+            for (int i = 0; i < spawnAmount; i++)
             {
-                Vector3 spawnPosition = GetRandomSpawnPointInRoom();
-                SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPosition, Quaternion.identity);
-                StartCoroutine(spawnTester.SpawningEnemy(spawnPosition, Spawn));
+                //find random point in the room
+                bool foundValidPoint = false;
+                foundValidPoint = GetRandomSpawnPointInRoom(out Vector3 spawnArea);
+                if (!foundValidPoint) continue;
+
+                //loop defines how many enemies are spawned in a group
+                for (int j = 0; j < goupSize; j++)
+                {
+                    //find random point close to the spawn area
+                    Vector3 spawnPoint;
+                    if (goupSize == 1) spawnPoint = spawnArea;
+                    else foundValidPoint = GetRandomSpawnPointInArea(spawnArea, out spawnPoint);
+                    if (!foundValidPoint) continue;
+
+                    //spawn tester to check if player is near
+                    SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
+                    StartCoroutine(spawnTester.SpawningEnemy(spawnPoint, Spawn));
+                }
             }
         }
 
@@ -82,16 +103,32 @@ namespace Generation
             return enemyInfo[Random.Range(0, enemyInfo.Count)];
         }
 
-        private Vector3 GetRandomSpawnPointInRoom()
+        private bool GetRandomSpawnPointInRoom(out Vector3 point)
         {
-            float y = (spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
             float x = (spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
+            float z = (spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
 
-            if (NavMesh.SamplePosition(new Vector3(x, 0, y), out NavMeshHit hit, 1, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(new Vector3(x, 0, z), out NavMeshHit hit, 1, NavMesh.AllAreas))
             {
-                return hit.position;
+                point = hit.position;
+                return true;
             }
-            return transform.position;
+            point = Vector3.zero;
+            return false;
+        }
+
+        private bool GetRandomSpawnPointInArea(Vector3 area, out Vector3 point)
+        {
+            float x = area.x + Random.Range(-1f, 1f) * GROUP_AREA_SIZE;
+            float z = area.z + Random.Range(-1f, 1f) * GROUP_AREA_SIZE;
+
+            if (NavMesh.SamplePosition(new Vector3(x, 0, z), out NavMeshHit hit, 1, NavMesh.AllAreas))
+            {
+                point = hit.position;
+                return true;
+            }
+            point = Vector3.zero;
+            return false;
         }
     }
 }
