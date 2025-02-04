@@ -66,7 +66,7 @@ namespace Core
 
             IPoolable poolable = newObject.GetComponent<IPoolable>();
             if (poolable == null) Debug.LogError("Pooled Object isn't of type IPoolable. Add the interface to make it poolable.");
-            poolable.onDestroy += ReturnObject;
+            poolable.OnDestroy += ReturnObject;
 
             return poolable;
         }

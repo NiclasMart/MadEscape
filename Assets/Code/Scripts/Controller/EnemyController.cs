@@ -27,7 +27,7 @@ namespace Controller
         private AudioManager audioManager;
         public List<Item> loot = new List<Item>();
 
-        public event System.Action<IPoolable> onDestroy;
+        public event System.Action<IPoolable> OnDestroy;
 
         protected override void Awake()
         {
@@ -75,7 +75,7 @@ namespace Controller
             //Todo: disable unused components
             stats.Clear();
             DropLoot();
-            onDestroy(this);
+            OnDestroy(this);
             health.onDeath = null;
             FindFirstObjectByType<AudioManager>().Play("enemy death");
 
