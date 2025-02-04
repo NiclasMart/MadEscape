@@ -6,11 +6,8 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Controller;
-using System;
 
 namespace Core
 {
@@ -18,8 +15,8 @@ namespace Core
     {
         public static GameManager Instance { get; private set; }
 
-        [SerializeField] private PlayerController player;
-        private SceneManagement sceneManagement;
+        [SerializeField] private PlayerController _player;
+        private SceneManagement _sceneManagement;
 
         private void Awake()
         {
@@ -32,14 +29,14 @@ namespace Core
 
             Instance = this;
 
-            sceneManagement = GetComponent<SceneManagement>();
-            player.OnDeath += RestartGame;
+            _sceneManagement = GetComponent<SceneManagement>();
+            _player.OnDeath += RestartGame;
         }
 
         private void RestartGame()
         {
             Debug.Log("Player is dead. Reloading scene");
-            sceneManagement.ReloadScenes();
+            _sceneManagement.ReloadScenes();
         }
     }
 }
