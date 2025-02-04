@@ -7,15 +7,13 @@
 // -------------------------------------------*/
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Generation
 {
     public interface IPoolable
     {
-        event Action<IPoolable> onDestroy;
+        event Action<IPoolable> OnDestroy;
 
         GameObject GetAttachedGameobject();
     }

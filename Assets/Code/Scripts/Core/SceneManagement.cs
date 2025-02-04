@@ -7,7 +7,7 @@ namespace Core
 {
     public class SceneManagement : MonoBehaviour
     {
-        [SerializeField] private List<int> loadedScenes = new List<int>();
+        [SerializeField] private List<int> _loadedScenes = new();
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace Core
 
         private void LoadScenes()
         {
-            foreach (var scene in loadedScenes)
+            foreach (var scene in _loadedScenes)
             {
                 SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
             }
@@ -36,7 +36,7 @@ namespace Core
 
         private void UnloadActiveScenes()
         {
-            foreach (var scene in loadedScenes)
+            foreach (var scene in _loadedScenes)
             {
                 SceneManager.UnloadSceneAsync(scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             }

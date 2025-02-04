@@ -15,7 +15,6 @@ using Items;
 using Stats;
 using Generator;
 using UnityEngine.AI;
-using System.Collections;
 
 namespace Generation
 {
@@ -31,28 +30,28 @@ namespace Generation
         [SerializeField][Min(1)] private int _spawnAmount = 1;
         [SerializeField][Min(1)] private int _groupSize = 1;
 
-        private List<StatRecord> enemyInfo = new();
-        private float timer = 0;
-        private Vector2 spawnArea;
+        private List<StatRecord> _enemyInfo = new();
+        private float _timer = 0;
+        private Vector2 _spawnArea;
 
-        private ObjectPool enemyPool;
+        private ObjectPool _enemyPool;
 
         private void Awake()
         {
-            enemyPool = GetComponent<ObjectPool>();
-            enemyInfo = LoadStats.LoadEnemyStats();
-            spawnArea = FindFirstObjectByType<RoomGenerator>().roomSize;
+            _enemyPool = GetComponent<ObjectPool>();
+            _enemyInfo = LoadStats.LoadEnemyStats();
+            _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
         }
 
         private void FixedUpdate()
         {
             //time spawn interval
-            if (timer > _spawnInterval)
+            if (_timer > _spawnInterval)
             {
                 SpawnEnemys(_spawnAmount, _groupSize);
-                timer = 0;
+                _timer = 0;
             }
-            timer += Time.deltaTime;
+            _timer += Time.deltaTime;
         }
 
         private void SpawnEnemys(int spawnAmount = 1, int goupSize = 1)
@@ -84,7 +83,7 @@ namespace Generation
 
         public void Spawn(Vector3 spawnPosition)
         {
-            GameObject enemy = enemyPool.GetObject();
+            GameObject enemy = _enemyPool.GetObject();
             SetUpEnemy(enemy);
             enemy.transform.position = spawnPosition;
             enemy.SetActive(true);
@@ -100,13 +99,13 @@ namespace Generation
 
         private StatRecord GetRandomEnemyType()
         {
-            return enemyInfo[Random.Range(0, enemyInfo.Count)];
+            return _enemyInfo[Random.Range(0, _enemyInfo.Count)];
         }
 
         private bool GetRandomSpawnPointInRoom(out Vector3 point)
         {
-            float x = (spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
-            float z = (spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
+            float x = (_spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
+            float z = (_spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
 
             if (NavMesh.SamplePosition(new Vector3(x, 0, z), out NavMeshHit hit, 1, NavMesh.AllAreas))
             {

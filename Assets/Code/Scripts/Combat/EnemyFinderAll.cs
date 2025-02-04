@@ -7,24 +7,23 @@
 // -------------------------------------------*/
 
 using System;
-using Stats;
 using UnityEngine;
 
 namespace Combat
 {
     public class EnemyFinderAll : MonoBehaviour
     {
-        private GameObject overrideTarget;
-        private Transform enemiesParent;
+        private GameObject _overrideTarget;
+        private Transform _enemiesParent;
 
 
         public void Initialize(GameObject target)
         {
-            overrideTarget = target;
-            if (overrideTarget == null)
+            _overrideTarget = target;
+            if (_overrideTarget == null)
             {
-                enemiesParent = GameObject.Find("Pool").transform;
-                if (enemiesParent == null)
+                _enemiesParent = GameObject.Find("Pool").transform; //Todo: don't use hardcoded name
+                if (_enemiesParent == null)
                 {
                     Debug.LogError("EnemiesParent not found in the scene!");
                 }
@@ -35,10 +34,10 @@ namespace Combat
         public void GetClosestEnemy(out GameObject closestEnemy, out float distance)
         {
             //handling for finder on enemies
-            if (overrideTarget != null)
+            if (_overrideTarget != null)
             {
-                closestEnemy = overrideTarget;
-                distance = Vector3.Distance(transform.position, overrideTarget.transform.position);
+                closestEnemy = _overrideTarget;
+                distance = Vector3.Distance(transform.position, _overrideTarget.transform.position);
                 return;
             }
 
@@ -46,7 +45,7 @@ namespace Combat
             closestEnemy = null;
             float closestDistanceSqr = Mathf.Infinity;
 
-            foreach (Transform enemyTransform in enemiesParent)
+            foreach (Transform enemyTransform in _enemiesParent)
             {
                 if (!enemyTransform.gameObject.activeSelf) continue;
 

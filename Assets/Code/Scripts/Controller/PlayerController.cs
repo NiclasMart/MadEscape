@@ -9,43 +9,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Movement;
-using Combat;
 using VitalForces;
 using System;
 using Stats;
 using Items;
-using UnityEditor.PackageManager;
 
 namespace Controller
 {
     public class PlayerController : BaseController
     {
-        [SerializeField] private int playerID = 0;
+        [SerializeField] private int _playerID = 0;
 
-        private PlayerMover mover;
-        private ItemInventory inventory;
-        public ItemInventory Inventory => inventory;
+        private PlayerMover _mover;
+        private ItemInventory _inventory;
+        public ItemInventory Inventory => _inventory;
+        private Sanity _sanity;
 
-        public Action onDeath;
-        private Sanity sanity;
+        public Action OnDeath;
 
         protected override void Awake()
         {
             base.Awake();
-            mover = GetComponent<PlayerMover>();
-            sanity = GetComponent<Sanity>();
-            inventory = GetComponentInChildren<ItemInventory>();
+            _mover = GetComponent<PlayerMover>();
+            _sanity = GetComponent<Sanity>();
+            _inventory = GetComponentInChildren<ItemInventory>();
         }
 
         private void Start()
         {
             LoadCharacterStats();
 
-            mover.Initialize(stats);
-            sanity.Initialize(stats); //TODO: connect SanityDecSpeed
-            inventory.Initialize(gameObject);
+            _mover.Initialize(_stats);
+            _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
+            _inventory.Initialize(gameObject);
 
-            String targetLayer = "Enemy";
+            string targetLayer = "Enemy";
             MountWeapon(null, targetLayer);
         }
 
@@ -54,28 +52,28 @@ namespace Controller
             //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
             List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
             Dictionary<Stat, float> baseStats;
-            if (loadedStatData.Count - 1 < playerID)
+            if (loadedStatData.Count - 1 < _playerID)
             {
                 baseStats = loadedStatData[0].statDict;
                 Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
             }
             else
             {
-                baseStats = loadedStatData[playerID].statDict;
+                baseStats = loadedStatData[_playerID].statDict;
             }
             base.Initialize(baseStats);
         }
 
         protected override void HandleDeath(GameObject self)
         {
-            onDeath();
+            OnDeath();
         }
 
         //this is just for reference to see how it could be done later
         public void SwitchPlayer(int playerId)
         {
             StatRecord playerData = LoadStats.LoadPlayerStats()[playerId];
-            stats.SetNewStatData(playerData.statDict);
+            _stats.SetNewStatData(playerData.statDict);
         }
     }
 }

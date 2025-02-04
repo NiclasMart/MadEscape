@@ -16,30 +16,30 @@ namespace Controller
 {
     public abstract class BaseController : MonoBehaviour
     {
-        [SerializeField] protected WeaponTemplate startWeapon;
-        protected CharacterStats stats;
-        protected Health health;
+        [SerializeField] protected WeaponTemplate _startWeapon;
+        protected CharacterStats _stats;
+        protected Health _health;
 
 
         protected virtual void Awake()
         {
-            stats = GetComponent<CharacterStats>();
-            health = GetComponent<Health>();
+            _stats = GetComponent<CharacterStats>();
+            _health = GetComponent<Health>();
         }
 
         public void Initialize(Dictionary<Stat, float> baseStats)
         {
-            stats.Initialize(baseStats);
-            health.Initialize(stats, HandleDeath);
+            _stats.Initialize(baseStats);
+            _health.Initialize(_stats, HandleDeath);
         }
 
         protected Weapon MountWeapon(GameObject target, string targetLayer)
         {
             WeaponController weaponController = gameObject.GetComponentInChildren<WeaponController>();
-            if (weaponController != null && startWeapon != null)
+            if (weaponController != null && _startWeapon != null)
             {
                 weaponController.SetTarget(target);
-                return weaponController.InitWeapon(startWeapon, targetLayer);
+                return weaponController.InitWeapon(_startWeapon, targetLayer);
             }
             return null;
         }

@@ -6,8 +6,6 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Combat
@@ -15,8 +13,8 @@ namespace Combat
     [CreateAssetMenu(fileName = "Weapon", menuName = "ScriptableObjects/WeaponsTemplate")]
     public class WeaponTemplate : ScriptableObject
     {
-        public float weaponID;
-        public Color bulletColor;
-        public GameObject weaponModel;
+        public float WeaponID;
+        public Color BulletColor;
+        public GameObject WeaponModel;
     }
 }

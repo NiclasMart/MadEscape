@@ -7,7 +7,6 @@
 // -------------------------------------------*/
 
 using Generation;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,24 +14,24 @@ namespace Core
 {
     public class ObjectPool : MonoBehaviour
     {
-        [SerializeField] private int initialCapacity = 10;
-        [SerializeField] private GameObject poolType;
-        [SerializeField] private Transform poolHolder;
+        [SerializeField] private int _initialCapacity = 10;
+        [SerializeField] private GameObject _poolType;
+        [SerializeField] private Transform _poolHolder;
 
-        private List<IPoolable> disabledObjects = new List<IPoolable>();
+        private readonly List<IPoolable> disabledObjects = new();
 
         private void Awake()
         {
-            if (poolHolder == null)
+            if (_poolHolder == null)
             {
-                poolHolder = new GameObject(transform.name).transform;
+                _poolHolder = new GameObject(transform.name).transform;
             }
         }
 
         private void Start()
         {
             //initialize pool according to initial capacity
-            for (int i = 0; i < initialCapacity; i++)
+            for (int i = 0; i < _initialCapacity; i++)
             {
                 disabledObjects.Add(CreateNewObject());
             }
@@ -61,12 +60,12 @@ namespace Core
 
         private IPoolable CreateNewObject()
         {
-            GameObject newObject = Instantiate(poolType, poolHolder);
+            GameObject newObject = Instantiate(_poolType, _poolHolder);
             newObject.SetActive(false);
 
             IPoolable poolable = newObject.GetComponent<IPoolable>();
             if (poolable == null) Debug.LogError("Pooled Object isn't of type IPoolable. Add the interface to make it poolable.");
-            poolable.onDestroy += ReturnObject;
+            poolable.OnDestroy += ReturnObject;
 
             return poolable;
         }
