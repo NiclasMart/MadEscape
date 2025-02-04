@@ -21,20 +21,18 @@ namespace Controller
     public class EnemyController : BaseController, IPoolable
     {
         //TODO: switch transform to find player in scene
-        private Transform target;
-        private Move mover;
-        private Attack attack;
-        private AudioManager audioManager;
-        public List<Item> loot = new List<Item>();
+        private Transform _target;
+        private Move _mover;
+        private Attack _attack;
+        public List<Item> _loot = new List<Item>();
 
         public event System.Action<IPoolable> OnDestroy;
 
         protected override void Awake()
         {
             base.Awake();
-            mover = GetComponent<Move>();
-            attack = GetComponent<Attack>();
-            audioManager = GetComponent<AudioManager>();
+            _mover = GetComponent<Move>();
+            _attack = GetComponent<Attack>();
         }
 
         //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
@@ -45,17 +43,17 @@ namespace Controller
             FindPlayerTarget();
 
             string targetLayer = "Player";
-            Weapon weapon = MountWeapon(target.gameObject, targetLayer);
-            if (weapon) stats.SetStat(Stat.AttackRange, weapon.AttackRange);
+            Weapon weapon = MountWeapon(_target.gameObject, targetLayer);
+            if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
-            mover.Initialize(stats);
-            mover.Activate();
-            mover.SetTarget(target);
+            _mover.Initialize(_stats);
+            _mover.Activate();
+            _mover.SetTarget(_target);
 
-            attack.Initialize(stats);
-            attack.Activate();
+            _attack.Initialize(_stats);
+            _attack.Activate();
 
-            this.loot = loot;
+            this._loot = loot; //Todo: don't tie loot to enemy, but to enemy spawner
         }
 
         public GameObject GetAttachedGameobject()
@@ -67,25 +65,18 @@ namespace Controller
         {
             PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player == null) Debug.LogError("Player not Found!");
-            target = player.transform;
+            _target = player.transform;
         }
 
         protected override void HandleDeath(GameObject self)
         {
             //Todo: disable unused components
-            stats.Clear();
+            _stats.Clear();
             DropLoot();
             OnDestroy(this);
-            health.onDeath = null;
+            _health.onDeath = null;
             FindFirstObjectByType<AudioManager>().Play("enemy death");
 
-        }
-
-        //this is just for reference, how actions could be switched if they are mutually exclusive
-        private void SwitchAction(Action currentAction, Action newAction)
-        {
-            currentAction.Deactivate();
-            newAction.Activate();
         }
 
         private void DropLoot()
@@ -95,7 +86,7 @@ namespace Controller
 
             if (randomFloat <= dropChance)
             {
-                Item item = loot[Random.Range(0, loot.Count)];
+                Item item = _loot[Random.Range(0, _loot.Count)];
                 GameObject pickup = new GameObject("ItemPickup");
                 Pickup pickupRef = pickup.AddComponent<Pickup>();
                 SphereCollider collider = pickup.AddComponent<SphereCollider>();

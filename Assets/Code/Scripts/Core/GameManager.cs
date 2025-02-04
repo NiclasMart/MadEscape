@@ -33,7 +33,7 @@ namespace Core
             Instance = this;
 
             sceneManagement = GetComponent<SceneManagement>();
-            player.onDeath += RestartGame;
+            player.OnDeath += RestartGame;
         }
 
         private void RestartGame()
