@@ -6,7 +6,6 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
 using System.Collections.Generic;
 using Stats;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace Combat
         public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer)
         {
             //load weapon stats from file
-            int weaponID = (int)weaponConfig.weaponID;
+            int weaponID = (int)weaponConfig.WeaponID;
             List<StatRecord> loadedStatData = LoadStats.LoadWeaponStats();
             Dictionary<Stat, float> baseStats;
             if (loadedStatData.Count - 1 < weaponID)
@@ -31,7 +30,7 @@ namespace Combat
                 baseStats = loadedStatData[weaponID].statDict;
             }
 
-            weapon.Initialize(baseStats, weaponConfig.bulletColor, targetLayer);
+            weapon.Initialize(baseStats, weaponConfig.BulletColor, targetLayer);
             return weapon;
         }
     }

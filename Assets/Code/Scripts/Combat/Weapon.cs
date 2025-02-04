@@ -6,7 +6,6 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using Controller;
 using Stats;
 using UnityEngine;
 using Audio;
@@ -17,60 +16,60 @@ namespace Combat
     public class Weapon : MonoBehaviour
     {
         //stat values   
-        private float damage;
+        private float _damage;
         public float AttackSpeed { get; private set; }
         public float AttackRange { get; private set; }
 
-        private AudioManager audioManager;
+        private AudioManager _audioManager;
 
         //particle system modules
-        private ParticleSystem bulletSystem;
-        private ParticleSystem.MainModule mainModule;
-        private ParticleSystem.EmissionModule emissionModule;
-        private ParticleSystem.ShapeModule shapeModule;
-        private ParticleSystem.CollisionModule collisionModule;
+        private ParticleSystem _bulletSystem;
+        private ParticleSystem.MainModule _mainModule;
+        private ParticleSystem.EmissionModule _emissionModule;
+        private ParticleSystem.ShapeModule _shapeModule;
+        private ParticleSystem.CollisionModule _collisionModule;
 
         public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
         {
-            bulletSystem = GetComponentInChildren<ParticleSystem>();
-            audioManager = FindFirstObjectByType<AudioManager>();
-            emissionModule = bulletSystem.emission;
-            mainModule = bulletSystem.main;
-            shapeModule = bulletSystem.shape;
-            collisionModule = bulletSystem.collision;
+            _bulletSystem = GetComponentInChildren<ParticleSystem>();
+            _audioManager = FindFirstObjectByType<AudioManager>();
+            _emissionModule = _bulletSystem.emission;
+            _mainModule = _bulletSystem.main;
+            _shapeModule = _bulletSystem.shape;
+            _collisionModule = _bulletSystem.collision;
 
             //TODO move to seperate method
-            damage = baseStats[Stat.BaseDamage];
+            _damage = baseStats[Stat.BaseDamage];
             AttackSpeed = baseStats[Stat.AttackSpeed];
             AttackRange = baseStats[Stat.AttackRange];
 
-            ParticleSystem.Burst burst = emissionModule.GetBurst(0);
+            ParticleSystem.Burst burst = _emissionModule.GetBurst(0);
             burst.count = baseStats[Stat.BulletCount];
-            emissionModule.SetBurst(0, burst);
+            _emissionModule.SetBurst(0, burst);
 
-            mainModule.startSpeed = baseStats[Stat.BulletSpeed];
-            mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
-            shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
-            mainModule.startColor = bulletColor;
+            _mainModule.startSpeed = baseStats[Stat.BulletSpeed];
+            _mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
+            _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
+            _mainModule.startColor = bulletColor;
 
-            collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
+            _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
         {
-            return damage;
+            return _damage;
         }
 
         public void Fire()
         {
-            bulletSystem.Play();
-            audioManager.Play("gun bearbeitet");
+            _bulletSystem.Play();
+            _audioManager.Play("gun bearbeitet");
         }
 
         public void ReleaseTrigger()
         {
-            if (emissionModule.rateOverTime.constant == 0) return;
-            emissionModule.rateOverTime = 0;
+            if (_emissionModule.rateOverTime.constant == 0) return;
+            _emissionModule.rateOverTime = 0;
         }
     }
 }
