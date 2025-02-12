@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpawnConfig", menuName = "ScriptableObjects/Spawn Configuration")]
 public class EnemySpawnConfig : ScriptableObject
 {
-    public float totalDuration = 90f; // Total spawn cycle in seconds
+    public int TotalDuration = 90; // Total spawn cycle in seconds
     //Todo: add loot table
-    public List<SpawnWave> spawnWaves;
+    public List<SpawnWave> SpawnWaves;
 }
 
 [Serializable]

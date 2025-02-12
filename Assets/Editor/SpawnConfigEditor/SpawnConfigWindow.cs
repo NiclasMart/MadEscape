@@ -5,6 +5,9 @@ using System.Linq;
 
 public class SpawnConfigWindow : EditorWindow
 {
+
+    //Todo: generate timeline for visual representation of spawn waves
+
     private EnemySpawnConfig spawnConfig;
     private Vector2 scrollPosition;
     private List<bool> waveFoldouts = new List<bool>();
@@ -20,14 +23,6 @@ public class SpawnConfigWindow : EditorWindow
         GUILayout.Label("Enemy Spawn Configuration", EditorStyles.boldLabel);
         spawnConfig = (EnemySpawnConfig)EditorGUILayout.ObjectField("Spawn Config", spawnConfig, typeof(EnemySpawnConfig), false);
 
-        // Sort List Button
-        if (GUILayout.Button("Sort List"))
-        {
-            if (spawnConfig == null) return;
-            GUI.FocusControl(null);
-            spawnConfig.spawnWaves = spawnConfig.spawnWaves.OrderBy(wave => wave.SpawnStartTime).ToList();
-        }
-
         //check if spawnConfig is assigned
         if (spawnConfig == null)
         {
@@ -35,11 +30,21 @@ public class SpawnConfigWindow : EditorWindow
             return;
         }
 
+        spawnConfig.TotalDuration = EditorGUILayout.IntField("Total Duration", spawnConfig.TotalDuration);
+        GUILayout.Space(20);
+
+        // Sort List Button
+        if (GUILayout.Button("Sort List"))
+        {
+            GUI.FocusControl(null);
+            spawnConfig.SpawnWaves = spawnConfig.SpawnWaves.OrderBy(wave => wave.SpawnStartTime).ToList();
+        }
+
         //handle foldouts
-        if (waveFoldouts.Count != spawnConfig.spawnWaves.Count)
+        if (waveFoldouts.Count != spawnConfig.SpawnWaves.Count)
         {
             waveFoldouts.Clear();
-            for (int i = 0; i < spawnConfig.spawnWaves.Count; i++)
+            for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
             {
                 waveFoldouts.Add(false);
             }
@@ -49,9 +54,9 @@ public class SpawnConfigWindow : EditorWindow
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
         // Loop through Waves
-        for (int i = 0; i < spawnConfig.spawnWaves.Count; i++)
+        for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
         {
-            var wave = spawnConfig.spawnWaves[i];
+            var wave = spawnConfig.SpawnWaves[i];
             waveFoldouts[i] = EditorGUILayout.Foldout(waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}");
 
             if (waveFoldouts[i])
@@ -92,7 +97,7 @@ public class SpawnConfigWindow : EditorWindow
 
                 if (GUILayout.Button("- Remove Wave"))
                 {
-                    spawnConfig.spawnWaves.RemoveAt(i);
+                    spawnConfig.SpawnWaves.RemoveAt(i);
                     waveFoldouts.RemoveAt(i);
                     break;
                 }
@@ -105,15 +110,16 @@ public class SpawnConfigWindow : EditorWindow
 
         if (GUILayout.Button("+ Add Wave"))
         {
-            spawnConfig.spawnWaves.Add(new SpawnWave() { WaveName = "New Wave", EnemiesToSpawn = new List<EnemySpawnInfo>() });
+            spawnConfig.SpawnWaves.Add(new SpawnWave() { WaveName = "New Wave", EnemiesToSpawn = new List<EnemySpawnInfo>() });
             waveFoldouts.Add(false);
         }
 
         EditorGUILayout.EndScrollView();
 
-        if (WavesOverlap())
+       
+        if (WavesOverlap(out string message))
         {
-            EditorGUILayout.HelpBox("In the list are waves that overlap!", MessageType.Warning);
+            EditorGUILayout.HelpBox(message, MessageType.Warning);
             return;
         }
 
@@ -124,19 +130,27 @@ public class SpawnConfigWindow : EditorWindow
         }
     }
 
-    private bool WavesOverlap()
+    private bool WavesOverlap(out string message)
     {
-        foreach (var wave in spawnConfig.spawnWaves)
+        foreach (var wave in spawnConfig.SpawnWaves)
         {
-            foreach (var otherWave in spawnConfig.spawnWaves)
+            foreach (var otherWave in spawnConfig.SpawnWaves)
             {
                 if (wave == otherWave) continue;
                 if (wave.SpawnStartTime < otherWave.SpawnEndTime && wave.SpawnEndTime > otherWave.SpawnStartTime)
                 {
+                    message = $"Wave {wave.WaveName} overlaps with {otherWave.WaveName}";
+                    return true;
+                }
+
+                if (wave.SpawnStartTime > spawnConfig.TotalDuration || wave.SpawnEndTime > spawnConfig.TotalDuration)
+                {
+                    message = $"Wave {wave.WaveName} exceeds Total Duration";
                     return true;
                 }
             }
         }
+        message = "";
         return false;
     }
 }
