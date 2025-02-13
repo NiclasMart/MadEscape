@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99d14dac1181744cadff1871db99fb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnDelay: 4
+  _spawnDelay: 3
 --- !u!65 &1779734770611186056
 BoxCollider:
   m_ObjectHideFlags: 0

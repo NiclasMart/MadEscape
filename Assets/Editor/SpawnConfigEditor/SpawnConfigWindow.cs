@@ -12,7 +12,7 @@ public class SpawnConfigWindow : EditorWindow
 
     private EnemySpawnConfig spawnConfig;
     private Vector2 scrollPosition;
-    private List<bool> waveFoldouts = new List<bool>();
+    private List<bool> _waveFoldouts = new();
 
     [MenuItem("Game Tools/Spawn Configurator")]
     public static void ShowWindow()
@@ -43,12 +43,12 @@ public class SpawnConfigWindow : EditorWindow
         }
 
         //handle foldouts
-        if (waveFoldouts.Count != spawnConfig.SpawnWaves.Count)
+        if (_waveFoldouts.Count != spawnConfig.SpawnWaves.Count)
         {
-            waveFoldouts.Clear();
+            _waveFoldouts.Clear();
             for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
             {
-                waveFoldouts.Add(false);
+                _waveFoldouts.Add(false);
             }
         }
 
@@ -59,16 +59,26 @@ public class SpawnConfigWindow : EditorWindow
         for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
         {
             var wave = spawnConfig.SpawnWaves[i];
-            waveFoldouts[i] = EditorGUILayout.Foldout(waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}");
+            _waveFoldouts[i] = EditorGUILayout.Foldout(_waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}");
 
-            if (waveFoldouts[i])
+            if (_waveFoldouts[i])
             {
                 EditorGUILayout.BeginVertical(GUI.skin.box);
-
                 wave.WaveName = EditorGUILayout.TextField("Wave Name", wave.WaveName);
-                wave.SpawnStartTime = Mathf.Clamp(EditorGUILayout.DelayedFloatField("Start Time", wave.SpawnStartTime), 0, spawnConfig.TotalDuration);
-                wave.SpawnEndTime = Mathf.Clamp(EditorGUILayout.DelayedFloatField("End Time", wave.SpawnEndTime), wave.SpawnStartTime, spawnConfig.TotalDuration);
-                wave.SpawnInterval = Mathf.Max(1, EditorGUILayout.DelayedFloatField("Spawn Interval", wave.SpawnInterval));
+                wave.IsSingleWave = EditorGUILayout.Toggle("Single Wave", wave.IsSingleWave);
+                wave.SpawnStartTime = Mathf.Clamp(EditorGUILayout.DelayedIntField("Start Time", wave.SpawnStartTime), 0, spawnConfig.TotalDuration);
+
+                if (!wave.IsSingleWave)
+                {
+                    wave.SpawnEndTime = Mathf.Clamp(EditorGUILayout.DelayedIntField("End Time", wave.SpawnEndTime), wave.SpawnStartTime, spawnConfig.TotalDuration);
+                    wave.SpawnInterval = Mathf.Max(1, EditorGUILayout.DelayedIntField("Spawn Interval", wave.SpawnInterval));
+                } 
+                else
+                {
+                    wave.SpawnEndTime = wave.SpawnStartTime;
+                    wave.SpawnInterval = 0;
+                }
+                
                 wave.AmountOfGroupAreas = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Areas", wave.AmountOfGroupAreas));
                 wave.GroupSize = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Size", wave.GroupSize));
                 wave.GroupSizeVariance = Mathf.Max(0, EditorGUILayout.DelayedIntField("Group Size Variance", wave.GroupSizeVariance));
@@ -101,7 +111,7 @@ public class SpawnConfigWindow : EditorWindow
                 if (GUILayout.Button("- Remove Wave"))
                 {
                     spawnConfig.SpawnWaves.RemoveAt(i);
-                    waveFoldouts.RemoveAt(i);
+                    _waveFoldouts.RemoveAt(i);
                     break;
                 }
 
@@ -114,7 +124,7 @@ public class SpawnConfigWindow : EditorWindow
         if (GUILayout.Button("+ Add Wave"))
         {
             spawnConfig.SpawnWaves.Add(new SpawnWave() { WaveName = "New Wave", EnemiesToSpawn = new List<EnemySpawnInfo>() });
-            waveFoldouts.Add(false);
+            _waveFoldouts.Add(false);
         }
 
         EditorGUILayout.EndScrollView();
@@ -150,6 +160,18 @@ public class SpawnConfigWindow : EditorWindow
                 if (wave.SpawnStartTime > spawnConfig.TotalDuration || wave.SpawnEndTime > spawnConfig.TotalDuration)
                 {
                     message = $"Wave {wave.WaveName} exceeds Total Duration";
+                    return true;
+                }
+
+                if (!wave.IsSingleWave && wave.SpawnStartTime == wave.SpawnEndTime)
+                {
+                    message = $"Wave {wave.WaveName} is not a single wave but has the same start and end time";
+                    return true;
+                }
+
+                if (!wave.IsSingleWave && wave.SpawnEndTime - wave.SpawnStartTime < wave.SpawnInterval)
+                {
+                    message = $"Wave {wave.WaveName} has a spawn interval that exceeds the wave duration";
                     return true;
                 }
             }
