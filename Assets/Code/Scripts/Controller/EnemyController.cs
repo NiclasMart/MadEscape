@@ -94,7 +94,7 @@ namespace Controller
 
                 pickup.transform.position = transform.position;
                 pickupRef.Generate(item);
-                collider.radius = pickupRef.collectRadius;
+                collider.radius = pickupRef.CollectRadius;
                 collider.isTrigger = true;
             }
         }

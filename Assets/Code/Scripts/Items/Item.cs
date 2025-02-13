@@ -6,18 +6,16 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Items
 {
     public abstract class Item : MonoBehaviour
     {
-        [SerializeField] new string name;
-        [SerializeField] bool instantUse;
-        public Color debugColor;
-        public bool isUsedInstantly => instantUse;
+        [SerializeField] string _name;
+        [SerializeField] bool _instantUse;
+        public Color DebugColor;
+        public bool IsUsedInstantly => _instantUse;
         //icon
 
         public abstract void Use(GameObject user);

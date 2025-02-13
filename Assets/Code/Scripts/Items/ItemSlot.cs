@@ -6,31 +6,29 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Items
 {
     public class ItemSlot
     {
-        Item item = null;
-        public bool hasItem => item != null;
+        Item _item = null;
+        public bool HasItem => _item != null;
 
         public ItemSlot(Item item)
         {
-            this.item = item;
+            _item = item;
         }
 
         public Item GetItem()
         {
-            return item;
+            return _item;
         }
 
         public void UseItem(GameObject user)
         {
-            if (!hasItem) return;
-            item.Use(user);
+            if (!HasItem) return;
+            _item.Use(user);
         }
     }
 }

@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace Items
 {
+    //This class is not used in game and is only a depug tool
     public class LootGenerator : MonoBehaviour
     {
         [SerializeField] Pickup pickupPrefab;
