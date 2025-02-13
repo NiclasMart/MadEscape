@@ -7,6 +7,8 @@ public class SpawnConfigWindow : EditorWindow
 {
 
     //Todo: generate timeline for visual representation of spawn waves
+    //Todo: add loot table
+    //Todo: add estimation for wave stats like enemy amount and damage
 
     private EnemySpawnConfig spawnConfig;
     private Vector2 scrollPosition;
@@ -30,7 +32,7 @@ public class SpawnConfigWindow : EditorWindow
             return;
         }
 
-        spawnConfig.TotalDuration = EditorGUILayout.IntField("Total Duration", spawnConfig.TotalDuration);
+        spawnConfig.TotalDuration = EditorGUILayout.DelayedIntField("Total Duration", spawnConfig.TotalDuration);
         GUILayout.Space(20);
 
         // Sort List Button
@@ -64,12 +66,13 @@ public class SpawnConfigWindow : EditorWindow
                 EditorGUILayout.BeginVertical(GUI.skin.box);
 
                 wave.WaveName = EditorGUILayout.TextField("Wave Name", wave.WaveName);
-                wave.SpawnStartTime = Mathf.Max(0, EditorGUILayout.FloatField("Start Time", wave.SpawnStartTime));
-                wave.SpawnEndTime = Mathf.Max(wave.SpawnStartTime, EditorGUILayout.FloatField("End Time", wave.SpawnEndTime));
-                wave.SpawnInterval = EditorGUILayout.FloatField("Spawn Interval", wave.SpawnInterval);
-                wave.AmountOfGroupAreas = EditorGUILayout.IntField("Group Areas", wave.AmountOfGroupAreas);
-                wave.GroupSize = EditorGUILayout.IntField("Group Size", wave.GroupSize);
-                wave.GroupSizeVariance = EditorGUILayout.IntField("Group Size Variance", wave.GroupSizeVariance);
+                wave.SpawnStartTime = Mathf.Clamp(EditorGUILayout.DelayedFloatField("Start Time", wave.SpawnStartTime), 0, spawnConfig.TotalDuration);
+                wave.SpawnEndTime = Mathf.Clamp(EditorGUILayout.DelayedFloatField("End Time", wave.SpawnEndTime), wave.SpawnStartTime, spawnConfig.TotalDuration);
+                wave.SpawnInterval = Mathf.Max(1, EditorGUILayout.DelayedFloatField("Spawn Interval", wave.SpawnInterval));
+                wave.AmountOfGroupAreas = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Areas", wave.AmountOfGroupAreas));
+                wave.GroupSize = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Size", wave.GroupSize));
+                wave.GroupSizeVariance = Mathf.Max(0, EditorGUILayout.DelayedIntField("Group Size Variance", wave.GroupSizeVariance));
+                GUILayout.Space(20);
 
                 // Enemy Spawn List
                 for (int j = 0; j < wave.EnemiesToSpawn.Count; j++)
@@ -79,7 +82,7 @@ public class SpawnConfigWindow : EditorWindow
                     EditorGUILayout.BeginHorizontal();
 
                     enemyInfo.EnemyPrefab = (GameObject)EditorGUILayout.ObjectField("Enemy", enemyInfo.EnemyPrefab, typeof(GameObject), false);
-                    enemyInfo.RelativAmount = EditorGUILayout.IntField("Amount", enemyInfo.RelativAmount);
+                    enemyInfo.RelativAmount = Mathf.Max(1, EditorGUILayout.DelayedIntField("Relative Amount", enemyInfo.RelativAmount));
 
                     if (GUILayout.Button("X", GUILayout.Width(20)))
                     {
@@ -116,21 +119,22 @@ public class SpawnConfigWindow : EditorWindow
 
         EditorGUILayout.EndScrollView();
 
-       
-        if (WavesOverlap(out string message))
+        //show warning if waves 
+        if (AreWaveTimesValid(out string message))
         {
             EditorGUILayout.HelpBox(message, MessageType.Warning);
             return;
         }
 
-        // Save changes
-        if (GUI.changed)
+        //save button
+        if (GUILayout.Button("Save Configuration"))
         {
+            DeleteUnsetEnemies();
             EditorUtility.SetDirty(spawnConfig);
         }
     }
 
-    private bool WavesOverlap(out string message)
+    private bool AreWaveTimesValid(out string message)
     {
         foreach (var wave in spawnConfig.SpawnWaves)
         {
@@ -152,5 +156,21 @@ public class SpawnConfigWindow : EditorWindow
         }
         message = "";
         return false;
+    }
+
+    private void DeleteUnsetEnemies()
+    {
+        for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
+        {
+            var wave = spawnConfig.SpawnWaves[i];
+            for (int j = 0; j < wave.EnemiesToSpawn.Count; j++)
+            {
+                if (wave.EnemiesToSpawn[j].EnemyPrefab == null)
+                {
+                    wave.EnemiesToSpawn.RemoveAt(j);
+                    j--;
+                }
+            }
+        }
     }
 }

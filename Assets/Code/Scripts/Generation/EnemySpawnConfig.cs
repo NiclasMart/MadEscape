@@ -27,5 +27,5 @@ public class SpawnWave
 public class EnemySpawnInfo
 {
     public GameObject EnemyPrefab;
-    public int RelativAmount;
+    public int RelativAmount = 1;
 }

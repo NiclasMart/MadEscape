@@ -12,5 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a2f62f41f6a6445966a54027c663b1, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  totalDuration: 90
-  spawnWaves: []
+  TotalDuration: 90
+  SpawnWaves:
+  - WaveName: WaveA
+    SpawnStartTime: 0
+    SpawnEndTime: 0
+    SpawnInterval: 1
+    AmountOfGroupAreas: 1
+    GroupSize: 1
+    GroupSizeVariance: 52
+    EnemiesToSpawn: []
+  - WaveName: WaveB
+    SpawnStartTime: 0
+    SpawnEndTime: 1
+    SpawnInterval: 5
+    AmountOfGroupAreas: 4
+    GroupSize: 3
+    GroupSizeVariance: 1
+    EnemiesToSpawn: []
+  - WaveName: WaveC
+    SpawnStartTime: 1
+    SpawnEndTime: 5
+    SpawnInterval: 5
+    AmountOfGroupAreas: 4
+    GroupSize: 3
+    GroupSizeVariance: 1
+    EnemiesToSpawn: []
