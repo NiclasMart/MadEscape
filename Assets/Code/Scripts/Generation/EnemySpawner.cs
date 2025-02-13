@@ -15,6 +15,7 @@ using Items;
 using Stats;
 using Generator;
 using UnityEngine.AI;
+using System.Collections;
 
 namespace Generation
 {
@@ -24,16 +25,11 @@ namespace Generation
         const float GROUP_AREA_SIZE = 3f;
         [SerializeField] private SpawnTester _spawnTesterPrefab;
         [SerializeField] private List<Item> _lootTable = new();
-
-        [Header("Spawn Settings")]
-        [SerializeField] private float _spawnInterval = 3f;
-        [SerializeField][Min(1)] private int _spawnAmount = 1;
-        [SerializeField][Min(1)] private int _groupSize = 1;
+        [SerializeField] private EnemySpawnConfig _spawnConfig;
 
         private List<StatRecord> _enemyInfo = new();
         private float _timer = 0;
         private Vector2 _spawnArea;
-
         private ObjectPool _enemyPool;
 
         private void Awake()
@@ -43,41 +39,63 @@ namespace Generation
             _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
         }
 
-        private void FixedUpdate()
+        private void Start()
         {
-            //time spawn interval
-            if (_timer > _spawnInterval)
-            {
-                SpawnEnemys(_spawnAmount, _groupSize);
-                _timer = 0;
-            }
-            _timer += Time.deltaTime;
+            StartCoroutine(SpawnEnemiesOverTime());
         }
 
-        private void SpawnEnemys(int spawnAmount = 1, int goupSize = 1)
+        IEnumerator SpawnEnemiesOverTime()
+        {
+            var delay = new WaitForSeconds(1f);
+            SpawnWave currentWave = null;
+
+            while (_timer < _spawnConfig.TotalDuration)
+            {
+                if (currentWave == null || currentWave.SpawnEndTime < _timer)
+                {
+                    currentWave = _spawnConfig.SpawnWaves.Find(wave => wave.SpawnStartTime <= _timer && wave.SpawnEndTime >= _timer);
+                    if (currentWave != null)
+                    {
+                        Debug.Log($"Current Wave: {currentWave.WaveName}; Current Time: {_timer}; Current real time: {Time.time}");
+                        StartCoroutine(SpawnEnemies(currentWave));
+                    }
+
+                }
+                _timer += 1;
+                yield return delay;
+            }
+
+        }
+
+        IEnumerator SpawnEnemies(SpawnWave wave)
         {
             //Todo: use pool for testers
             //loop defines how many groups of enemies are spawned
-            for (int i = 0; i < spawnAmount; i++)
+            while (_timer <= wave.SpawnEndTime)
             {
-                //find random point in the room
-                bool foundValidPoint = false;
-                foundValidPoint = GetRandomSpawnPointInRoom(out Vector3 spawnArea);
-                if (!foundValidPoint) continue;
-
-                //loop defines how many enemies are spawned in a group
-                for (int j = 0; j < goupSize; j++)
+                for (int i = 0; i < wave.AmountOfGroupAreas; i++)
                 {
-                    //find random point close to the spawn area
-                    Vector3 spawnPoint;
-                    if (goupSize == 1) spawnPoint = spawnArea;
-                    else foundValidPoint = GetRandomSpawnPointInArea(spawnArea, out spawnPoint);
+                    //find random point in the room
+                    bool foundValidPoint = false;
+                    foundValidPoint = GetRandomSpawnPointInRoom(out Vector3 spawnArea);
                     if (!foundValidPoint) continue;
 
-                    //spawn tester to check if player is near
-                    SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
-                    StartCoroutine(spawnTester.SpawningEnemy(spawnPoint, Spawn));
+                    //loop defines how many enemies are spawned in a group
+                    for (int j = 0; j < wave.GroupSize; j++)
+                    {
+                        //find random point close to the spawn area
+                        Vector3 spawnPoint;
+                        if (wave.GroupSize == 1) spawnPoint = spawnArea;
+                        else foundValidPoint = GetRandomSpawnPointInArea(spawnArea, out spawnPoint);
+                        if (!foundValidPoint) continue;
+
+                        //spawn tester to check if player is near
+                        SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
+                        StartCoroutine(spawnTester.SpawningEnemy(spawnPoint, Spawn));
+                    }
                 }
+                Debug.Log("Spawned Enemies");
+                yield return new WaitForSeconds(wave.SpawnInterval);
             }
         }
 

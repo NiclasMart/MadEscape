@@ -16,33 +16,33 @@ namespace EnemyActions
 {
     public class Move : Action
     {
-        private Transform target;
+        private Transform _target;
 
-        private NavMeshAgent agent;
+        private NavMeshAgent _agent;
 
         private void Awake()
         {
-            agent = GetComponent<NavMeshAgent>();
+            _agent = GetComponent<NavMeshAgent>();
         }
 
         private void FixedUpdate()
         {
-            if (active && agent)
+            if (_active && _agent)
             {
-                agent.destination = target.position;
+                _agent.destination = _target.position;
             }
         }
 
         public override void Initialize(CharacterStats stats)
         {
             base.Initialize(stats);
-            agent.speed = stats.GetStat(Stat.MovementSpeed);
-            agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
+            _agent.speed = stats.GetStat(Stat.MovementSpeed);
+            _agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
         }
 
         public void SetTarget(Transform newTarget)
         {
-            target = newTarget;
+            _target = newTarget;
         }
     }
 }

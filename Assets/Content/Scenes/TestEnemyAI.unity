@@ -481,6 +481,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6660887140392642195, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
+      propertyPath: _spawnConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e3a62bb6d4149042ab95abbba0b49bb, type: 2}
     - target: {fileID: 7273425084882371535, guid: 3d3e013d73bf6cd47a2e6394f020cf7c, type: 3}
       propertyPath: spawnInterval
       value: 3
@@ -1193,7 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f24d0659384ced43b1f8e1a194866c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomSize: {x: 30, y: 30}
+  _roomSize: {x: 30, y: 30}
 --- !u!1 &2094056950
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,28 +6,25 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using Controller;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Items
 {
     public class Pickup : MonoBehaviour
     {
-        private Item itemRef;
+        private Item _itemRef;
 
-        public float collectRadius = 0.7f;
+        public readonly float CollectRadius = 0.7f;
 
         public Item GetItem()
         {
-            return itemRef;
+            return _itemRef;
         }
 
         public void Generate(Item item)
         {
-            itemRef = Instantiate(item, transform);
+            _itemRef = Instantiate(item, transform);
         }
 
         private void OnTriggerStay(Collider other)
@@ -40,9 +37,9 @@ namespace Items
 
         private void CollectItem(PlayerController player)
         {
-            if (!itemRef.CollectConditionIsFullfilled(player.gameObject)) return;
-            
-            bool itemWasConsumed = player.Inventory.Add(itemRef);
+            if (!_itemRef.CollectConditionIsFullfilled(player.gameObject)) return;
+
+            bool itemWasConsumed = player.Inventory.Add(_itemRef);
             if (itemWasConsumed) Destroy(gameObject);
         }
     }

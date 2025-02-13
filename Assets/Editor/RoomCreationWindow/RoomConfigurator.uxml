@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="root">
+        <ui:Label text="Room Configurator Timeline" class="title"/>
+
+        <!-- Timeline Container -->
+        <ui:VisualElement class="timeline-container">
+            <ui:VisualElement class="timeline" name="timeline">
+                <ui:VisualElement class="subdivision-container" name="subdivisionContainer"/>
+                <ui:VisualElement class="marker-container" name="markerContainer"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Input Field for Timeline Length -->
+        <ui:TextField name="timelineLengthField" class="timeline-length-field" value="100"/>
+    </ui:VisualElement>
+</ui:UXML>
