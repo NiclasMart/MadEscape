@@ -13,11 +13,11 @@ namespace EnemyActions
 {
     public class Action : MonoBehaviour
     {
-        internal bool active = false;
+        internal bool _active = false;
 
-        public bool isActive
+        public bool IsActive
         {
-            get { return active; }
+            get { return _active; }
         }
 
         public virtual void Initialize(CharacterStats stats)
@@ -25,12 +25,12 @@ namespace EnemyActions
 
         public void Activate()
         {
-            active = true;
+            _active = true;
         }
 
         public void Deactivate()
         {
-            active = false;
+            _active = false;
         }
     }
 }

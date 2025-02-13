@@ -15,18 +15,18 @@ namespace EnemyActions
 {
     public class Attack : Action
     {
-        private float attackDamage;
-        private float attackInterval;
-        private float nextAttackTime;
-        private bool attacked;
+        private float _attackDamage;
+        private float _attackInterval;
+        private float _nextAttackTime;
+        private bool _attacked;
 
         public override void Initialize(CharacterStats stats)
         {
             base.Initialize(stats);
-            attackDamage = stats.GetStat(Stat.BaseDamage);
-            attackInterval = 1f / stats.GetStat(Stat.AttackSpeed);
-            nextAttackTime = Time.time;
-            attacked = false;
+            _attackDamage = stats.GetStat(Stat.BaseDamage);
+            _attackInterval = 1f / stats.GetStat(Stat.AttackSpeed);
+            _nextAttackTime = Time.time;
+            _attacked = false;
         }
 
         private void OnTriggerEnter(Collider colliderInfo)
@@ -43,20 +43,20 @@ namespace EnemyActions
 
         private void PerformAttack(GameObject target)
         {
-            if (nextAttackTime <= Time.time)
+            if (_nextAttackTime <= Time.time)
             {
-                attacked = false;
+                _attacked = false;
             }
 
-            if (!attacked && active)
+            if (!_attacked && _active)
             {
                 if (target.GetComponent<PlayerController>())
                 {
                     //TODO: maybe we can add a function to get the health directly via the player controller, so we only need one GetComponent call
                     Health targetHealth = target.GetComponent<Health>();
-                    targetHealth.TakeDamage(attackDamage);
-                    nextAttackTime = Time.time + attackInterval;
-                    attacked = true;
+                    targetHealth.TakeDamage(_attackDamage);
+                    _nextAttackTime = Time.time + _attackInterval;
+                    _attacked = true;
                 }
             }
         }
