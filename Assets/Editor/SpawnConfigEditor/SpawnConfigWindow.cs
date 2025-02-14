@@ -59,7 +59,24 @@ public class SpawnConfigWindow : EditorWindow
         for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
         {
             var wave = spawnConfig.SpawnWaves[i];
-            _waveFoldouts[i] = EditorGUILayout.Foldout(_waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}");
+
+            //create foldout with custom style
+            GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
+            if (wave.IsSingleWave)
+            {
+                foldoutStyle.normal.textColor = new Color(1.0f, 0.5f, 0.5f);
+                foldoutStyle.onNormal.textColor = new Color(1.0f, 0.5f, 0.5f);
+                foldoutStyle.focused.textColor = new Color(1.0f, 0.5f, 0.5f);
+                foldoutStyle.onFocused.textColor = new Color(1.0f, 0.5f, 0.5f);
+            }
+            else
+            {
+                foldoutStyle.onNormal.textColor = Color.white;
+                foldoutStyle.focused.textColor = Color.white;
+                foldoutStyle.onFocused.textColor = Color.white;
+
+            }
+            _waveFoldouts[i] = EditorGUILayout.Foldout(_waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}", foldoutStyle);
 
             if (_waveFoldouts[i])
             {
@@ -72,13 +89,13 @@ public class SpawnConfigWindow : EditorWindow
                 {
                     wave.SpawnEndTime = Mathf.Clamp(EditorGUILayout.DelayedIntField("End Time", wave.SpawnEndTime), wave.SpawnStartTime, spawnConfig.TotalDuration);
                     wave.SpawnInterval = Mathf.Max(1, EditorGUILayout.DelayedIntField("Spawn Interval", wave.SpawnInterval));
-                } 
+                }
                 else
                 {
                     wave.SpawnEndTime = wave.SpawnStartTime;
                     wave.SpawnInterval = 0;
                 }
-                
+
                 wave.AmountOfGroupAreas = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Areas", wave.AmountOfGroupAreas));
                 wave.GroupSize = Mathf.Max(1, EditorGUILayout.DelayedIntField("Group Size", wave.GroupSize));
                 wave.GroupSizeVariance = Mathf.Max(0, EditorGUILayout.DelayedIntField("Group Size Variance", wave.GroupSizeVariance));
