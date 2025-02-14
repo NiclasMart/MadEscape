@@ -147,7 +147,7 @@ public class SpawnConfigWindow : EditorWindow
         EditorGUILayout.EndScrollView();
 
         //show warning if waves 
-        if (AreWaveTimesValid(out string message))
+        if (!ValidateWaveStats(out string message))
         {
             EditorGUILayout.HelpBox(message, MessageType.Warning);
             return;
@@ -161,7 +161,7 @@ public class SpawnConfigWindow : EditorWindow
         }
     }
 
-    private bool AreWaveTimesValid(out string message)
+    private bool ValidateWaveStats(out string message)
     {
         foreach (var wave in spawnConfig.SpawnWaves)
         {
@@ -171,30 +171,35 @@ public class SpawnConfigWindow : EditorWindow
                 if (wave.SpawnStartTime < otherWave.SpawnEndTime && wave.SpawnEndTime > otherWave.SpawnStartTime)
                 {
                     message = $"Wave {wave.WaveName} overlaps with {otherWave.WaveName}";
-                    return true;
+                    return false;
                 }
+            }
+            if (wave.SpawnStartTime > spawnConfig.TotalDuration || wave.SpawnEndTime > spawnConfig.TotalDuration)
+            {
+                message = $"Wave {wave.WaveName} exceeds Total Duration";
+                return false;
+            }
 
-                if (wave.SpawnStartTime > spawnConfig.TotalDuration || wave.SpawnEndTime > spawnConfig.TotalDuration)
-                {
-                    message = $"Wave {wave.WaveName} exceeds Total Duration";
-                    return true;
-                }
+            if (!wave.IsSingleWave && wave.SpawnStartTime == wave.SpawnEndTime)
+            {
+                message = $"Wave {wave.WaveName} is not a single wave but has the same start and end time";
+                return false;
+            }
 
-                if (!wave.IsSingleWave && wave.SpawnStartTime == wave.SpawnEndTime)
-                {
-                    message = $"Wave {wave.WaveName} is not a single wave but has the same start and end time";
-                    return true;
-                }
+            if (!wave.IsSingleWave && wave.SpawnEndTime - wave.SpawnStartTime < wave.SpawnInterval)
+            {
+                message = $"Wave {wave.WaveName} has a spawn interval that exceeds the wave duration";
+                return false;
+            }
 
-                if (!wave.IsSingleWave && wave.SpawnEndTime - wave.SpawnStartTime < wave.SpawnInterval)
-                {
-                    message = $"Wave {wave.WaveName} has a spawn interval that exceeds the wave duration";
-                    return true;
-                }
+            if (wave.EnemiesToSpawn.Count == 0)
+            {
+                message = $"Wave {wave.WaveName} has no enemies to spawn";
+                return false;
             }
         }
         message = "";
-        return false;
+        return true;
     }
 
     private void DeleteUnsetEnemies()

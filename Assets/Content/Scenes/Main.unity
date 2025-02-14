@@ -618,6 +618,10 @@ PrefabInstance:
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8132989100631428253, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 23.21
+      objectReference: {fileID: 0}
     - target: {fileID: 8696907981836716761, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay
       value: 

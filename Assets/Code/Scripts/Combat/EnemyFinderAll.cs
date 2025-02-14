@@ -7,6 +7,8 @@
 // -------------------------------------------*/
 
 using System;
+using Core;
+using Generation;
 using UnityEngine;
 
 namespace Combat
@@ -22,7 +24,7 @@ namespace Combat
             _overrideTarget = target;
             if (_overrideTarget == null)
             {
-                _enemiesParent = GameObject.Find("Pool").transform; //Todo: don't use hardcoded name
+                _enemiesParent = FindFirstObjectByType<EnemySpawner>().transform;
                 if (_enemiesParent == null)
                 {
                     Debug.LogError("EnemiesParent not found in the scene!");
@@ -45,15 +47,19 @@ namespace Combat
             closestEnemy = null;
             float closestDistanceSqr = Mathf.Infinity;
 
-            foreach (Transform enemyTransform in _enemiesParent)
+            foreach (Transform pool in _enemiesParent)
             {
-                if (!enemyTransform.gameObject.activeSelf) continue;
-
-                float distanceSqr = (enemyTransform.position - transform.position).sqrMagnitude;
-                if (distanceSqr < closestDistanceSqr)
+                if (pool.GetComponent<ObjectPool>() == null) continue;
+                foreach (Transform enemy in pool)
                 {
-                    closestEnemy = enemyTransform.gameObject;
-                    closestDistanceSqr = distanceSqr;
+                    if (!enemy.gameObject.activeSelf) continue;
+
+                    float distanceSqr = (enemy.position - transform.position).sqrMagnitude;
+                    if (distanceSqr < closestDistanceSqr)
+                    {
+                        closestEnemy = enemy.gameObject;
+                        closestDistanceSqr = distanceSqr;
+                    }
                 }
             }
             distance = (float)Math.Sqrt(closestDistanceSqr);

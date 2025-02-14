@@ -30,8 +30,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8806192514162945502}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6660887140392642195
@@ -49,9 +48,7 @@ MonoBehaviour:
   _spawnTesterPrefab: {fileID: 5359239937696025593, guid: a2f418b0bc71fed49a896b1d84f5b574, type: 3}
   _lootTable:
   - {fileID: 3818701986398421439, guid: 3adad9bc51cdfc548ad3407cdb688e94, type: 3}
-  _spawnInterval: 3
-  _spawnAmount: 1
-  _groupSize: 4
+  _spawnConfig: {fileID: 0}
 --- !u!114 &4026505400820868999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,35 +63,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialCapacity: 10
   _poolType: {fileID: 1104908563727063817, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
-  _poolHolder: {fileID: 8806192514162945502}
---- !u!1 &7147369351276479546
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8806192514162945502}
-  m_Layer: 0
-  m_Name: Pool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8806192514162945502
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7147369351276479546}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3293089737139755911}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  _poolHolder: {fileID: 0}

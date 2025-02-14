@@ -19,7 +19,6 @@ using System.Collections;
 
 namespace Generation
 {
-    [RequireComponent(typeof(ObjectPool))]
     public class EnemySpawner : MonoBehaviour
     {
         const float GROUP_AREA_SIZE = 3f;
@@ -30,18 +29,27 @@ namespace Generation
         private List<StatRecord> _enemyInfo = new();
         private float _timer = 0;
         private Vector2 _spawnArea;
-        private ObjectPool _enemyPool;
+        private Dictionary<int, ObjectPool> _enemyPools = new();
 
         private void Awake()
         {
-            _enemyPool = GetComponent<ObjectPool>();
             _enemyInfo = LoadStats.LoadEnemyStats();
             _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
+            // _enemyPools.Add(-1, CreateNewSpawnPool(_spawnTesterPrefab.gameObject, 10));
         }
 
         private void Start()
         {
             StartCoroutine(SpawnEnemiesOverTime());
+        }
+
+        private ObjectPool CreateNewSpawnPool(GameObject poolType, int initialCapacity)
+        {
+            var poolHolder = new GameObject("Pool");
+            poolHolder.transform.parent = transform;
+            var pool = poolHolder.AddComponent<ObjectPool>();
+            pool.Initialize(poolType, initialCapacity, poolHolder.transform);
+            return pool;
         }
 
         IEnumerator SpawnEnemiesOverTime()
@@ -81,7 +89,8 @@ namespace Generation
                     if (!foundValidPoint) continue;
 
                     //loop defines how many enemies are spawned in a group
-                    for (int j = 0; j < wave.GroupSize; j++)
+                    int groupSize = Random.Range(wave.GroupSize - wave.GroupSizeVariance, wave.GroupSize + wave.GroupSizeVariance);
+                    for (int j = 0; j < groupSize; j++)
                     {
                         //find random point close to the spawn area
                         Vector3 spawnPoint;
@@ -89,9 +98,18 @@ namespace Generation
                         else foundValidPoint = GetRandomSpawnPointInArea(spawnArea, out spawnPoint);
                         if (!foundValidPoint) continue;
 
+                        //get enemy
+                        EnemyController enemyType = wave.GetRandomEnemyTypeFromWave();
+                        bool poolExists = _enemyPools.ContainsKey(enemyType.ID);
+                        if (!poolExists)
+                        {
+                            _enemyPools.Add(enemyType.ID, CreateNewSpawnPool(enemyType.gameObject, 10));
+                        }
+
                         //spawn tester to check if player is near
                         SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
-                        StartCoroutine(spawnTester.SpawningEnemy(spawnPoint, Spawn));
+                        // SpawnTester spawnTester = _enemyPools[-1].GetObject().GetComponent<SpawnTester>();
+                        StartCoroutine(spawnTester.SpawningEnemy(enemyType.ID, Spawn));
                     }
                 }
                 Debug.Log("Spawned Enemies");
@@ -99,18 +117,23 @@ namespace Generation
             }
         }
 
-        public void Spawn(Vector3 spawnPosition)
+        public void Spawn(Vector3 spawnPosition, int enemyTypeID)
         {
-            GameObject enemy = _enemyPool.GetObject();
-            SetUpEnemy(enemy);
+            GameObject enemy = _enemyPools[enemyTypeID].GetObject();
+            SetUpEnemy(enemy, enemyTypeID);
             enemy.transform.position = spawnPosition;
             enemy.SetActive(true);
         }
 
-        private void SetUpEnemy(GameObject enemy)
+        private void SetUpEnemy(GameObject enemy, int ID)
         {
             EnemyController enemyController = enemy.GetComponent<EnemyController>();
-            StatRecord type = GetRandomEnemyType();
+            StatRecord type = _enemyInfo.Find(info => info.id == ID);
+            if (type == null)
+            {
+                Debug.LogError($"Enemy with ID {ID} not found in enemy info list.");
+                return;
+            }
             enemy.gameObject.name = type.name;
             enemyController.Initialize(type.statDict, _lootTable);
         }

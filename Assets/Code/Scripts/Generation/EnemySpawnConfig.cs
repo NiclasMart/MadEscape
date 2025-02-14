@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SpawnConfig", menuName = "ScriptableObjects/Spawn Configuration")]
@@ -22,6 +23,37 @@ public class SpawnWave
     [HideInInspector] public int GroupSize = 3; // amount of enemies in a group
     [HideInInspector] public int GroupSizeVariance = 1; // variance in group size
     [HideInInspector] public List<EnemySpawnInfo> EnemiesToSpawn;
+
+    private int _totalSpawnWeight = -1;
+
+    public EnemyController GetRandomEnemyTypeFromWave()
+    {
+        if (_totalSpawnWeight == -1)
+        {
+            InitializeTotalSpawnWeight();
+        }
+
+        int randomValue = UnityEngine.Random.Range(0, _totalSpawnWeight);
+        int cumulativeWeight = 0;
+        foreach (var enemy in EnemiesToSpawn)
+        {
+            cumulativeWeight += enemy.RelativAmount;
+            if (randomValue < cumulativeWeight)
+            {
+                return enemy.EnemyPrefab.GetComponent<EnemyController>();
+            }
+        }
+        return default;
+    }
+
+    private void InitializeTotalSpawnWeight()
+    {
+        _totalSpawnWeight = 0;
+        foreach (var enemy in EnemiesToSpawn)
+        {
+            _totalSpawnWeight += enemy.RelativAmount;
+        }
+    }
 }
 
 [Serializable]
