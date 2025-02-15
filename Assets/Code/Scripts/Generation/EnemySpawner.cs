@@ -30,12 +30,13 @@ namespace Generation
         private float _timer = 0;
         private Vector2 _spawnArea;
         private Dictionary<int, ObjectPool> _enemyPools = new();
+        private ObjectPool _spawnTesterPool;
 
         private void Awake()
         {
             _enemyInfo = LoadStats.LoadEnemyStats();
             _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
-            // _enemyPools.Add(-1, CreateNewSpawnPool(_spawnTesterPrefab.gameObject, 10));
+            _spawnTesterPool = CreateNewSpawnPool(_spawnTesterPrefab.gameObject, 10);
         }
 
         private void Start()
@@ -52,6 +53,7 @@ namespace Generation
             return pool;
         }
 
+        //handles spawning of different waves
         IEnumerator SpawnEnemiesOverTime()
         {
             var delay = new WaitForSeconds(1f);
@@ -72,12 +74,11 @@ namespace Generation
                 _timer += 1;
                 yield return delay;
             }
-
         }
 
+        //handles spawning of enemies in a wave
         IEnumerator SpawnEnemies(SpawnWave wave)
         {
-            //Todo: use pool for testers
             //loop defines how many groups of enemies are spawned
             while (_timer <= wave.SpawnEndTime)
             {
@@ -107,8 +108,10 @@ namespace Generation
                         }
 
                         //spawn tester to check if player is near
-                        SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
-                        // SpawnTester spawnTester = _enemyPools[-1].GetObject().GetComponent<SpawnTester>();
+                        // SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
+                        SpawnTester spawnTester = _spawnTesterPool.GetObject().GetComponent<SpawnTester>();
+                        spawnTester.transform.position = spawnPoint;
+                        spawnTester.gameObject.SetActive(true);
                         StartCoroutine(spawnTester.SpawningEnemy(enemyType.ID, Spawn));
                     }
                 }
@@ -117,7 +120,7 @@ namespace Generation
             }
         }
 
-        public void Spawn(Vector3 spawnPosition, int enemyTypeID)
+        private void Spawn(Vector3 spawnPosition, int enemyTypeID)
         {
             GameObject enemy = _enemyPools[enemyTypeID].GetObject();
             SetUpEnemy(enemy, enemyTypeID);
@@ -136,11 +139,6 @@ namespace Generation
             }
             enemy.gameObject.name = type.name;
             enemyController.Initialize(type.statDict, _lootTable);
-        }
-
-        private StatRecord GetRandomEnemyType()
-        {
-            return _enemyInfo[Random.Range(0, _enemyInfo.Count)];
         }
 
         private bool GetRandomSpawnPointInRoom(out Vector3 point)

@@ -50,6 +50,7 @@ namespace Core
 
         public void ReturnObject(IPoolable returnedObject)
         {
+            returnedObject.Reset();
             returnedObject.GetAttachedGameobject().SetActive(false);
             _disabledObjects.Add(returnedObject);
         }

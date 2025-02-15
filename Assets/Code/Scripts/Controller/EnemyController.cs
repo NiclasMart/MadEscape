@@ -56,11 +56,6 @@ namespace Controller
             this._loot = loot; //Todo: don't tie loot to enemy, but to enemy spawner
         }
 
-        public GameObject GetAttachedGameobject()
-        {
-            return gameObject;
-        }
-
         private void FindPlayerTarget()
         {
             PlayerController player = FindFirstObjectByType<PlayerController>();
@@ -73,7 +68,7 @@ namespace Controller
             //Todo: disable unused components
             _stats.Clear();
             DropLoot();
-            OnDestroy(this);
+            OnDestroy?.Invoke(this);
             _health.onDeath = null;
             FindFirstObjectByType<AudioManager>().Play("enemy death");
 
@@ -98,5 +93,12 @@ namespace Controller
                 collider.isTrigger = true;
             }
         }
+
+        public GameObject GetAttachedGameobject()
+        {
+            return gameObject;
+        }
+
+        public void Reset() { }
     }
 }
