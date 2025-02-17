@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using Items;
 
 public class SpawnConfigWindow : EditorWindow
 {
@@ -32,7 +33,10 @@ public class SpawnConfigWindow : EditorWindow
             return;
         }
 
+        // overall wave stats
         spawnConfig.TotalDuration = EditorGUILayout.DelayedIntField("Total Duration", spawnConfig.TotalDuration);
+        spawnConfig.LootTable = (LootTable)EditorGUILayout.ObjectField("Loot Table", spawnConfig.LootTable, typeof(LootTable), false);
+
         GUILayout.Space(20);
 
         // Sort List Button

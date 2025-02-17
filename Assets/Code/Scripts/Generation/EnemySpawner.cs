@@ -23,9 +23,10 @@ namespace Generation
     {
         const float GROUP_AREA_SIZE = 3f;
         [SerializeField] private SpawnTester _spawnTesterPrefab;
-        [SerializeField] private List<Item> _lootTable = new();
         [SerializeField] private EnemySpawnConfig _spawnConfig;
 
+        private LootTable _lootTable;
+        private LootGenerator _lootGenerator;
         private List<StatRecord> _enemyInfo = new();
         private float _timer = 0;
         private Vector2 _spawnArea;
@@ -37,6 +38,7 @@ namespace Generation
             _enemyInfo = LoadStats.LoadEnemyStats();
             _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
             _spawnTesterPool = CreateNewSpawnPool(_spawnTesterPrefab.gameObject, 10);
+            _lootGenerator = new LootGenerator(_spawnConfig.LootTable);
         }
 
         private void Start()
@@ -138,7 +140,9 @@ namespace Generation
                 return;
             }
             enemy.gameObject.name = type.name;
-            enemyController.Initialize(type.statDict, _lootTable);
+
+            Item drop = _lootGenerator.Generate();
+            enemyController.Initialize(type.statDict, drop);
         }
 
         private bool GetRandomSpawnPointInRoom(out Vector3 point)

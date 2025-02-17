@@ -24,7 +24,7 @@ namespace Controller
         private Transform _target;
         private Move _mover;
         private Attack _attack;
-        public List<Item> _loot = new List<Item>();
+        public Item _drop;
 
         public event System.Action<IPoolable> OnDestroy;
 
@@ -36,7 +36,7 @@ namespace Controller
         }
 
         //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
-        public void Initialize(Dictionary<Stat, float> baseStats, List<Item> loot)
+        public void Initialize(Dictionary<Stat, float> baseStats, Item drop)
         {
             base.Initialize(baseStats);
 
@@ -53,7 +53,7 @@ namespace Controller
             _attack.Initialize(_stats);
             _attack.Activate();
 
-            this._loot = loot; //Todo: don't tie loot to enemy, but to enemy spawner
+            _drop = drop; //Todo: don't tie loot to enemy, but to enemy spawner
         }
 
         private void FindPlayerTarget()
@@ -76,22 +76,17 @@ namespace Controller
 
         private void DropLoot()
         {
-            float dropChance = 0.05f;
-            float randomFloat = Random.Range(0f, 1f);
+            if (_drop == null) return;
+            
+            GameObject pickup = new GameObject("ItemPickup");
+            Pickup pickupRef = pickup.AddComponent<Pickup>();
+            SphereCollider collider = pickup.AddComponent<SphereCollider>();
+            pickup.layer = LayerMask.NameToLayer("EnemyProjectile");
 
-            if (randomFloat <= dropChance)
-            {
-                Item item = _loot[Random.Range(0, _loot.Count)];
-                GameObject pickup = new GameObject("ItemPickup");
-                Pickup pickupRef = pickup.AddComponent<Pickup>();
-                SphereCollider collider = pickup.AddComponent<SphereCollider>();
-                pickup.layer = LayerMask.NameToLayer("EnemyProjectile");
-
-                pickup.transform.position = transform.position;
-                pickupRef.Generate(item);
-                collider.radius = pickupRef.CollectRadius;
-                collider.isTrigger = true;
-            }
+            pickup.transform.position = transform.position;
+            pickupRef.Generate(_drop);
+            collider.radius = pickupRef.CollectRadius;
+            collider.isTrigger = true;
         }
 
         public GameObject GetAttachedGameobject()

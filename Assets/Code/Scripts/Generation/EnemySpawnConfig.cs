@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Controller;
+using Items;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SpawnConfig", menuName = "ScriptableObjects/Spawn Configuration")]
+[CreateAssetMenu(fileName = "SpawnConfig", menuName = "Scriptable Objects/Spawn Configuration")]
 public class EnemySpawnConfig : ScriptableObject
 {
     public int TotalDuration = 90; // Total spawn cycle in seconds
-    //Todo: add loot table
+    public LootTable LootTable;
     public List<SpawnWave> SpawnWaves;
 }
 
