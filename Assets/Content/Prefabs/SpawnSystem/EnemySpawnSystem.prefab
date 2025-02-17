@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3293089737139755911}
   - component: {fileID: 6660887140392642195}
-  - component: {fileID: 4026505400820868999}
   m_Layer: 0
   m_Name: EnemySpawnSystem
   m_TagString: Untagged
@@ -46,21 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnTesterPrefab: {fileID: 5359239937696025593, guid: a2f418b0bc71fed49a896b1d84f5b574, type: 3}
-  _lootTable:
-  - {fileID: 3818701986398421439, guid: 3adad9bc51cdfc548ad3407cdb688e94, type: 3}
   _spawnConfig: {fileID: 0}
---- !u!114 &4026505400820868999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127387817692316545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7658fb67b1cede4f857c99cda58c5f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialCapacity: 10
-  _poolType: {fileID: 1104908563727063817, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
-  _poolHolder: {fileID: 0}

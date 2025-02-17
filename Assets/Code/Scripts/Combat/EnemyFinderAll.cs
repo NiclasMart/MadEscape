@@ -7,6 +7,7 @@
 // -------------------------------------------*/
 
 using System;
+using Controller;
 using Core;
 using Generation;
 using UnityEngine;
@@ -52,7 +53,7 @@ namespace Combat
                 if (pool.GetComponent<ObjectPool>() == null) continue;
                 foreach (Transform enemy in pool)
                 {
-                    if (!enemy.gameObject.activeSelf) continue;
+                    if (!enemy.gameObject.activeSelf || enemy.GetComponent<EnemyController>() == null) continue;
 
                     float distanceSqr = (enemy.position - transform.position).sqrMagnitude;
                     if (distanceSqr < closestDistanceSqr)
