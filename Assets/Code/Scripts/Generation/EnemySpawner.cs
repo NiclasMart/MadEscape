@@ -25,7 +25,6 @@ namespace Generation
         [SerializeField] private SpawnTester _spawnTesterPrefab;
         [SerializeField] private EnemySpawnConfig _spawnConfig;
 
-        private LootTable _lootTable;
         private LootGenerator _lootGenerator;
         private List<StatRecord> _enemyInfo = new();
         private float _timer = 0;

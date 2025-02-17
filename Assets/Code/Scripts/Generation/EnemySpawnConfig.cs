@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using Items;
 using UnityEngine;
@@ -31,7 +32,7 @@ public class SpawnWave
     {
         if (_totalSpawnWeight == -1)
         {
-            InitializeTotalSpawnWeight();
+            _totalSpawnWeight = EnemiesToSpawn.Sum(e => e.RelativAmount);
         }
 
         int randomValue = UnityEngine.Random.Range(0, _totalSpawnWeight);
@@ -45,15 +46,6 @@ public class SpawnWave
             }
         }
         return default;
-    }
-
-    private void InitializeTotalSpawnWeight()
-    {
-        _totalSpawnWeight = 0;
-        foreach (var enemy in EnemiesToSpawn)
-        {
-            _totalSpawnWeight += enemy.RelativAmount;
-        }
     }
 }
 

@@ -3,22 +3,41 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 using Items;
+using Stats;
+using Controller;
+
+public class WaveData
+{
+    public bool isFolded = false;
+    public int minEnemyAmount = 0;
+    public int maxEnemyAmount = 0;
+    public float waveLife = 0;
+}
 
 public class SpawnConfigWindow : EditorWindow
 {
 
     //Todo: generate timeline for visual representation of spawn waves
-    //Todo: add loot table
     //Todo: add estimation for wave stats like enemy amount and damage
 
     private EnemySpawnConfig spawnConfig;
     private Vector2 scrollPosition;
     private List<bool> _waveFoldouts = new();
+    private List<WaveData> _waveData = new();
+    private List<StatRecord> _enemyInfo = new();
+
+
 
     [MenuItem("Game Tools/Spawn Configurator")]
     public static void ShowWindow()
     {
         GetWindow<SpawnConfigWindow>("Spawn Configurator");
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("load stats");
+        _enemyInfo = LoadStats.LoadEnemyStats();
     }
 
     private void OnGUI()
@@ -46,7 +65,7 @@ public class SpawnConfigWindow : EditorWindow
             spawnConfig.SpawnWaves = spawnConfig.SpawnWaves.OrderBy(wave => wave.SpawnStartTime).ToList();
         }
 
-        //handle foldouts
+        // handle foldouts
         if (_waveFoldouts.Count != spawnConfig.SpawnWaves.Count)
         {
             _waveFoldouts.Clear();
@@ -63,6 +82,7 @@ public class SpawnConfigWindow : EditorWindow
         for (int i = 0; i < spawnConfig.SpawnWaves.Count; i++)
         {
             var wave = spawnConfig.SpawnWaves[i];
+            // if (_waveData.Count < i + 1) _waveData.Add(new WaveData() { isFolded = false});
 
             //create foldout with custom style
             GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout);
@@ -82,6 +102,7 @@ public class SpawnConfigWindow : EditorWindow
             }
             _waveFoldouts[i] = EditorGUILayout.Foldout(_waveFoldouts[i], $"Wave {i + 1}: starts at {wave.SpawnStartTime}s - {wave.WaveName}", foldoutStyle);
 
+            // wave settings
             if (_waveFoldouts[i])
             {
                 EditorGUILayout.BeginVertical(GUI.skin.box);
@@ -124,12 +145,38 @@ public class SpawnConfigWindow : EditorWindow
                     EditorGUILayout.EndHorizontal();
                 }
 
+                // wave stats
+                GUILayout.BeginVertical(GUI.skin.box);
+                GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+                labelStyle.fontSize = 10;
+                labelStyle.fontStyle = FontStyle.Italic;
+
+                int minEnemyAmountPerSpawn = wave.AmountOfGroupAreas * (wave.GroupSize - wave.GroupSizeVariance);
+                int maxEnemyAmountPerSpawn = wave.AmountOfGroupAreas * (wave.GroupSize + wave.GroupSizeVariance);
+                int minEnemyAmountTotal = wave.IsSingleWave ? minEnemyAmountPerSpawn : (1 + (wave.SpawnEndTime - wave.SpawnStartTime) / wave.SpawnInterval) * minEnemyAmountPerSpawn;
+                int maxEnemyAmountTotal = wave.IsSingleWave ? maxEnemyAmountPerSpawn : (1 + (wave.SpawnEndTime - wave.SpawnStartTime) / wave.SpawnInterval) * maxEnemyAmountPerSpawn;
+                GUILayout.Label($"Total enemy amount: {minEnemyAmountTotal} - {maxEnemyAmountTotal}", labelStyle);
+                float averageEnemies = (minEnemyAmountTotal + maxEnemyAmountTotal) / 2;
+                int totalEnemyWeight = wave.EnemiesToSpawn.Sum(e => e != null ? e.RelativAmount : 0);
+                double averageHealthPerEnemy = wave.EnemiesToSpawn.Sum(e =>
+                {
+                    if (e == null || e.EnemyPrefab == null) return 0;
+                    var enemyController = e.EnemyPrefab.GetComponent<EnemyController>();
+                    if (enemyController == null) return 0;
+                    var enemyData = _enemyInfo.Find(enemyData => enemyData.id == enemyController.ID);
+                    if (enemyData == null) return 0;
+                    return e.RelativAmount / (double)totalEnemyWeight * enemyData.statDict[Stat.Life];
+                });
+                GUILayout.Label($"Average total wave life: {averageHealthPerEnemy * averageEnemies}", labelStyle);
+                GUILayout.EndVertical();
+
                 if (GUILayout.Button("+ Add Enemy"))
                 {
                     wave.EnemiesToSpawn.Add(new EnemySpawnInfo());
                 }
 
-                if (GUILayout.Button("- Remove Wave"))
+                GUILayout.Space(10);
+                if (GUILayout.Button("Remove Wave"))
                 {
                     spawnConfig.SpawnWaves.RemoveAt(i);
                     _waveFoldouts.RemoveAt(i);
@@ -199,6 +246,13 @@ public class SpawnConfigWindow : EditorWindow
             if (wave.EnemiesToSpawn.Count == 0)
             {
                 message = $"Wave {wave.WaveName} has no enemies to spawn";
+                return false;
+            }
+
+            foreach (var enemy in wave.EnemiesToSpawn)
+            {
+                if (enemy != null) continue;
+                message = $"Wave {wave.WaveName} has an empty enemy within its spawn list";
                 return false;
             }
         }

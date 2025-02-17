@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62eb37c1474f11a48aeaa36aec7eeded, type: 3}
   m_Name: BaseLootTabel
   m_EditorClassIdentifier: 
-  PrimaryLootChance: 0
-  PrimaryLoot: []
-  SecondaryLootChance: 0
-  SecondaryLoot: []
+  PrimaryLootChance: 0.3
+  PrimaryLoot:
+  - Item: {fileID: 3818701986398421439, guid: 3adad9bc51cdfc548ad3407cdb688e94, type: 3}
+    Weight: 1
+  SecondaryLootChance: 0.05
+  SecondaryLoot:
+  - Item: {fileID: 6678040134146156270, guid: c3081cd8cf04c504abe826d04c3ac7cb, type: 3}
+    Weight: 1
+  - Item: {fileID: 6678040134146156270, guid: 2abf5905edb6d68439156f3f3436de83, type: 3}
+    Weight: 1
