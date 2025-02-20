@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Combat
 {
-    [CreateAssetMenu(fileName = "Weapon", menuName = "ScriptableObjects/WeaponsTemplate")]
+    [CreateAssetMenu(fileName = "Weapon", menuName = "Scriptable Objects/WeaponsTemplate")]
     public class WeaponTemplate : ScriptableObject
     {
         public float WeaponID;

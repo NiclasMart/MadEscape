@@ -16,6 +16,8 @@ namespace Controller
 {
     public abstract class BaseController : MonoBehaviour
     {
+        [SerializeField] protected int _statID = 0;
+        public int ID => _statID;
         [SerializeField] protected WeaponTemplate _startWeapon;
         protected CharacterStats _stats;
         protected Health _health;
