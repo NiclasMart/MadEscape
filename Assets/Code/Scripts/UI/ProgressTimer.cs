@@ -9,6 +9,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Generation;
 using TMPro;
 using UnityEngine;
 
@@ -16,17 +17,21 @@ namespace UI
 {
     public class ProgressTimer : MonoBehaviour
     {
-        [SerializeField] public float LevelTime;
-        private float _timeLeft;
+        [SerializeField] private EnemySpawnConfig _spawnConfig;
+        private EnemySpawner _enemySpawner;
+        private TextMeshProUGUI _textGui;
         private void Start()
         {
-            _timeLeft = LevelTime;
+            _textGui = GetComponent<TextMeshProUGUI>();
+            _enemySpawner = FindFirstObjectByType<EnemySpawner>();
+            _enemySpawner.onTimerUpdated += HandleTimerUpdated;
         }
-        private void Update()
-        {
-            _timeLeft -= Time.deltaTime;
-            SetStatDisplay(_timeLeft);
-            if ( _timeLeft < 0 )
+
+        private void HandleTimerUpdated(float timer)
+        {   
+            float timeLeft = _spawnConfig.TotalDuration - timer;
+            SetStatDisplay(timeLeft);
+            if (timeLeft <= 0)
             {
                 LevelOver();
             }
@@ -40,7 +45,11 @@ namespace UI
         public void SetStatDisplay(float value)
         {
             int secondsLeft = (int) Math.Ceiling(value);
-            GetComponent<TextMeshProUGUI>().text = secondsLeft.ToString("D");
+            _textGui.text = secondsLeft.ToString("D");
+            if (secondsLeft <= 10)
+            {
+                _textGui.color = Color.red;
+            }
         }
     }
 }

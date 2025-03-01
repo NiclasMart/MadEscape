@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4360bf5699d80741bb3a627dea27e38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelTime: 45
+  _spawnConfig: {fileID: 11400000, guid: 6e3a62bb6d4149042ab95abbba0b49bb, type: 2}
 --- !u!114 &394494100
 MonoBehaviour:
   m_ObjectHideFlags: 0
