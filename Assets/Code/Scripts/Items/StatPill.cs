@@ -7,7 +7,6 @@
 // -------------------------------------------*/
 
 using System.Collections;
-using System.Collections.Generic;
 using Stats;
 using UnityEngine;
 
@@ -15,24 +14,24 @@ namespace Items
 {
     public class StatPill : Item
     {
-        [SerializeField] Stat stat;
-        CharacterStats activeStats;
+        [SerializeField] Stat _stat;
+        CharacterStats _activeStats;
 
         [SerializeField] float changeValue = 1.2f;
         [SerializeField] float duration = 5f;
 
         public override void Use(GameObject user)
         {
-            activeStats = user.GetComponent<CharacterStats>();
-            changeValue *= activeStats.GetStat(Stat.PillEfficiency);
+            _activeStats = user.GetComponent<CharacterStats>();
+            changeValue *= _activeStats.GetStat(Stat.PillEfficiency);
             StartCoroutine(UpdatingStats());
         }
 
         public IEnumerator UpdatingStats()
         {
-            activeStats.MultipliStatValue(stat, changeValue);
+            _activeStats.MultipliStatValue(_stat, changeValue);
             yield return new WaitForSeconds(duration);
-            activeStats.MultipliStatValue(stat, 1 / changeValue);
+            _activeStats.MultipliStatValue(_stat, 1 / changeValue);
             Destroy(gameObject);
         }
 

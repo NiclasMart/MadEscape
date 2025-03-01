@@ -36,14 +36,14 @@ namespace UI
             for (int i = 0; i < items.Count; i++)
             {
                 slots[i].gameObject.SetActive(true);
-                slots[i].color = items[i].GetItem().debugColor;
+                slots[i].color = items[i].GetItem().DebugColor;
             }
         }
 
         public void AddItem(ItemSlot item)
         {
             slots[itemAmount].gameObject.SetActive(true);
-            slots[itemAmount].color = item.GetItem().debugColor;
+            slots[itemAmount].color = item.GetItem().DebugColor;
             itemAmount++;
         }
 
@@ -56,7 +56,7 @@ namespace UI
                 slots[i].color = slots[nextIndex].color;
 
                 //if next item is the last one, disable display for it and exit
-                if (nextIndex == itemAmount - 1) 
+                if (nextIndex == itemAmount - 1)
                 {
                     slots[nextIndex].gameObject.SetActive(false);
                     itemAmount--;

@@ -18,44 +18,41 @@ namespace Core
         [SerializeField] private GameObject _poolType;
         [SerializeField] private Transform _poolHolder;
 
-        private readonly List<IPoolable> disabledObjects = new();
+        private readonly List<IPoolable> _disabledObjects = new();
 
-        private void Awake()
+        public void Initialize(GameObject poolType, int initialCapacity, Transform poolHolder)
         {
-            if (_poolHolder == null)
-            {
-                _poolHolder = new GameObject(transform.name).transform;
-            }
-        }
+            _poolType = poolType;
+            _initialCapacity = initialCapacity;
+            _poolHolder = poolHolder;
 
-        private void Start()
-        {
             //initialize pool according to initial capacity
             for (int i = 0; i < _initialCapacity; i++)
             {
-                disabledObjects.Add(CreateNewObject());
+                _disabledObjects.Add(CreateNewObject());
             }
         }
 
         public GameObject GetObject()
         {
             IPoolable objectInstance;
-            if (disabledObjects.Count == 0)
+            if (_disabledObjects.Count == 0)
             {
                 objectInstance = CreateNewObject();
             }
             else
             {
-                objectInstance = disabledObjects[disabledObjects.Count - 1];
-                disabledObjects.RemoveAt(disabledObjects.Count - 1);
+                objectInstance = _disabledObjects[_disabledObjects.Count - 1];
+                _disabledObjects.RemoveAt(_disabledObjects.Count - 1);
             }
             return objectInstance.GetAttachedGameobject();
         }
 
         public void ReturnObject(IPoolable returnedObject)
         {
+            returnedObject.Reset();
             returnedObject.GetAttachedGameobject().SetActive(false);
-            disabledObjects.Add(returnedObject);
+            _disabledObjects.Add(returnedObject);
         }
 
         private IPoolable CreateNewObject()

@@ -18,7 +18,7 @@ namespace Controller
 {
     public class PlayerController : BaseController
     {
-        [SerializeField] private int _playerID = 0;
+        
 
         private PlayerMover _mover;
         private ItemInventory _inventory;
@@ -52,14 +52,14 @@ namespace Controller
             //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
             List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
             Dictionary<Stat, float> baseStats;
-            if (loadedStatData.Count - 1 < _playerID)
+            if (loadedStatData.Count - 1 < _statID)
             {
                 baseStats = loadedStatData[0].statDict;
                 Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
             }
             else
             {
-                baseStats = loadedStatData[_playerID].statDict;
+                baseStats = loadedStatData[_statID].statDict;
             }
             base.Initialize(baseStats);
         }

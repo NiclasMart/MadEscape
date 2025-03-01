@@ -6,8 +6,6 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using VitalForces;
 using UnityEngine;
 
@@ -15,14 +13,14 @@ namespace Items
 {
     public class LifeContainer : Item
     {
-        [SerializeField] float restoreAmount;
+        [SerializeField] float _restoreAmount;
 
         public override void Use(GameObject user)
         {
             Health health = user.GetComponent<Health>();
             if (health)
             {
-                health.RegenerateHealth(restoreAmount);
+                health.RegenerateHealth(_restoreAmount);
             }
             Destroy(this);
         }

@@ -16,5 +16,6 @@ namespace Generation
         event Action<IPoolable> OnDestroy;
 
         GameObject GetAttachedGameobject();
+        void Reset();
     }
 }
