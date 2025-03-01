@@ -21,6 +21,7 @@ namespace VitalForces
         private float currentValue;
         public float CurrentValue => currentValue;
         public float ProportionalValue => currentValue / maxValue;
+        public float MaxValue => maxValue;
 
         protected void Initialize(float currentValue, float maxValue)
         {
@@ -42,6 +43,7 @@ namespace VitalForces
 
             connectedDisplay.Initialize(CurrentValue, maxValue);
         }
+
         public void UpdateDisplay(float newMaxValue)
         {
             if (connectedDisplay == null) return;
