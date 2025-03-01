@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using Core;
 using Controller;
 using Items;
@@ -16,6 +17,7 @@ using Stats;
 using Generator;
 using UnityEngine.AI;
 using System.Collections;
+using System;
 
 namespace Generation
 {
@@ -31,6 +33,8 @@ namespace Generation
         private Vector2 _spawnArea;
         private Dictionary<int, ObjectPool> _enemyPools = new();
         private ObjectPool _spawnTesterPool;
+
+        public Action<float> onTimerUpdated; 
 
         private void Awake()
         {
@@ -73,6 +77,7 @@ namespace Generation
 
                 }
                 _timer += 1;
+                onTimerUpdated?.Invoke(_timer);
                 yield return delay;
             }
         }
