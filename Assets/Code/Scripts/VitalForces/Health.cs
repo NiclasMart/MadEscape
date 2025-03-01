@@ -50,10 +50,7 @@ namespace VitalForces
 
         public void TakeDamage(float amount)
         {   
-            if (armor < amount)
-            {
-                Change(-amount + armor);
-            }
+            Change(-DamageCalculator.CalculateDamage(amount, armor));
             if (!isAlive) onDeath(gameObject);
         }
 
@@ -64,7 +61,7 @@ namespace VitalForces
 
         public void UpdateHealthStat(Stat stat, float newValue)
         {
-            if (stat != Stat.Life && stat != Stat.LifeRegen) return;
+            if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;
 
             if (stat == Stat.Life) 
             {
@@ -72,6 +69,7 @@ namespace VitalForces
                 UpdateDisplay(life);
             }
             if (stat == Stat.LifeRegen) lifeRegen = newValue;
+            if (stat == Stat.Armor) armor = newValue;
         }
 
         private void OnParticleCollision(GameObject other) {
