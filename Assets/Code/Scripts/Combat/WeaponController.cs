@@ -7,6 +7,7 @@
 // -------------------------------------------*/
 
 using UnityEngine;
+using VitalForces;
 
 namespace Combat
 {
@@ -16,10 +17,19 @@ namespace Combat
         private Weapon _weapon;
         private float _timeSinceLastShot;
 
+        private float sanityFactor;
+        const float SANITY_ATTACKSPEED_FACTOR = 2f;
+        [SerializeField] private Sanity sanity;
+
+        [System.Obsolete]
         private void Awake()
         {
             _enemyFinderAll = GetComponent<EnemyFinderAll>();
             _weapon = GetComponentInChildren<Weapon>();
+            if (sanity == null)
+            {
+                sanity = FindFirstObjectByType<Sanity>(); // Sucht automatisch nach einer vorhandenen Sanity-Komponente
+            }
         }
 
         private void Update()
@@ -42,7 +52,8 @@ namespace Combat
 
         public void FireWeapon()
         {
-            if (_timeSinceLastShot > 1 / _weapon.AttackSpeed)
+            sanityFactor = sanity.CurrentValue / sanity.MaxValue; // Wert zwischen 0 und 1
+            if (_timeSinceLastShot > 1 / (_weapon.AttackSpeed * (SANITY_ATTACKSPEED_FACTOR - sanityFactor)))
             {
                 _weapon.Fire();
                 _timeSinceLastShot = 0;
