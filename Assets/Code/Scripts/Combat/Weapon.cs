@@ -10,6 +10,7 @@ using Stats;
 using UnityEngine;
 using Audio;
 using System.Collections.Generic;
+using System;
 
 namespace Combat
 {
@@ -28,6 +29,8 @@ namespace Combat
         private ParticleSystem.EmissionModule _emissionModule;
         private ParticleSystem.ShapeModule _shapeModule;
         private ParticleSystem.CollisionModule _collisionModule;
+
+        Dictionary<Stat, Action<float>> dict = new();
 
         public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
         {
@@ -53,6 +56,13 @@ namespace Combat
             _mainModule.startColor = bulletColor;
 
             _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
+
+            dict.Add(Stat.BaseDamage, (value) => {_damage = value;});
+        }
+
+        void UpdateStat(Stat stat, float value)
+        {
+            dict[stat].Invoke(value);
         }
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
