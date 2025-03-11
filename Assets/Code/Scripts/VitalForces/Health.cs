@@ -25,17 +25,17 @@ namespace VitalForces
         private float armor;
         public bool isAlive => CurrentValue > 0;
 
-        public Action<GameObject> onDeath;
+        public Action<GameObject> OnDeath;
+        public Action<float> OnTakeDamage;
         private float timer = 0f;
 
-        public void Initialize(CharacterStats stats, Action<GameObject> onDeath)
-        {   
+        public void Initialize(CharacterStats stats)
+        {
             life = stats.GetStat(Stat.Life);
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             armor = stats.GetStat(Stat.Armor);
             stats.onStatsChanged += UpdateHealthStat;
             Initialize(life, life);
-            this.onDeath = onDeath;
         }
 
         private void Update()
@@ -49,9 +49,11 @@ namespace VitalForces
         }
 
         public void TakeDamage(float amount)
-        {   
-            Change(-DamageCalculator.CalculateDamage(amount, armor));
-            if (!isAlive) onDeath(gameObject);
+        {
+            float damage = DamageCalculator.CalculateDamage(amount, armor);
+            Change(-damage);
+            OnTakeDamage?.Invoke(damage);
+            if (!isAlive) OnDeath(gameObject);
         }
 
         public void RegenerateHealth(float regenAmount)
@@ -63,7 +65,7 @@ namespace VitalForces
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;
 
-            if (stat == Stat.Life) 
+            if (stat == Stat.Life)
             {
                 life = newValue;
                 UpdateDisplay(life);
@@ -72,7 +74,8 @@ namespace VitalForces
             if (stat == Stat.Armor) armor = newValue;
         }
 
-        private void OnParticleCollision(GameObject other) {
+        private void OnParticleCollision(GameObject other)
+        {
             Weapon weapon = other.transform.parent.GetComponent<Weapon>();
             if (weapon != null)
             {
