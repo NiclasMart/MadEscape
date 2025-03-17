@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using VitalForces;
+using Stats;
 
 namespace Combat
 {
@@ -61,10 +62,10 @@ namespace Combat
             _timeSinceLastShot += Time.deltaTime;
         }
 
-        public Weapon InitWeapon(WeaponTemplate weaponData, string targetLayer)
+        public Weapon InitWeapon(WeaponTemplate weaponData, string targetLayer, CharacterStats characterStats)
         {
             if (_weapon == null) _weapon = Instantiate(weaponData.WeaponModel, transform).GetComponentInChildren<Weapon>();
-            WeaponBuilder.ConfigureWeapon(_weapon, weaponData, targetLayer);
+            WeaponBuilder.ConfigureWeapon(_weapon, weaponData, targetLayer, characterStats);
             return _weapon;
         }
 

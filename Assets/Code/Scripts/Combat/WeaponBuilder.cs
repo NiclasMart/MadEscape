@@ -14,7 +14,7 @@ namespace Combat
 {
     public static class WeaponBuilder
     {
-        public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer)
+        public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer, CharacterStats characterStats)
         {
             //load weapon stats from file
             int weaponID = (int)weaponConfig.WeaponID;
@@ -30,7 +30,7 @@ namespace Combat
                 baseStats = loadedStatData[weaponID].statDict;
             }
 
-            weapon.Initialize(baseStats, weaponConfig.BulletColor, targetLayer);
+            weapon.Initialize(baseStats, weaponConfig.BulletColor, targetLayer, characterStats);
             return weapon;
         }
     }

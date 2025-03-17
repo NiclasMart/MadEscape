@@ -32,7 +32,7 @@ namespace Combat
 
         Dictionary<Stat, Action<float>> dict = new();
 
-        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
+        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer, CharacterStats stats)
         {
             _bulletSystem = GetComponentInChildren<ParticleSystem>();
             _audioManager = FindFirstObjectByType<AudioManager>();
@@ -57,13 +57,35 @@ namespace Combat
 
             _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
 
-            dict.Add(Stat.BaseDamage, (value) => {_damage = value;});
+            // Add stat update actions to the dictionary
+            dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
+            dict.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
+            dict.Add(Stat.AttackRange, (value) => { AttackRange = value; });
+            dict.Add(Stat.BulletCount, (value) => {
+                ParticleSystem.Burst updatedBurst = _emissionModule.GetBurst(0);
+                updatedBurst.count = value;
+                _emissionModule.SetBurst(0, updatedBurst);
+                });
+            dict.Add(Stat.BulletSpeed, (value) => {
+                _mainModule.startSpeed = value;
+                _mainModule.startLifetime = 50f / value;
+                });
+            dict.Add(Stat.Accuracy, (value) => {
+                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0);
+                });
+            // Subscribe to stat changes
+            stats.onStatsChanged += UpdateStat;
         }
 
-        void UpdateStat(Stat stat, float value)
+        public void UpdateStat(Stat stat, float value)
         {
-            dict[stat].Invoke(value);
+            if (dict.ContainsKey(stat))
+            {
+                dict[stat].Invoke(value);
+            }
         }
+
+        // TODO: unsubscribe if weapon is destroyed? maybe if we change weapons
 
         public float CalculateDamage(/*TODE: calculate with armor and resi*/)
         {
