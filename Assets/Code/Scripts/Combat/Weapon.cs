@@ -32,49 +32,21 @@ namespace Combat
 
         Dictionary<Stat, Action<float>> dict = new();
 
-        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer, CharacterStats stats)
+        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
         {
             _bulletSystem = GetComponentInChildren<ParticleSystem>();
             _audioManager = FindFirstObjectByType<AudioManager>();
+
             _emissionModule = _bulletSystem.emission;
             _mainModule = _bulletSystem.main;
             _shapeModule = _bulletSystem.shape;
             _collisionModule = _bulletSystem.collision;
 
-            //TODO move to seperate method
-            _damage = baseStats[Stat.BaseDamage];
-            AttackSpeed = baseStats[Stat.AttackSpeed];
-            AttackRange = baseStats[Stat.AttackRange];
+            AssignStats(baseStats);
+            CreateStatUpdateDictionary();
 
-            ParticleSystem.Burst burst = _emissionModule.GetBurst(0);
-            burst.count = baseStats[Stat.BulletCount];
-            _emissionModule.SetBurst(0, burst);
-
-            _mainModule.startSpeed = baseStats[Stat.BulletSpeed];
-            _mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
-            _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
             _mainModule.startColor = bulletColor;
-
             _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
-
-            // Add stat update actions to the dictionary
-            dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
-            dict.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
-            dict.Add(Stat.AttackRange, (value) => { AttackRange = value; });
-            dict.Add(Stat.BulletCount, (value) => {
-                ParticleSystem.Burst updatedBurst = _emissionModule.GetBurst(0);
-                updatedBurst.count = value;
-                _emissionModule.SetBurst(0, updatedBurst);
-                });
-            dict.Add(Stat.BulletSpeed, (value) => {
-                _mainModule.startSpeed = value;
-                _mainModule.startLifetime = 50f / value;
-                });
-            dict.Add(Stat.Accuracy, (value) => {
-                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0);
-                });
-            // Subscribe to stat changes
-            stats.onStatsChanged += UpdateStat;
         }
 
         public void UpdateStat(Stat stat, float value)
@@ -102,6 +74,43 @@ namespace Combat
         {
             if (_emissionModule.rateOverTime.constant == 0) return;
             _emissionModule.rateOverTime = 0;
+        }
+
+        private void AssignStats(Dictionary<Stat, float> baseStats)
+        {
+            _damage = baseStats[Stat.BaseDamage];
+            AttackSpeed = baseStats[Stat.AttackSpeed];
+            AttackRange = baseStats[Stat.AttackRange];
+
+            ParticleSystem.Burst burst = _emissionModule.GetBurst(0);
+            burst.count = baseStats[Stat.BulletCount];
+            _emissionModule.SetBurst(0, burst);
+
+            _mainModule.startSpeed = baseStats[Stat.BulletSpeed];
+            _mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
+            _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
+        }
+
+        private void CreateStatUpdateDictionary()
+        {
+            dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
+            dict.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
+            dict.Add(Stat.AttackRange, (value) => { AttackRange = value; });
+            dict.Add(Stat.BulletCount, (value) =>
+            {
+                ParticleSystem.Burst updatedBurst = _emissionModule.GetBurst(0);
+                updatedBurst.count = value;
+                _emissionModule.SetBurst(0, updatedBurst);
+            });
+            dict.Add(Stat.BulletSpeed, (value) =>
+            {
+                _mainModule.startSpeed = value;
+                _mainModule.startLifetime = 50f / value;
+            });
+            dict.Add(Stat.Accuracy, (value) =>
+            {
+                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0);
+            });
         }
     }
 }

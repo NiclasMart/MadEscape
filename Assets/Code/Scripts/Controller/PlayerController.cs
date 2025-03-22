@@ -52,14 +52,14 @@ namespace Controller
             //TODO: decide if we want to store all other loaded character stats OR only load the defined ID stats
             List<StatRecord> loadedStatData = LoadStats.LoadPlayerStats();
             Dictionary<Stat, float> baseStats;
-            if (loadedStatData.Count - 1 < _statID)
+            if (loadedStatData.Count - 1 >= _statID)
             {
-                baseStats = loadedStatData[0].statDict;
-                Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
+                baseStats = loadedStatData[_statID].statDict;
             }
             else
             {
-                baseStats = loadedStatData[_statID].statDict;
+                baseStats = loadedStatData[0].statDict;
+                Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
             }
             base.Initialize(baseStats);
         }

@@ -62,10 +62,10 @@ namespace Combat
             _timeSinceLastShot += Time.deltaTime;
         }
 
-        public Weapon InitWeapon(WeaponTemplate weaponData, string targetLayer, CharacterStats characterStats)
+        public Weapon InitWeapon(WeaponTemplate weaponData, string targetLayer)
         {
             if (_weapon == null) _weapon = Instantiate(weaponData.WeaponModel, transform).GetComponentInChildren<Weapon>();
-            WeaponBuilder.ConfigureWeapon(_weapon, weaponData, targetLayer, characterStats);
+            WeaponBuilder.ConfigureWeapon(_weapon, weaponData, targetLayer);
             return _weapon;
         }
 

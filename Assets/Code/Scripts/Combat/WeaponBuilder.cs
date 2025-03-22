@@ -14,23 +14,25 @@ namespace Combat
 {
     public static class WeaponBuilder
     {
-        public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer, CharacterStats characterStats)
+        static List<StatRecord> weaponData = null;
+        public static Weapon ConfigureWeapon(Weapon weapon, WeaponTemplate weaponConfig, string targetLayer)
         {
             //load weapon stats from file
             int weaponID = (int)weaponConfig.WeaponID;
-            List<StatRecord> loadedStatData = LoadStats.LoadWeaponStats();
+            weaponData ??= LoadStats.LoadWeaponStats();
+
             Dictionary<Stat, float> baseStats;
-            if (loadedStatData.Count - 1 < weaponID)
+            if (weaponData.Count - 1 >= weaponID)
             {
-                baseStats = loadedStatData[0].statDict;
-                Debug.LogWarning("For the set weaponID no data is availabe. Loaded default weapon insted.");
+                baseStats = weaponData[weaponID].statDict;
             }
             else
             {
-                baseStats = loadedStatData[weaponID].statDict;
+                baseStats = weaponData[0].statDict;
+                Debug.LogWarning($"For the set weaponID {weaponID} no data is availabe. Loaded default weapon instead.");
             }
 
-            weapon.Initialize(baseStats, weaponConfig.BulletColor, targetLayer, characterStats);
+            weapon.Initialize(baseStats, weaponConfig.BulletColor, targetLayer);
             return weapon;
         }
     }
