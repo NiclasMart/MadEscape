@@ -32,7 +32,8 @@ namespace Controller
         public void Initialize(Dictionary<Stat, float> baseStats)
         {
             _stats.Initialize(baseStats);
-            _health.Initialize(_stats, HandleDeath);
+            _health.Initialize(_stats);
+            _health.OnDeath += HandleDeath;
         }
 
         protected Weapon MountWeapon(GameObject target, string targetLayer)

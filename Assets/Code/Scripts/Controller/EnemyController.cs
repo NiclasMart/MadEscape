@@ -14,6 +14,7 @@ using Stats;
 using Items;
 using Audio;
 using Combat;
+using Core;
 
 //TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
@@ -24,7 +25,7 @@ namespace Controller
         private Transform _target;
         private Move _mover;
         private Attack _attack;
-        public Item _drop;
+        [HideInInspector] public Item _drop;
 
         public event System.Action<IPoolable> OnDestroy;
 
@@ -46,6 +47,8 @@ namespace Controller
             Weapon weapon = MountWeapon(_target.gameObject, targetLayer);
             if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
+            _health.OnTakeDamage += StatisticTracker.Instance.RegisterDealtDamage;
+
             _mover.Initialize(_stats);
             _mover.Activate();
             _mover.SetTarget(_target);
@@ -66,18 +69,21 @@ namespace Controller
         protected override void HandleDeath(GameObject self)
         {
             //Todo: disable unused components
-            _stats.Clear();
             DropLoot();
-            OnDestroy?.Invoke(this);
-            _health.onDeath = null;
             FindFirstObjectByType<AudioManager>().Play("enemy death");
 
+            StatisticTracker.Instance.RegisterKill();
+            _stats.Clear();
+            _health.OnDeath -= HandleDeath;
+            _health.OnTakeDamage -= StatisticTracker.Instance.RegisterDealtDamage;
+
+            OnDestroy?.Invoke(this);
         }
 
         private void DropLoot()
         {
             if (_drop == null) return;
-            
+
             GameObject pickup = new GameObject("ItemPickup");
             Pickup pickupRef = pickup.AddComponent<Pickup>();
             SphereCollider collider = pickup.AddComponent<SphereCollider>();
@@ -94,6 +100,9 @@ namespace Controller
             return gameObject;
         }
 
-        public void Reset() { }
+        public void Reset()
+        {
+            //Todo: handle reset of all classes that get initialized on new spawn
+        }
     }
 }

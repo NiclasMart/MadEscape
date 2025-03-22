@@ -13,12 +13,13 @@ using VitalForces;
 using System;
 using Stats;
 using Items;
+using Core;
 
 namespace Controller
 {
     public class PlayerController : BaseController
     {
-        
+
 
         private PlayerMover _mover;
         private ItemInventory _inventory;
@@ -42,6 +43,7 @@ namespace Controller
             _mover.Initialize(_stats);
             _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
             _inventory.Initialize(gameObject);
+            _health.OnTakeDamage += StatisticTracker.Instance.RegisterSufferedDamage;
 
             string targetLayer = "Enemy";
             MountWeapon(null, targetLayer);
@@ -67,6 +69,7 @@ namespace Controller
         protected override void HandleDeath(GameObject self)
         {
             OnDeath();
+            _health.OnTakeDamage -= StatisticTracker.Instance.RegisterSufferedDamage;
         }
 
         //this is just for reference to see how it could be done later
