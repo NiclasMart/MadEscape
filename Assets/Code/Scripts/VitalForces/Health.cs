@@ -34,7 +34,7 @@ namespace VitalForces
             life = stats.GetStat(Stat.Life);
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             armor = stats.GetStat(Stat.Armor);
-            stats.onStatsChanged += UpdateHealthStat;
+            stats.OnStatsChanged += UpdateHealthStat;
             Initialize(life, life);
         }
 

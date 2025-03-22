@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using VitalForces;
+using Stats;
 
 namespace Combat
 {
