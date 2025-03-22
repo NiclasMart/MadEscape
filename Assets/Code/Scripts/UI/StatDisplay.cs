@@ -8,34 +8,45 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Combat;
 using Stats;
 using UnityEngine;
+
+public enum StatSource
+{
+    Character,
+    Weapon
+}
 
 namespace UI
 {
     public class StatDisplay : MonoBehaviour
     {
-        [SerializeField] private CharacterStats connectedStats;
-        Dictionary<Stat, StatText> slots = new Dictionary<Stat, StatText>();
+        [SerializeField] private CharacterStats _connectedCharacterStats;
+        [SerializeField] private WeaponController _connectedWeaponController;
+        Dictionary<Stat, StatText> _slots = new Dictionary<Stat, StatText>();
+
         private void Awake()
         {
             BuildSlotDictionary();
 
-            connectedStats.OnStatsChanged += DisplayStat;
+            _connectedCharacterStats.OnStatsChanged += DisplayStat;
+            _connectedWeaponController.OnStatChanged += DisplayStat;
         }
 
         public void DisplayStat(Stat stat, float value)
         {
-            if (!slots.ContainsKey(stat)) return;
-            slots[stat].SetStatDisplay(value);
+            if (!_slots.ContainsKey(stat)) return;
+            
+            _slots[stat].SetStatDisplay(value);
         }
 
         private void BuildSlotDictionary()
         {
             foreach (var slot in GetComponentsInChildren<StatText>(true))
             {
-                if (slots.ContainsKey(slot.stat)) continue;
-                slots.Add(slot.stat, slot);
+                if (_slots.ContainsKey(slot.Stat)) continue;
+                _slots.Add(slot.Stat, slot);
             }
         }
     }

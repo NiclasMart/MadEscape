@@ -16,7 +16,8 @@ namespace UI
 {
     public class StatText : MonoBehaviour
     {
-        public Stat stat;
+        public Stat Stat;
+        public StatSource Source;
         [SerializeField] string format;
 
         public void SetStatDisplay(float value)

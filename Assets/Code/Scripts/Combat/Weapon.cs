@@ -29,10 +29,9 @@ namespace Combat
         private ParticleSystem.EmissionModule _emissionModule;
         private ParticleSystem.ShapeModule _shapeModule;
         private ParticleSystem.CollisionModule _collisionModule;
-
         Dictionary<Stat, Action<float>> dict = new();
 
-        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer)
+        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer, Action<Stat, float> onStatChange)
         {
             _bulletSystem = GetComponentInChildren<ParticleSystem>();
             _audioManager = FindFirstObjectByType<AudioManager>();
@@ -42,18 +41,25 @@ namespace Combat
             _shapeModule = _bulletSystem.shape;
             _collisionModule = _bulletSystem.collision;
 
-            AssignStats(baseStats);
             CreateStatUpdateDictionary();
+
+            foreach (var statRecord in baseStats)
+            {
+                UpdateStat(statRecord.Key, statRecord.Value);
+                onStatChange?.Invoke(statRecord.Key, statRecord.Value);
+            }
 
             _mainModule.startColor = bulletColor;
             _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
         }
 
+
+        //Don't use directly, use the StatUpdate methode from the WeaponController instead
         public void UpdateStat(Stat stat, float value)
         {
             if (dict.ContainsKey(stat))
             {
-                dict[stat].Invoke(value);
+                dict[stat]?.Invoke(value);
             }
         }
 
@@ -76,21 +82,6 @@ namespace Combat
             _emissionModule.rateOverTime = 0;
         }
 
-        private void AssignStats(Dictionary<Stat, float> baseStats)
-        {
-            _damage = baseStats[Stat.BaseDamage];
-            AttackSpeed = baseStats[Stat.AttackSpeed];
-            AttackRange = baseStats[Stat.AttackRange];
-
-            ParticleSystem.Burst burst = _emissionModule.GetBurst(0);
-            burst.count = baseStats[Stat.BulletCount];
-            _emissionModule.SetBurst(0, burst);
-
-            _mainModule.startSpeed = baseStats[Stat.BulletSpeed];
-            _mainModule.startLifetime = 50f / baseStats[Stat.BulletSpeed];
-            _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * baseStats[Stat.Accuracy] + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
-        }
-
         private void CreateStatUpdateDictionary()
         {
             dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
@@ -109,7 +100,7 @@ namespace Combat
             });
             dict.Add(Stat.Accuracy, (value) =>
             {
-                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0);
+                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
             });
         }
     }
