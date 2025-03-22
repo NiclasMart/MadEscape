@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   TotalDuration: 30
+  LootTable: {fileID: 11400000, guid: 098fa8e43dddd4f4aae713906f9fd75e, type: 2}
   SpawnWaves:
   - WaveName: WaveA
     IsSingleWave: 1

@@ -21,7 +21,7 @@ namespace UI
         {
             BuildSlotDictionary();
 
-            connectedStats.onStatsChanged += DisplayStat;
+            connectedStats.OnStatsChanged += DisplayStat;
         }
 
         public void DisplayStat(Stat stat, float value)
