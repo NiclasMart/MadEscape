@@ -32,7 +32,7 @@ namespace VitalForces
             sanity = stats.GetStat(Stat.Sanity);
             sanityDecAmount = stats.GetStat(Stat.SanityDecAmount);
             sanityConversionFactor = stats.GetStat(Stat.SanityConversionFactor);
-            stats.onStatsChanged += UpdateSanityStat;
+            stats.OnStatsChanged += UpdateSanityStat;
             Initialize(sanity, sanity);
         }
 
@@ -60,13 +60,13 @@ namespace VitalForces
             }
         }
         private void UpdateSanityStat(Stat stat, float newValue)
-        {   
+        {
             if (stat != Stat.Sanity && stat != Stat.SanityDecAmount && stat != Stat.SanityConversionFactor) return;
             if (stat == Stat.Sanity)
             {
                 sanity = newValue;
                 UpdateDisplay(sanity);
-            }    
+            }
             if (stat == Stat.SanityDecAmount) sanityDecAmount = newValue;
             if (stat == Stat.SanityConversionFactor) sanityConversionFactor = newValue;
         }

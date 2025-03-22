@@ -32,7 +32,7 @@ namespace Movement
         public void Initialize(CharacterStats stats)
         {
             movementSpeed = stats.GetStat(Stat.MovementSpeed);
-            stats.onStatsChanged += UpdateMovementspeed;
+            stats.OnStatsChanged += UpdateMovementspeed;
             rigidBody.sleepThreshold = 0;
         }
 

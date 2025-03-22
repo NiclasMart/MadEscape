@@ -37,7 +37,7 @@ namespace Stats
     {
         private Dictionary<Stat, float> activeStats = new Dictionary<Stat, float>();
 
-        public Action<Stat, float> onStatsChanged;
+        public Action<Stat, float> OnStatsChanged;
 
         public void Initialize(Dictionary<Stat, float> baseStatDict)
         {
@@ -50,7 +50,7 @@ namespace Stats
 
             foreach (KeyValuePair<Stat, float> stat in activeStats)
             {
-                onStatsChanged?.Invoke(stat.Key, stat.Value);
+                OnStatsChanged?.Invoke(stat.Key, stat.Value);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Stats
             if (StatIsAvailable(stat))
             {
                 activeStats[stat] *= changeMultiplier;
-                onStatsChanged.Invoke(stat, activeStats[stat]);
+                OnStatsChanged.Invoke(stat, activeStats[stat]);
             }
             else
             {
@@ -99,6 +99,7 @@ namespace Stats
             }
         }
 
+        //Todo: should all classes that relie on stats also be resetted and the callback OnStatChanged resetted?
         public void Clear()
         {
             activeStats.Clear();

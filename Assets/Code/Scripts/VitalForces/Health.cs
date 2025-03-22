@@ -29,11 +29,11 @@ namespace VitalForces
         private float timer = 0f;
 
         public void Initialize(CharacterStats stats, Action<GameObject> onDeath)
-        {   
+        {
             life = stats.GetStat(Stat.Life);
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             armor = stats.GetStat(Stat.Armor);
-            stats.onStatsChanged += UpdateHealthStat;
+            stats.OnStatsChanged += UpdateHealthStat;
             Initialize(life, life);
             this.onDeath = onDeath;
         }
@@ -49,7 +49,7 @@ namespace VitalForces
         }
 
         public void TakeDamage(float amount)
-        {   
+        {
             Change(-DamageCalculator.CalculateDamage(amount, armor));
             if (!isAlive) onDeath(gameObject);
         }
@@ -63,7 +63,7 @@ namespace VitalForces
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;
 
-            if (stat == Stat.Life) 
+            if (stat == Stat.Life)
             {
                 life = newValue;
                 UpdateDisplay(life);
@@ -72,7 +72,8 @@ namespace VitalForces
             if (stat == Stat.Armor) armor = newValue;
         }
 
-        private void OnParticleCollision(GameObject other) {
+        private void OnParticleCollision(GameObject other)
+        {
             Weapon weapon = other.transform.parent.GetComponent<Weapon>();
             if (weapon != null)
             {
