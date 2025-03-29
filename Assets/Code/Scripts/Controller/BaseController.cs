@@ -22,18 +22,34 @@ namespace Controller
         protected CharacterStats _stats;
         protected Health _health;
 
-
         protected virtual void Awake()
         {
             _stats = GetComponent<CharacterStats>();
             _health = GetComponent<Health>();
         }
 
+        protected virtual void OnEnable()
+        {
+            // Subscribe to callbacks when the object is enabled
+            if (_health != null)
+            {
+                _health.OnDeath += HandleDeath;
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            // Unsubscribe from callbacks when the object is disabled
+            if (_health != null)
+            {
+                _health.OnDeath -= HandleDeath;
+            }
+        }
+
         public void Initialize(Dictionary<Stat, float> baseStats)
         {
             _stats.Initialize(baseStats);
             _health.Initialize(_stats);
-            _health.OnDeath += HandleDeath;
         }
 
         protected Weapon MountWeapon(GameObject target, string targetLayer)

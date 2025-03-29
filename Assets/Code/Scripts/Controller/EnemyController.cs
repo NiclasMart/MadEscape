@@ -35,8 +35,30 @@ namespace Controller
             _mover = GetComponent<Move>();
             _attack = GetComponent<Attack>();
         }
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable(); // Calls BaseController's OnEnable to handle HandleDeath subscription
 
-        //this function sets up all important stat related settings for the enemy and can be called multiple times (to change enemy type)
+            // Subscribe to additional callbacks specific to EnemyController
+            if (_health != null)
+            {
+                _health.OnTakeDamage += StatisticTracker.Instance.RegisterDealtDamage;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable(); // Calls BaseController's OnDisable to handle HandleDeath unsubscription
+
+            // Unsubscribe from additional callbacks specific to EnemyController
+            if (_health != null)
+            {
+                _health.OnTakeDamage -= StatisticTracker.Instance.RegisterDealtDamage;
+            }
+        }
+
+        // This function sets up all important stat-related settings for the enemy and can be called multiple times (to change enemy type)
         public void Initialize(Dictionary<Stat, float> baseStats, Item drop)
         {
             base.Initialize(baseStats);
@@ -46,8 +68,6 @@ namespace Controller
             string targetLayer = "Player";
             Weapon weapon = MountWeapon(_target.gameObject, targetLayer);
             if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
-
-            _health.OnTakeDamage += StatisticTracker.Instance.RegisterDealtDamage;
 
             _mover.Initialize(_stats);
             _mover.Activate();
@@ -74,8 +94,6 @@ namespace Controller
 
             StatisticTracker.Instance.RegisterKill();
             _stats.Clear();
-            _health.OnDeath -= HandleDeath;
-            _health.OnTakeDamage -= StatisticTracker.Instance.RegisterDealtDamage;
 
             OnDestroy?.Invoke(this);
         }
