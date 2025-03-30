@@ -19,8 +19,6 @@ namespace Controller
 {
     public class PlayerController : BaseController
     {
-
-
         private PlayerMover _mover;
         private ItemInventory _inventory;
         public ItemInventory Inventory => _inventory;
@@ -36,6 +34,28 @@ namespace Controller
             _inventory = GetComponentInChildren<ItemInventory>();
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable(); // Calls BaseController's OnEnable to handle HandleDeath subscription
+
+            // Subscribe to additional callbacks specific to PlayerController
+            if (_health != null)
+            {
+                _health.OnTakeDamage += StatisticTracker.Instance.RegisterSufferedDamage;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable(); // Calls BaseController's OnDisable to handle HandleDeath unsubscription
+
+            // Unsubscribe from additional callbacks specific to PlayerController
+            if (_health != null)
+            {
+                _health.OnTakeDamage -= StatisticTracker.Instance.RegisterSufferedDamage;
+            }
+        }
+
         private void Start()
         {
             LoadCharacterStats();
@@ -43,7 +63,6 @@ namespace Controller
             _mover.Initialize(_stats);
             _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
             _inventory.Initialize(gameObject);
-            _health.OnTakeDamage += StatisticTracker.Instance.RegisterSufferedDamage;
 
             string targetLayer = "Enemy";
             MountWeapon(null, targetLayer);
@@ -61,15 +80,18 @@ namespace Controller
             else
             {
                 baseStats = loadedStatData[0].statDict;
-                Debug.LogWarning("For the set playerID no data is availabe. Loaded default player insted.");
+                Debug.LogWarning("For the set playerID no data is available. Loaded default player instead.");
             }
             base.Initialize(baseStats);
         }
 
         protected override void HandleDeath(GameObject self)
         {
-            OnDeath();
-            _health.OnTakeDamage -= StatisticTracker.Instance.RegisterSufferedDamage;
+            // Call OnDisable to ensure proper unsubscription of callbacks
+            OnDisable();
+
+            // Invoke OnDeath action
+            OnDeath?.Invoke();
         }
 
         //this is just for reference to see how it could be done later

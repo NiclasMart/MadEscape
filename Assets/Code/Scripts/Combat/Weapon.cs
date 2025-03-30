@@ -84,6 +84,9 @@ namespace Combat
 
         private void CreateStatUpdateDictionary()
         {
+            // Clear the dictionary to avoid duplicate keys
+            dict.Clear();
+
             dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
             dict.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
             dict.Add(Stat.AttackRange, (value) => { AttackRange = value; });
@@ -100,7 +103,7 @@ namespace Combat
             });
             dict.Add(Stat.Accuracy, (value) =>
             {
-                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0); //100accuracy = 0angle, 0accuracy = 60angle
+                _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0); // 100 accuracy = 0 angle, 0 accuracy = 60 angle
             });
         }
     }
