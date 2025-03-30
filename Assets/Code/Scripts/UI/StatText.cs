@@ -6,24 +6,15 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System.Collections;
-using System.Collections.Generic;
 using Stats;
-using TMPro;
-using UnityEngine;
 
 namespace UI
 {
-    public class StatText : MonoBehaviour
+  
+    public class StatText : UIText
     {
         public Stat Stat;
         public StatSource Source;
-        [SerializeField] string format;
-
-        public void SetStatDisplay(float value)
-        {
-            GetComponent<TextMeshProUGUI>().text = format.Replace("*", value.ToString("F2"));
-        }
-
+        
     }
 }

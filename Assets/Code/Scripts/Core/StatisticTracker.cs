@@ -6,9 +6,11 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Core
 {
@@ -17,8 +19,11 @@ namespace Core
         public static StatisticTracker Instance { get; private set; }
 
         private int totalKills = 0;
+        public UnityEvent<int> OnKillCountUpdate;
         private float totalDealtDamage = 0;
+        public UnityEvent<float> OnDealtDamageUpdate;
         private float totalSufferedDamage = 0;
+        public UnityEvent<float> OnSufferedDamageUpdate;
 
         void Awake()
         {
@@ -37,19 +42,19 @@ namespace Core
         public void RegisterKill()
         {
             totalKills++;
-            Debug.Log($"Register Kill. Total Kills {totalKills}");
+            OnKillCountUpdate?.Invoke(totalKills);
         }
 
         public void RegisterDealtDamage(float value)
         {
             totalDealtDamage += value;
-            Debug.Log($"Register Dealt Damage. Total Damage {totalDealtDamage}");
+            OnDealtDamageUpdate?.Invoke(totalDealtDamage);
         }
 
         public void RegisterSufferedDamage(float value)
         {
             totalSufferedDamage += value;
-            Debug.Log($"Register Suffered Damage. Total Damage {totalSufferedDamage}");
+            OnSufferedDamageUpdate?.Invoke(totalSufferedDamage);
         }
     }
 }
