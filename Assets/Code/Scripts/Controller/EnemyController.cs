@@ -35,7 +35,7 @@ namespace Controller
             _mover = GetComponent<Move>();
             _attack = GetComponent<Attack>();
         }
-        
+
         protected override void OnEnable()
         {
             base.OnEnable(); // Calls BaseController's OnEnable to handle HandleDeath subscription
@@ -43,7 +43,7 @@ namespace Controller
             // Subscribe to additional callbacks specific to EnemyController
             if (_health != null)
             {
-                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>()?.RegisterDealtDamage;
+                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Controller
             // Unsubscribe from additional callbacks specific to EnemyController
             if (_health != null)
             {
-                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>()?.RegisterDealtDamage;
+                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
             }
         }
 
@@ -90,7 +90,7 @@ namespace Controller
         {
             //Todo: disable unused components
             DropLoot();
-            FindFirstObjectByType<AudioManager>().Play("enemy death");
+            ServiceProvider.Get<AudioManager>().Play(AudioActionType.Enemy_Death, Priority.Low);
 
             ServiceProvider.Get<StatisticTracker>()?.RegisterKill();
             _stats.Clear();

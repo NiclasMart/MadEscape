@@ -14,9 +14,18 @@ using Core;
 
 namespace Audio
 {
-    public class AudioManager : MonoBehaviour
+    public enum Priority
     {
-        public Sound[] sounds;
+        Low,
+        High,
+        Critical
+    }
+
+    public class AudioManager : ObjectPool
+    {
+        [SerializeField] private AudioDataSet _audioSet;
+        [SerializeField][Min(0)] private int _maxAudioChannels;
+
         void Awake()
         {
             if (ServiceProvider.Get<AudioManager>() != null)
@@ -24,15 +33,20 @@ namespace Audio
                 Destroy(gameObject);
                 return;
             }
-
             ServiceProvider.Register(this);
             DontDestroyOnLoad(gameObject);
         }
 
-        public void Play(string soundName)
+        public void Play(AudioActionType type, Priority prio)
         {
-            Sound s = Array.Find(sounds, sound => sound.name == soundName);
-            s.source.Play();
+            // use object pool instead
+
+            var audioSource = gameObject.AddComponent<AudioSource>();
+            AudioData data = _audioSet.AudioDataList.Find(elem => elem.AudioActionType == type);
+            audioSource.clip = data.Clip;
+            audioSource.volume = data.volume;
+            audioSource.Play();
+
         }
     }
 }

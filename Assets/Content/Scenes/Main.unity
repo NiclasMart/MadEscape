@@ -654,15 +654,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea337b36f2ad51749844c1f5e5fea474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
-  - name: gun bearbeitet
-    clip: {fileID: 8300000, guid: 871ac8e87fa15b442b07bf962bb3f7ad, type: 3}
-    volume: 1
-    source: {fileID: 0}
-  - name: enemy death
-    clip: {fileID: 8300000, guid: 4d2fe4e66177d0645802df9524616b75, type: 3}
-    volume: 1
-    source: {fileID: 0}
+  _initialCapacity: 10
+  _poolType: {fileID: 0}
+  _poolHolder: {fileID: 1997224460}
+  _audioSet: {fileID: 11400000, guid: 1e425c078700eee4d9b7b7ae3c997d2d, type: 2}
+  _maxAudioChannels: 0
 --- !u!4 &1997224460
 Transform:
   m_ObjectHideFlags: 0

@@ -41,7 +41,7 @@ namespace Controller
             // Subscribe to additional callbacks specific to PlayerController
             if (_health != null)
             {
-                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>()?.RegisterSufferedDamage;
+                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
             }
         }
 
@@ -52,7 +52,7 @@ namespace Controller
             // Unsubscribe from additional callbacks specific to PlayerController
             if (_health != null)
             {
-                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>()?.RegisterSufferedDamage;
+                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
             }
         }
 

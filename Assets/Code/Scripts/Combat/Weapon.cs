@@ -34,7 +34,7 @@ namespace Combat
         public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer, Action<Stat, float> onStatChange)
         {
             _bulletSystem = GetComponentInChildren<ParticleSystem>();
-            _audioManager = FindFirstObjectByType<AudioManager>();
+            _audioManager = ServiceProvider.Get<AudioManager>();
 
             _emissionModule = _bulletSystem.emission;
             _mainModule = _bulletSystem.main;
@@ -73,7 +73,7 @@ namespace Combat
         public void Fire()
         {
             _bulletSystem.Play();
-            _audioManager.Play("gun bearbeitet");
+            _audioManager.Play(AudioActionType.WeaponShoot_Pistol, Priority.High);
         }
 
         public void ReleaseTrigger()
