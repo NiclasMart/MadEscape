@@ -16,8 +16,6 @@ namespace Core
 {
     public class StatisticTracker : MonoBehaviour
     {
-        public static StatisticTracker Instance { get; private set; }
-
         private int totalKills = 0;
         public UnityEvent<int> OnKillCountUpdate;
         private float totalDealtDamage = 0;
@@ -27,15 +25,13 @@ namespace Core
 
         void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
+            if (ServiceProvider.Get<StatisticTracker>() != null)
             {
                 Destroy(gameObject);
                 return;
             }
+
+            ServiceProvider.Register(this);
             DontDestroyOnLoad(gameObject);
         }
 

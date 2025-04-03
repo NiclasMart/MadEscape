@@ -43,7 +43,7 @@ namespace Controller
             // Subscribe to additional callbacks specific to EnemyController
             if (_health != null)
             {
-                _health.OnTakeDamage += StatisticTracker.Instance.RegisterDealtDamage;
+                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>()?.RegisterDealtDamage;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Controller
             // Unsubscribe from additional callbacks specific to EnemyController
             if (_health != null)
             {
-                _health.OnTakeDamage -= StatisticTracker.Instance.RegisterDealtDamage;
+                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>()?.RegisterDealtDamage;
             }
         }
 
@@ -92,7 +92,7 @@ namespace Controller
             DropLoot();
             FindFirstObjectByType<AudioManager>().Play("enemy death");
 
-            StatisticTracker.Instance.RegisterKill();
+            ServiceProvider.Get<StatisticTracker>()?.RegisterKill();
             _stats.Clear();
 
             OnDestroy?.Invoke(this);

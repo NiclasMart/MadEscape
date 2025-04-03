@@ -10,6 +10,7 @@ using UnityEngine.Audio;
 using UnityEngine;
 using System;
 using Audio;
+using Core;
 
 namespace Audio
 {
@@ -18,11 +19,14 @@ namespace Audio
         public Sound[] sounds;
         void Awake()
         {
-            foreach (Sound s in sounds){
-                s.source = gameObject.AddComponent<AudioSource>();
-                s.source.clip = s.clip;
-                s.source.volume = s.volume;
+            if (ServiceProvider.Get<AudioManager>() != null)
+            {
+                Destroy(gameObject);
+                return;
             }
+
+            ServiceProvider.Register(this);
+            DontDestroyOnLoad(gameObject);
         }
 
         public void Play(string soundName)

@@ -13,21 +13,19 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance { get; private set; }
-
         [SerializeField] private PlayerController _player;
         private SceneManagement _sceneManagement;
 
         private void Awake()
         {
-            //create Singelton
-            if (Instance != null && Instance != this)
+            if (ServiceProvider.Get<GameManager>() != null)
             {
-                Destroy(Instance);
+                Destroy(gameObject);
                 return;
             }
 
-            Instance = this;
+            ServiceProvider.Register(this);
+            DontDestroyOnLoad(gameObject);
 
             _sceneManagement = GetComponent<SceneManagement>();
             _player.OnDeath += RestartGame;
