@@ -90,7 +90,7 @@ namespace Controller
         {
             //Todo: disable unused components
             DropLoot();
-            ServiceProvider.Get<AudioManager>().Play(AudioActionType.Enemy_Death, Priority.Low);
+            ServiceProvider.Get<AudioManager>().Play(AudioActionType.Enemy_Death);
 
             ServiceProvider.Get<StatisticTracker>()?.RegisterKill();
             _stats.Clear();

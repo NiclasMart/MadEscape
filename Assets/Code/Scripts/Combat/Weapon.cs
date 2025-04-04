@@ -73,7 +73,7 @@ namespace Combat
         public void Fire()
         {
             _bulletSystem.Play();
-            _audioManager.Play(AudioActionType.WeaponShoot_Pistol, Priority.High);
+            _audioManager.Play(AudioActionType.WeaponShoot_Pistol);
         }
 
         public void ReleaseTrigger()
