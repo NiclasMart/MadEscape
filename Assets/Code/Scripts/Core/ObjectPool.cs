@@ -22,6 +22,7 @@ namespace Core
         [SerializeField] private Transform _poolHolder;
         private readonly List<IPoolable> _disabledObjects = new();
         public int CurrentCapacity { get; private set; }
+        public int AvailableSpace => _disabledObjects.Count;
 
         public void Initialize(GameObject poolType, Transform poolHolder, int initialCapacity = 10, int maxCapacity = 50)
         {
