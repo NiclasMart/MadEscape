@@ -6,6 +6,7 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using Audio;
 using UnityEngine;
 
 namespace Combat
@@ -15,6 +16,7 @@ namespace Combat
     {
         public float WeaponID;
         public Color BulletColor;
+        public AudioActionType ShootSFX;
         public GameObject WeaponModel;
     }
 }

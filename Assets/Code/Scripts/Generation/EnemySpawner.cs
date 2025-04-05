@@ -24,6 +24,8 @@ namespace Generation
     public class EnemySpawner : MonoBehaviour
     {
         const float GROUP_AREA_SIZE = 3f;
+        const int INITIAL_POOL_SIZE = 10;
+        const int MAX_POOL_SIZE = 100;
         [SerializeField] private SpawnTester _spawnTesterPrefab;
         [SerializeField] private EnemySpawnConfig _spawnConfig;
 
@@ -34,13 +36,13 @@ namespace Generation
         private Dictionary<int, ObjectPool> _enemyPools = new();
         private ObjectPool _spawnTesterPool;
 
-        public Action<float> onTimerUpdated; 
+        public Action<float> onTimerUpdated;
 
         private void Awake()
         {
             _enemyInfo = LoadStats.LoadEnemyStats();
             _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
-            _spawnTesterPool = CreateNewSpawnPool(_spawnTesterPrefab.gameObject, 10);
+            _spawnTesterPool = CreateNewSpawnPool(_spawnTesterPrefab.gameObject, INITIAL_POOL_SIZE, MAX_POOL_SIZE);
             _lootGenerator = new LootGenerator(_spawnConfig.LootTable);
         }
 
@@ -49,12 +51,12 @@ namespace Generation
             StartCoroutine(SpawnEnemiesOverTime());
         }
 
-        private ObjectPool CreateNewSpawnPool(GameObject poolType, int initialCapacity)
+        private ObjectPool CreateNewSpawnPool(GameObject poolType, int initialCapacity, int maxCapacity)
         {
             var poolHolder = new GameObject("Pool");
             poolHolder.transform.parent = transform;
             var pool = poolHolder.AddComponent<ObjectPool>();
-            pool.Initialize(poolType, initialCapacity, poolHolder.transform);
+            pool.Initialize(poolType, poolHolder.transform, initialCapacity, maxCapacity);
             return pool;
         }
 
@@ -105,19 +107,21 @@ namespace Generation
                         else foundValidPoint = GetRandomSpawnPointInArea(spawnArea, out spawnPoint);
                         if (!foundValidPoint) continue;
 
+                        //spawn tester to check if player is near
+                        if (!_spawnTesterPool.TryGetObject(out GameObject pooledObject)) continue;
+
+                        SpawnTester spawnTester = pooledObject.GetComponent<SpawnTester>();
+                        spawnTester.transform.position = spawnPoint;
+                        spawnTester.gameObject.SetActive(true);
+
                         //get enemy
                         EnemyController enemyType = wave.GetRandomEnemyTypeFromWave();
                         bool poolExists = _enemyPools.ContainsKey(enemyType.ID);
                         if (!poolExists)
                         {
-                            _enemyPools.Add(enemyType.ID, CreateNewSpawnPool(enemyType.gameObject, 10));
+                            _enemyPools.Add(enemyType.ID, CreateNewSpawnPool(enemyType.gameObject, INITIAL_POOL_SIZE, MAX_POOL_SIZE));
                         }
 
-                        //spawn tester to check if player is near
-                        // SpawnTester spawnTester = Instantiate(_spawnTesterPrefab, spawnPoint, Quaternion.identity, transform);
-                        SpawnTester spawnTester = _spawnTesterPool.GetObject().GetComponent<SpawnTester>();
-                        spawnTester.transform.position = spawnPoint;
-                        spawnTester.gameObject.SetActive(true);
                         StartCoroutine(spawnTester.SpawningEnemy(enemyType.ID, Spawn));
                     }
                 }
@@ -128,7 +132,8 @@ namespace Generation
 
         private void Spawn(Vector3 spawnPosition, int enemyTypeID)
         {
-            GameObject enemy = _enemyPools[enemyTypeID].GetObject();
+            if (!_enemyPools[enemyTypeID].TryGetObject(out GameObject enemy)) return;
+
             SetUpEnemy(enemy, enemyTypeID);
             enemy.transform.position = spawnPosition;
             enemy.SetActive(true);
