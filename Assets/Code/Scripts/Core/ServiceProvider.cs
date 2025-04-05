@@ -13,7 +13,7 @@ public static class ServiceProvider
     // if the service type is already registerd, destroy it
     public static void Register<T>(T service, GameObject go = null) where T : class
     {
-        if (Get<T>() != null)
+        if (HasService<T>())
         {
             if (go != null) UnityEngine.Object.Destroy(go);
             return;
@@ -25,8 +25,11 @@ public static class ServiceProvider
         {
             UnityEngine.Object.DontDestroyOnLoad(go);
         }
+    }
 
-        
+    public static bool HasService<T>()
+    {
+        return _services.ContainsKey(typeof(T));
     }
 
     public static T Get<T>() where T : class
@@ -36,6 +39,7 @@ public static class ServiceProvider
             return service as T;
         }
 
+        Debug.LogError($"Service Loader has not registerd service of type {typeof(T).Name}");
         return null;
     }
 }

@@ -29,7 +29,11 @@ namespace Audio
             AudioChannel newAudioChannel;
 
             // check for free capacity according to priority
-            if (CurrentCapacity >= MaxCapacity - MaxCapacity * _highPriorityBufferSize && !highPriority) return;
+            if (CurrentCapacity == MaxCapacity && AvailableSpace < MaxCapacity * _highPriorityBufferSize && !highPriority)
+            {
+                Debug.LogWarning($"The AudioManager has reached max capacity and the requested Audio of type {type} will be skipped.");
+                return;
+            }
 
             // get audio source
             if (!TryGetObject(out GameObject pooledObject)) return;
