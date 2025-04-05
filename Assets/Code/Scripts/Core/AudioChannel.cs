@@ -31,6 +31,7 @@ namespace Core
         {
             _source.clip = data.Clip;
             _source.volume = data.volume;
+            _source.outputAudioMixerGroup = data.MixerGroup;
 
             _playCoroutine = StartCoroutine(PlayingAudioClip(data.Clip.length));
         }

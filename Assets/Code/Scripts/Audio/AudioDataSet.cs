@@ -9,6 +9,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Audio
 {
@@ -17,6 +18,7 @@ namespace Audio
     {
         public AudioActionType AudioActionType = AudioActionType.None;
         public AudioClip Clip;
+        public AudioMixerGroup MixerGroup;
         [Range(0f, 1f)] public float volume = 1f;
     }
 
