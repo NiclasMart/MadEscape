@@ -18,14 +18,7 @@ namespace Core
 
         private void Awake()
         {
-            if (ServiceProvider.Get<GameManager>() != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            ServiceProvider.Register(this);
-            DontDestroyOnLoad(gameObject);
+            ServiceProvider.Register(this, gameObject);
 
             _sceneManagement = GetComponent<SceneManagement>();
             _player.OnDeath += RestartGame;

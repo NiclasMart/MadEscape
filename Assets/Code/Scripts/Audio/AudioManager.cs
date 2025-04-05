@@ -20,14 +20,7 @@ namespace Audio
 
         void Awake()
         {
-            if (ServiceProvider.Get<AudioManager>() != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            ServiceProvider.Register(this);
-            DontDestroyOnLoad(gameObject);
-
+            ServiceProvider.Register(this, gameObject);
             base.Initialize();
         }
 

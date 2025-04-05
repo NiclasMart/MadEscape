@@ -129,7 +129,6 @@ GameObject:
   m_Component:
   - component: {fileID: 328491939}
   - component: {fileID: 328491940}
-  - component: {fileID: 328491941}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -145,12 +144,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328491937}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -190.20335, y: -596.12616, z: -2.8290842}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1361138748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &328491940
 MonoBehaviour:
@@ -165,63 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 551063373}
---- !u!114 &328491941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 328491937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeccb801739121d40b29b9ae7b5d8831, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnKillCountUpdate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8827723928086454991}
-        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
-        m_MethodName: SetStatDisplay
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnDealtDamageUpdate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8827723928086454990}
-        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
-        m_MethodName: SetStatDisplay
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnSufferedDamageUpdate:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8827723928086454989}
-        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
-        m_MethodName: SetStatDisplay
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &551063373 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 729231206346974393, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
@@ -466,6 +408,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1361138747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1361138748}
+  m_Layer: 0
+  m_Name: '[SERVICES]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1361138748
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361138747}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 190.20335, y: 596.12616, z: 2.8290842}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 328491939}
+  - {fileID: 1477495195}
+  - {fileID: 1997224460}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1416108941 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2253730084499672600, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
@@ -526,6 +502,95 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1477495194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1477495195}
+  - component: {fileID: 1477495196}
+  m_Layer: 0
+  m_Name: StatisticTracker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1477495195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477495194}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -190.20335, y: -596.12616, z: -2.8290842}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1361138748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1477495196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477495194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeccb801739121d40b29b9ae7b5d8831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnKillCountUpdate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8827723928086454991}
+        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
+        m_MethodName: SetStatDisplay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDealtDamageUpdate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8827723928086454990}
+        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
+        m_MethodName: SetStatDisplay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnSufferedDamageUpdate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8827723928086454989}
+        m_TargetAssemblyTypeName: UI.UIText, Assembly-CSharp
+        m_MethodName: SetStatDisplay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1545536451 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 913179859257860924, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
@@ -659,6 +724,7 @@ MonoBehaviour:
   _poolType: {fileID: 5227667460859718054, guid: 943729d0d6812194586114eeb8b494ba, type: 3}
   _poolHolder: {fileID: 1997224460}
   _audioSet: {fileID: 11400000, guid: 1e425c078700eee4d9b7b7ae3c997d2d, type: 2}
+  _audioMixer: {fileID: 0}
   _highPriorityBufferSize: 0.25
 --- !u!4 &1997224460
 Transform:
@@ -668,12 +734,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1997224458}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -190.20335, y: -596.12616, z: -2.8290842}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1361138748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8827723928086454987
 PrefabInstance:
@@ -1614,9 +1680,8 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 328491939}
   - {fileID: 702701958}
   - {fileID: 8827723928086454987}
-  - {fileID: 1997224460}
   - {fileID: 800203686}
   - {fileID: 1424454388}
+  - {fileID: 1361138748}

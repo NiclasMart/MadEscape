@@ -1,16 +1,32 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+
+
 
 public static class ServiceProvider
 {
     private static Dictionary<Type, object> _services = new();
 
-    public static void Register<T>(T service) where T : class
+    // register new service
+    // if the service type is already registerd, destroy it
+    public static void Register<T>(T service, GameObject go = null) where T : class
     {
-        if (_services.ContainsKey(typeof(T))) return;
+        if (Get<T>() != null)
+        {
+            if (go != null) UnityEngine.Object.Destroy(go);
+            return;
+        }
 
         _services[typeof(T)] = service;
+
+        if (go != null)
+        {
+            UnityEngine.Object.DontDestroyOnLoad(go);
+        }
+
+        
     }
 
     public static T Get<T>() where T : class

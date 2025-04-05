@@ -25,14 +25,7 @@ namespace Core
 
         void Awake()
         {
-            if (ServiceProvider.Get<StatisticTracker>() != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            ServiceProvider.Register(this);
-            DontDestroyOnLoad(gameObject);
+            ServiceProvider.Register(this, gameObject);
         }
 
         public void RegisterKill()

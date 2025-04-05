@@ -15,9 +15,9 @@ MonoBehaviour:
   AudioDataList:
   - AudioActionType: 200
     Clip: {fileID: 8300000, guid: 4d2fe4e66177d0645802df9524616b75, type: 3}
-    MixerGroup: {fileID: -4015760108790582931, guid: b8f100ba5b837cd429985567e57a1b4a, type: 2}
+    MixerGroup: {fileID: 1610285290987699540, guid: b8f100ba5b837cd429985567e57a1b4a, type: 2}
     volume: 1
   - AudioActionType: 300
     Clip: {fileID: 8300000, guid: 871ac8e87fa15b442b07bf962bb3f7ad, type: 3}
-    MixerGroup: {fileID: -4015760108790582931, guid: b8f100ba5b837cd429985567e57a1b4a, type: 2}
+    MixerGroup: {fileID: 1326881156223702360, guid: b8f100ba5b837cd429985567e57a1b4a, type: 2}
     volume: 1
