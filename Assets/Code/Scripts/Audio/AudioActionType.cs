@@ -24,4 +24,7 @@ public enum AudioActionType
 
     // UI sounds (500-499)
     UI_ButtonClick = 500
+
+
+    // music sounds (500-599)
 }
