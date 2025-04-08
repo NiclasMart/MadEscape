@@ -19,7 +19,6 @@ namespace VitalForces
 
         private Health playerHealth;
 
-        private float timer = 0f;
         float sanity;
 
         private void Start()
@@ -38,12 +37,8 @@ namespace VitalForces
 
         private void Update()
         {
-            if (timer > 1)
-            {
-                ChangeSanity(-sanityDecAmount);
-                timer = 0f;
-            }
-            timer += Time.deltaTime;
+            float sanityLoss = sanityDecAmount * Time.deltaTime;
+            ChangeSanity(-sanityLoss);
         }
 
         public void ChangeSanity(float sanityChangeAmount)
