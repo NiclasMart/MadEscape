@@ -8,6 +8,7 @@
 using Stats;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 namespace VitalForces
 {
@@ -15,6 +16,7 @@ namespace VitalForces
     {
         float sanityDecAmount;
         [SerializeField] public int convertedHealthAmount = 100;
+        [SerializeField] public float sanityConversionTime = 0.5f; // Time to restore sanity over time
         private float sanityConversionFactor;
 
         private Health playerHealth;
@@ -37,8 +39,7 @@ namespace VitalForces
 
         private void Update()
         {
-            float sanityLoss = sanityDecAmount * Time.deltaTime;
-            ChangeSanity(-sanityLoss);
+            ChangeSanity(-sanityDecAmount * Time.deltaTime);
         }
 
         public void ChangeSanity(float sanityChangeAmount)
@@ -51,9 +52,21 @@ namespace VitalForces
             if (context.performed && (playerHealth.CurrentValue > convertedHealthAmount))
             {
                 playerHealth.TakeDamage(convertedHealthAmount);
-                ChangeSanity(convertedHealthAmount * sanityConversionFactor);
+                float sanityGain = convertedHealthAmount * sanityConversionFactor;
+                StartCoroutine(RestoreSanityOverTime(sanityGain, sanityConversionTime));
             }
         }
+        private IEnumerator RestoreSanityOverTime(float totalAmount, float duration)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                float delta = (totalAmount / duration) * Time.deltaTime;
+                ChangeSanity(delta);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }       
         private void UpdateSanityStat(Stat stat, float newValue)
         {
             if (stat != Stat.Sanity && stat != Stat.SanityDecAmount && stat != Stat.SanityConversionFactor) return;
