@@ -8,26 +8,49 @@
 
 using UnityEngine;
 using Controller;
+using UI;
 
 namespace Core
 {
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private PlayerController _player;
-        private SceneManagement _sceneManagement;
+        [SerializeField] private GameOverScreen _gameOverScreen;
 
         private void Awake()
         {
             ServiceProvider.Register(this, gameObject);
 
-            _sceneManagement = GetComponent<SceneManagement>();
-            _player.OnDeath += RestartGame;
+            _player.OnDeath += ShowGameOverScreen;
         }
 
-        private void RestartGame()
+        private void ShowGameOverScreen()
         {
-            Debug.Log("Player is dead. Reloading scene");
+            FreezeTime();
+            _gameOverScreen.ShowGameOverScreen();
+            _player.OnDeath -= ShowGameOverScreen; // Unsubscribe to prevent multiple calls
+        }
+
+        public void RestartGame()
+        {
+            SceneManagement _sceneManagement = ServiceProvider.Get<SceneManagement>();
+            Debug.Log("Reloading scene");
             _sceneManagement.ReloadScenes();
+            UnfreezeTime();
+        }
+
+        public void FreezeTime()
+        {
+            // Set the time scale to zero to freeze the game
+            Time.timeScale = 0f;
+            Debug.Log("Game time frozen.");
+        }
+
+        public void UnfreezeTime()
+        {
+            // Reset the time scale to 1 to resume the game
+            Time.timeScale = 1f;
+            Debug.Log("Game time resumed.");
         }
     }
 }
