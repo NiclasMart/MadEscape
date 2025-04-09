@@ -6,6 +6,7 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using System.Collections; // Add this to resolve the IEnumerator error
 using UnityEngine;
 using Controller;
 using UI;
@@ -33,10 +34,14 @@ namespace Core
 
         public void RestartGame()
         {
+            StartCoroutine(RestartGameCoroutine());
+        }
+
+        private IEnumerator RestartGameCoroutine()
+        {
             SceneManagement _sceneManagement = ServiceProvider.Get<SceneManagement>();
-            Debug.Log("Reloading scene");
-            _sceneManagement.ReloadScenes();
-            UnfreezeTime();
+            yield return _sceneManagement.ReloadCurrentScenes(); // Wait for scenes to reload
+            UnfreezeTime(); // Unfreeze time after reloading is complete
         }
 
         public void FreezeTime()

@@ -18,64 +18,38 @@ namespace Core
             LoadScenes();
         }
 
-        public void ReloadScenes()
+        public IEnumerator ReloadCurrentScenes()
         {
-            ReloadAllActiveScenes();
-        }
-
-        private void ReloadAllActiveScenes()
-        {
-            // Get a list of all currently active scenes
+            // Create a list to store the names of all currently loaded scenes
             int sceneCount = SceneManager.sceneCount;
-            var loadedScenes = new List<Scene>();
+            var loadedSceneNames = new List<string>();
 
+            // Store the names of all currently loaded scenes
             for (int i = 0; i < sceneCount; i++)
             {
-                loadedScenes.Add(SceneManager.GetSceneAt(i));
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.IsValid() && !string.IsNullOrEmpty(scene.name))
+                {
+                    loadedSceneNames.Add(scene.name);
+                }
             }
 
-            // Store the name of the active scene
+            // Reload the active scene in Single mode
             string activeSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(activeSceneName, LoadSceneMode.Single);
 
-            // Unload all active scenes
-            var unloadOperations = new List<AsyncOperation>();
-            foreach (var scene in loadedScenes)
+            // Reload all other scenes in Additive mode
+            foreach (string sceneName in loadedSceneNames)
             {
-                Debug.Log($"Unloading scene: {scene.name}");
-                AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(scene);
-                if (unloadOperation != null)
+                if (sceneName != activeSceneName) // Skip the active scene as it is already reloaded
                 {
-                    unloadOperations.Add(unloadOperation);
+                    SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
                 }
             }
 
-            // Wait for all unload operations to complete
-            bool allUnloaded = false;
-            while (!allUnloaded)
-            {
-                allUnloaded = true;
-                foreach (var operation in unloadOperations)
-                {
-                    if (!operation.isDone)
-                    {
-                        allUnloaded = false;
-                        break;
-                    }
-                }
-            }
-
-            // Reload all previously active scenes
-            foreach (var scene in loadedScenes)
-            {
-                Debug.Log($"Reloading scene: {scene.name}");
-                SceneManager.LoadScene(scene.name, LoadSceneMode.Additive);
-            }
-
-            // Restore the active scene
-            Scene activeScene = SceneManager.GetSceneByName(activeSceneName);
-            SceneManager.SetActiveScene(activeScene);
+            yield return null; // Wait for the scenes to load
         }
-
+        
         private void LoadScenes()
         {
             foreach (var scene in _loadedScenes)
