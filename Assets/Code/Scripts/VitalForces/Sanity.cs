@@ -16,7 +16,7 @@ namespace VitalForces
     {
         float sanityDecAmount;
         [SerializeField] public int convertedHealthAmount = 100;
-        [SerializeField] public float sanityConversionTime = 0.5f; // Time to restore sanity over time
+        [SerializeField] public float sanityRestoreTime = 0.5f; // Time to restore sanity over time
         private float sanityConversionFactor;
 
         private Health playerHealth;
@@ -53,7 +53,7 @@ namespace VitalForces
             {
                 playerHealth.TakeDamage(convertedHealthAmount);
                 float sanityGain = convertedHealthAmount * sanityConversionFactor;
-                StartCoroutine(RestoreSanityOverTime(sanityGain, sanityConversionTime));
+                StartCoroutine(RestoreSanityOverTime(sanityGain, sanityRestoreTime));
             }
         }
         private IEnumerator RestoreSanityOverTime(float totalAmount, float duration)
