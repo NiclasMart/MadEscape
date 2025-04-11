@@ -11,15 +11,14 @@ using Controller;
 
 namespace Core
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, IService
     {
-        [SerializeField] private PlayerController _player;
+        private PlayerController _player;
         private SceneManagement _sceneManagement;
 
         private void Awake()
         {
-            ServiceProvider.Register(this, gameObject);
-
+            _player = FindFirstObjectByType<PlayerController>();
             _sceneManagement = GetComponent<SceneManagement>();
             _player.OnDeath += RestartGame;
         }

@@ -14,7 +14,7 @@ namespace Combat
     [CreateAssetMenu(fileName = "Weapon", menuName = "Scriptable Objects/WeaponsTemplate")]
     public class WeaponTemplate : ScriptableObject
     {
-        public float WeaponID;
+        public int WeaponID;
         public Color BulletColor;
         public AudioActionType ShootSFX;
         public GameObject WeaponModel;

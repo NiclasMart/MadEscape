@@ -38,7 +38,7 @@ namespace Combat
         {
             if (_weapon == null) _weapon = Instantiate(weaponConfig.WeaponModel, transform).GetComponentInChildren<Weapon>();
 
-            int weaponID = (int)weaponConfig.WeaponID;
+            int weaponID = weaponConfig.WeaponID;
             var statDict = WeaponBuilder.GetWeaponStats(weaponID);
 
             _weapon.Initialize(statDict, weaponConfig.BulletColor, targetLayer, OnStatChanged);
