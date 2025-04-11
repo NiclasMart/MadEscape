@@ -36,7 +36,7 @@ namespace Controller
 
         protected override void OnEnable()
         {
-            base.OnEnable(); 
+            base.OnEnable();
 
             if (_health != null)
             {
@@ -62,8 +62,7 @@ namespace Controller
             _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
             _inventory.Initialize(gameObject);
 
-            string targetLayer = "Enemy";
-            MountWeapon(null, targetLayer);
+            MountWeapon(null, "Enemy");
         }
 
         private void LoadCharacterStats()

@@ -65,8 +65,7 @@ namespace Controller
 
             FindPlayerTarget();
 
-            string targetLayer = "Player";
-            Weapon weapon = MountWeapon(_target.gameObject, targetLayer);
+            Weapon weapon = MountWeapon(_target.gameObject, "Player");
             if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
             _mover.Initialize(_stats);
