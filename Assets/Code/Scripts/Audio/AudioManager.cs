@@ -8,19 +8,16 @@
 
 using UnityEngine;
 using Core;
-using UnityEngine.Audio;
 
 namespace Audio
 {
-    public class AudioManager : ObjectPool
+    public class AudioManager : ObjectPool, IService
     {
         [SerializeField] private AudioDataSet _audioSet;
-        [SerializeField] private AudioMixer _audioMixer;
         [SerializeField, Range(0, 1)] private float _highPriorityBufferSize = 0.25f; // this amount determines how much of the object pool is blocked for high priority audio
 
         void Awake()
         {
-            ServiceProvider.Register(this, gameObject);
             base.Initialize();
         }
 

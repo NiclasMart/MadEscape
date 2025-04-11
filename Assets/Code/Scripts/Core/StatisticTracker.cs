@@ -6,15 +6,12 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Core
 {
-    public class StatisticTracker : MonoBehaviour
+    public class StatisticTracker : MonoBehaviour, IService
     {
         private int totalKills = 0;
         public UnityEvent<int> OnKillCountUpdate;
@@ -22,11 +19,6 @@ namespace Core
         public UnityEvent<float> OnDealtDamageUpdate;
         private float totalSufferedDamage = 0;
         public UnityEvent<float> OnSufferedDamageUpdate;
-
-        void Awake()
-        {
-            ServiceProvider.Register(this, gameObject);
-        }
 
         public void RegisterKill()
         {
