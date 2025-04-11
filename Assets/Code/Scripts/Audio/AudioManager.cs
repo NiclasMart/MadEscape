@@ -23,8 +23,6 @@ namespace Audio
 
         public void Play(AudioActionType type, bool highPriority = false)
         {
-            AudioChannel newAudioChannel;
-
             // check for free capacity according to priority
             if (CurrentCapacity == MaxCapacity && AvailableSpace < MaxCapacity * _highPriorityBufferSize && !highPriority)
             {
@@ -35,10 +33,9 @@ namespace Audio
             // get audio source
             if (!TryGetObject(out GameObject pooledObject)) return;
             pooledObject.SetActive(true);
-            newAudioChannel = pooledObject.GetComponent<AudioChannel>();
 
             AudioData data = _audioSet.AudioDataList.Find(elem => elem.AudioActionType == type);
-            newAudioChannel.Play(data);
+            pooledObject.GetComponent<AudioChannel>().Play(data);
         }
     }
 }
