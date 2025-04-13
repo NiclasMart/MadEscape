@@ -18,8 +18,10 @@ namespace UI
     public class ProgressTimer : MonoBehaviour
     {
         [SerializeField] private EnemySpawnConfig _spawnConfig;
+        public Action onTimerEnded;
         private EnemySpawner _enemySpawner;
         private TextMeshProUGUI _textGui;
+    
         private void Start()
         {
             _textGui = GetComponent<TextMeshProUGUI>();
@@ -30,19 +32,14 @@ namespace UI
         private void HandleTimerUpdated(float timer)
         {   
             float timeLeft = _spawnConfig.TotalDuration - timer;
-            SetStatDisplay(timeLeft);
+            SetTimeDisplay(timeLeft);
             if (timeLeft <= 0)
             {
-                LevelOver();
+                onTimerEnded?.Invoke();
             }
         }
 
-        private void LevelOver()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetStatDisplay(float value)
+        public void SetTimeDisplay(float value)
         {
             int secondsLeft = (int) Math.Ceiling(value);
             _textGui.text = secondsLeft.ToString("D");

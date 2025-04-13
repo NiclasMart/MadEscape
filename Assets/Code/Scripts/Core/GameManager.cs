@@ -17,12 +17,14 @@ namespace Core
     {
         [SerializeField] private PlayerController _player;
         [SerializeField] private GameOverScreen _gameOverScreen;
+        [SerializeField] private ProgressTimer _progressTimer;
 
         private void Awake()
         {
             ServiceProvider.Register(this, gameObject);
 
             _player.OnDeath += ShowGameOverScreen;
+            _progressTimer.onTimerEnded += ShowGameOverScreen;
         }
 
         private void ShowGameOverScreen()
