@@ -165,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 551063373}
   _gameOverScreen: {fileID: 2035749818}
+  _progressTimer: {fileID: 1229365155}
 --- !u!1 &438156955
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1039,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1229365155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8163728899374344124, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
+  m_PrefabInstance: {fileID: 8827723928086454987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4360bf5699d80741bb3a627dea27e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1361138747
 GameObject:
   m_ObjectHideFlags: 0
