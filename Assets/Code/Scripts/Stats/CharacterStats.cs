@@ -14,23 +14,23 @@ namespace Stats
 {
     public enum Stat
     {
-        //Weapon Stats
-        BaseDamage,
-        AttackSpeed,
-        AttackRange,
-        BulletSpeed,
-        Accuracy,
-        BulletCount,
+        //Weapon Stats (0-99)
+        BaseDamage = 0,
+        AttackSpeed = 1,
+        AttackRange = 2,
+        BulletSpeed = 3,
+        Accuracy = 4,
+        BulletCount = 5,
 
-        //Character Stats
-        Life,
-        LifeRegen,
-        Armor,
-        Sanity,
-        SanityDecAmount,
-        MovementSpeed,
-        SanityConversionFactor,
-        PillEfficiency
+        //Character Stats (100 - 199)
+        Life = 100,
+        LifeRegen = 101,
+        Armor = 102,
+        Sanity = 103,
+        SanityDecAmount = 104,
+        MovementSpeed = 105,
+        SanityConversionFactor = 106,
+        PillEfficiency = 107
     }
 
     public class CharacterStats : MonoBehaviour
