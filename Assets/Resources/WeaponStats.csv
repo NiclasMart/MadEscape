@@ -1,3 +1,4 @@
 id;name;BaseDamage;AttackSpeed;AttackRange;BulletSpeed;Accuracy;BulletCount
-0;DefaultWeapon;30;1;7;10;85;2
-1;EnemyWeaponOne;80;0,5;4;15;60;3
+0;DefaultWeapon;30;1;10;10;100;1
+1;EnemyWeaponOne;80;0,5;12;3;60;1
+2;Shotgun;50;0,4;6;20;60;6

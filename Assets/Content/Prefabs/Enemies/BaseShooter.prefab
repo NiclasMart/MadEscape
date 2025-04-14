@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseShooter
       objectReference: {fileID: 0}
+    - target: {fileID: 344929409184624814, guid: 7e2db644ec96abd41a61710b4bf7ee82, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 3036774086110848363, guid: 7e2db644ec96abd41a61710b4bf7ee82, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -56,6 +60,10 @@ PrefabInstance:
       propertyPath: _statID
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3059864009819036123, guid: 7e2db644ec96abd41a61710b4bf7ee82, type: 3}
+      propertyPath: _startWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: aa5d08681d442a745bdd81b70b88cecb, type: 2}
     - target: {fileID: 6319427375560744087, guid: 7e2db644ec96abd41a61710b4bf7ee82, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
