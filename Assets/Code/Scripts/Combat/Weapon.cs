@@ -22,6 +22,7 @@ namespace Combat
         public float AttackRange { get; private set; }
 
         private AudioManager _audioManager;
+        private AudioActionType _shootSFX;
 
         //particle system modules
         private ParticleSystem _bulletSystem;
@@ -29,25 +30,21 @@ namespace Combat
         private ParticleSystem.EmissionModule _emissionModule;
         private ParticleSystem.ShapeModule _shapeModule;
         private ParticleSystem.CollisionModule _collisionModule;
-        Dictionary<Stat, Action<float>> dict = new();
 
-        public void Initialize(Dictionary<Stat, float> baseStats, Color bulletColor, string targetLayer, Action<Stat, float> onStatChange)
+        Dictionary<Stat, Action<float>> statChangeCallbackDictionary = new();
+
+        public void Initialize(Color bulletColor, AudioActionType shootSoundType, string targetLayer)
         {
-            _bulletSystem = GetComponentInChildren<ParticleSystem>();
             _audioManager = ServiceProvider.Get<AudioManager>();
+            _shootSFX = shootSoundType;
 
+            _bulletSystem = GetComponentInChildren<ParticleSystem>();
             _emissionModule = _bulletSystem.emission;
             _mainModule = _bulletSystem.main;
             _shapeModule = _bulletSystem.shape;
             _collisionModule = _bulletSystem.collision;
 
             CreateStatUpdateDictionary();
-
-            foreach (var statRecord in baseStats)
-            {
-                UpdateStat(statRecord.Key, statRecord.Value);
-                onStatChange?.Invoke(statRecord.Key, statRecord.Value);
-            }
 
             _mainModule.startColor = bulletColor;
             _collisionModule.collidesWith = LayerMask.GetMask("Default", targetLayer);
@@ -57,9 +54,9 @@ namespace Combat
         //Don't use directly, use the StatUpdate methode from the WeaponController instead
         public void UpdateStat(Stat stat, float value)
         {
-            if (dict.ContainsKey(stat))
+            if (statChangeCallbackDictionary.ContainsKey(stat))
             {
-                dict[stat]?.Invoke(value);
+                statChangeCallbackDictionary[stat]?.Invoke(value);
             }
         }
 
@@ -73,7 +70,7 @@ namespace Combat
         public void Fire()
         {
             _bulletSystem.Play();
-            _audioManager.Play(AudioActionType.WeaponShoot_Pistol);
+            _audioManager.Play(_shootSFX);
         }
 
         public void ReleaseTrigger()
@@ -85,23 +82,23 @@ namespace Combat
         private void CreateStatUpdateDictionary()
         {
             // Clear the dictionary to avoid duplicate keys
-            dict.Clear();
+            statChangeCallbackDictionary.Clear();
 
-            dict.Add(Stat.BaseDamage, (value) => { _damage = value; });
-            dict.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
-            dict.Add(Stat.AttackRange, (value) => { AttackRange = value; });
-            dict.Add(Stat.BulletCount, (value) =>
+            statChangeCallbackDictionary.Add(Stat.BaseDamage, (value) => { _damage = value; });
+            statChangeCallbackDictionary.Add(Stat.AttackSpeed, (value) => { AttackSpeed = value; });
+            statChangeCallbackDictionary.Add(Stat.AttackRange, (value) => { AttackRange = value; });
+            statChangeCallbackDictionary.Add(Stat.BulletCount, (value) =>
             {
                 ParticleSystem.Burst updatedBurst = _emissionModule.GetBurst(0);
                 updatedBurst.count = value;
                 _emissionModule.SetBurst(0, updatedBurst);
             });
-            dict.Add(Stat.BulletSpeed, (value) =>
+            statChangeCallbackDictionary.Add(Stat.BulletSpeed, (value) =>
             {
                 _mainModule.startSpeed = value;
                 _mainModule.startLifetime = 50f / value;
             });
-            dict.Add(Stat.Accuracy, (value) =>
+            statChangeCallbackDictionary.Add(Stat.Accuracy, (value) =>
             {
                 _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0); // 100 accuracy = 0 angle, 0 accuracy = 60 angle
             });

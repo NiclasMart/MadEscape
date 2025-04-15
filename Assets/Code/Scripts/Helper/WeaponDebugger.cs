@@ -21,13 +21,18 @@ namespace Helper
         private Weapon _weapon;
         private float _timeSinceLastShot;
 
-        public Action<Stat, float> OnStatChanged;
 
         void Awake()
         {
+
             _weapon = Instantiate(_startWeapon.WeaponModel).GetComponent<Weapon>();
+            _weapon.Initialize(_startWeapon.BulletColor, _startWeapon.ShootSFX, "Enemy");
+
             var statDict = WeaponBuilder.GetWeaponStats(_startWeapon.WeaponID);
-            _weapon.Initialize(statDict, _startWeapon.BulletColor, "Enemy", OnStatChanged);
+            foreach (var stat in statDict.Keys)
+            {
+                _weapon.UpdateStat(stat, statDict[stat]);
+            }
         }
 
         void Update()
