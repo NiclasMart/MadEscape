@@ -59,5 +59,10 @@ namespace Core
             Time.timeScale = 1f;
             Debug.Log("Game time resumed.");
         }
+
+        public PlayerController GetPlayer()
+        {
+            return _player;
+        }
     }
 }

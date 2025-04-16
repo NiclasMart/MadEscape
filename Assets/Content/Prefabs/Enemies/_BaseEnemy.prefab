@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6522628611787515273}
   - component: {fileID: 7599360371030801863}
   - component: {fileID: 6907234524639393962}
+  - component: {fileID: 7301201054532181616}
   m_Layer: 7
   m_Name: _BaseEnemy
   m_TagString: Enemy
@@ -227,7 +228,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _statID: 0
   _startWeapon: {fileID: 0}
-  _loot: []
+  _activeAgentBehaviour: {fileID: 7301201054532181616}
+  _drop: {fileID: 0}
 --- !u!114 &6129764440616980411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +326,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c266f41a12e93f4d81c31c2df5098b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7301201054532181616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104908563727063817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e6a6669d69cf24a82b2fd95e769deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1853149582973755749
@@ -811,7 +825,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
