@@ -6,6 +6,7 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using AI;
 using Stats;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,22 +15,23 @@ using UnityEngine.AI;
 
 namespace EnemyActions
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class Move : Action
     {
         private Transform _target;
-
         private NavMeshAgent _agent;
+        private AgentBehaviour _pathingBehaviour;
 
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            if (_active && _agent)
+            if (_active)
             {
-                _agent.destination = _target.position;
+                _agent.destination = _pathingBehaviour.GetTargetPosition();
             }
         }
 
@@ -40,9 +42,9 @@ namespace EnemyActions
             _agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
         }
 
-        public void SetTarget(Transform newTarget)
+        public void ChangeBehaviour(AgentBehaviour behaviour)
         {
-            _target = newTarget;
+            _pathingBehaviour = behaviour;
         }
     }
 }

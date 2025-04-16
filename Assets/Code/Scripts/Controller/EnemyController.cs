@@ -15,6 +15,7 @@ using Items;
 using Audio;
 using Combat;
 using Core;
+using AI;
 
 //TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
@@ -24,6 +25,7 @@ namespace Controller
         //TODO: switch transform to find player in scene
         private Transform _target;
         private Move _mover;
+        [SerializeField] private AgentBehaviour _activeAgentBehaviour;
         private Attack _attack;
         [HideInInspector] public Item _drop;
 
@@ -69,8 +71,8 @@ namespace Controller
             if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
             _mover.Initialize(_stats);
+            _mover.ChangeBehaviour(_activeAgentBehaviour);
             _mover.Activate();
-            _mover.SetTarget(_target);
 
             _attack.Initialize(_stats);
             _attack.Activate();
@@ -91,7 +93,7 @@ namespace Controller
             DropLoot();
             ServiceProvider.Get<AudioManager>().Play(AudioActionType.Enemy_Death);
 
-            ServiceProvider.Get<StatisticTracker>()?.RegisterKill();
+            ServiceProvider.Get<StatisticTracker>().RegisterKill();
             _stats.Clear();
 
             OnDestroy?.Invoke(this);

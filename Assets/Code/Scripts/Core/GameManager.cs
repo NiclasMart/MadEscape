@@ -28,5 +28,10 @@ namespace Core
             Debug.Log("Player is dead. Reloading scene");
             _sceneManagement.ReloadScenes();
         }
+
+        public PlayerController GetPlayer()
+        {
+            return _player;
+        }
     }
 }
