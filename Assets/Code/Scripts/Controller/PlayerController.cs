@@ -36,9 +36,8 @@ namespace Controller
 
         protected override void OnEnable()
         {
-            base.OnEnable(); // Calls BaseController's OnEnable to handle HandleDeath subscription
+            base.OnEnable();
 
-            // Subscribe to additional callbacks specific to PlayerController
             if (_health != null)
             {
                 _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
@@ -47,9 +46,8 @@ namespace Controller
 
         protected override void OnDisable()
         {
-            base.OnDisable(); // Calls BaseController's OnDisable to handle HandleDeath unsubscription
+            base.OnDisable();
 
-            // Unsubscribe from additional callbacks specific to PlayerController
             if (_health != null)
             {
                 _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
@@ -64,8 +62,7 @@ namespace Controller
             _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
             _inventory.Initialize(gameObject);
 
-            string targetLayer = "Enemy";
-            MountWeapon(null, targetLayer);
+            MountWeapon(null, "Enemy");
         }
 
         private void LoadCharacterStats()

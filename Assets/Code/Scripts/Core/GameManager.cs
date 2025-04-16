@@ -13,15 +13,15 @@ using UI;
 
 namespace Core
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, IService
     {
-        [SerializeField] private PlayerController _player;
+        private PlayerController _player;
         [SerializeField] private GameOverScreen _gameOverScreen;
         [SerializeField] private ProgressTimer _progressTimer;
 
         private void Awake()
         {
-            ServiceProvider.Register(this, gameObject);
+            _player = FindFirstObjectByType<PlayerController>();
 
             _player.OnDeath += ShowGameOverScreen;
             _progressTimer.onTimerEnded += ShowGameOverScreen;

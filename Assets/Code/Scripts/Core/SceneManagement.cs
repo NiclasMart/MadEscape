@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 
 namespace Core
 {
-    public class SceneManagement : MonoBehaviour
+    public class SceneManagement : MonoBehaviour, IService
     {
         [SerializeField] private List<int> _loadedScenes = new();
 
         private void Awake()
         {
-            ServiceProvider.Register(this, gameObject);
             //only load scene list if the game was started with the main scene
             if (SceneManager.GetActiveScene().buildIndex != 0) return;
 
