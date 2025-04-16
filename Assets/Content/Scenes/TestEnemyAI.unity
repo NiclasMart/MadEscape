@@ -1333,6 +1333,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainSceneLoadingHelper
       objectReference: {fileID: 0}
+    - target: {fileID: 8535310961946972992, guid: 0caabfd054fa39a41aa71541ff36fdfb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
