@@ -236,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8132989100631428253, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.21
+      value: 12.13
       objectReference: {fileID: 0}
     - target: {fileID: 8696907981836716761, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay

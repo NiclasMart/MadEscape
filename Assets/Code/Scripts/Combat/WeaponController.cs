@@ -41,7 +41,14 @@ namespace Combat
             int weaponID = weaponConfig.WeaponID;
             var statDict = WeaponBuilder.GetWeaponStats(weaponID);
 
-            _weapon.Initialize(statDict, weaponConfig.BulletColor, targetLayer, OnStatChanged);
+            _weapon.Initialize(weaponConfig.BulletColor, weaponConfig.ShootSFX, targetLayer);
+
+            // set all weapon stats
+            foreach (var stat in statDict.Keys)
+            {
+                UpdateStat(stat, statDict[stat]);
+            }
+            
             return _weapon;
         }
 
