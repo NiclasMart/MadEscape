@@ -43,6 +43,7 @@ namespace Core
         {
             SceneManagement _sceneManagement = ServiceProvider.Get<SceneManagement>();
             yield return _sceneManagement.ReloadCurrentScenes(); // Wait for scenes to reload
+            _player = FindFirstObjectByType<PlayerController>();
             UnfreezeTime(); // Unfreeze time after reloading is complete
         }
 
