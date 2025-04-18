@@ -75,6 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5341979700856012111}
   - component: {fileID: 6243350904095067576}
+  - component: {fileID: 6972230211165065092}
   m_Layer: 5
   m_Name: Debug Info
   m_TagString: Untagged
@@ -132,6 +133,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6972230211165065092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875871703392517575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a26d759469189334c92bf17881d3728b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _record: {fileID: 11400000, guid: 006f09179c44c33489820f505aee730e, type: 2}
+  _killCount: {fileID: 1019970174909804767}
+  _dealtDamage: {fileID: 5900945040424658305}
+  _sufferedDamage: {fileID: 3787431543605263972}
 --- !u!1 &2018072639636311768
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,7 +969,7 @@ GameObject:
   - component: {fileID: 1609628384052577909}
   - component: {fileID: 1019970174909804767}
   m_Layer: 5
-  m_Name: Text (TMP)_1
+  m_Name: KillsInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1461,7 +1478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 6
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -1705,7 +1722,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 12
+      value: 106
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -1827,7 +1844,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 10
+      value: 104
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -1949,7 +1966,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 9
+      value: 103
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -2193,7 +2210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 7
+      value: 101
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -2315,7 +2332,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 13
+      value: 107
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -2909,7 +2926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 11
+      value: 105
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
@@ -3031,7 +3048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: Stat
-      value: 8
+      value: 102
       objectReference: {fileID: 0}
     - target: {fileID: 3180650459137001300, guid: 14de584aa5354fc43993579fe3c2f8c7, type: 3}
       propertyPath: stat
