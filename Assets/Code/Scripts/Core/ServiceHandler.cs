@@ -12,7 +12,10 @@ using UnityEngine;
 
 namespace Core
 {
-    public interface IService { }
+    public interface IService 
+    { 
+        public void LoadReferences(){} //Implement this in the service, if some references must be reloaded after reloading the scene
+    }
 
     public class ServiceHandler : MonoBehaviour
     {

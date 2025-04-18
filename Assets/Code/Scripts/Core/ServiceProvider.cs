@@ -1,6 +1,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Core;
 using UnityEngine;
 
 
@@ -13,6 +15,13 @@ public static class ServiceProvider
     // if the service type is already registerd, destroy it
     public static void Register<T>(T service, GameObject go = null) where T : class
     {
+        // check if the IService interface is implemented
+        if (service is not IService)
+        {
+            Debug.LogError($"The object {go.name} was tried to be registered as Service, but it didn't implement the IService interface. Ensure that all services implement this interface.");
+        }
+
+        // check if the service is already registered
         if (HasService<T>())
         {
             if (go != null) UnityEngine.Object.Destroy(go);
@@ -41,5 +50,10 @@ public static class ServiceProvider
 
         Debug.LogError($"Service Loader has not registerd service of type {typeof(T).Name}");
         return null;
+    }
+
+    public static IService[] GetAll()
+    {
+        return _services.Values.OfType<IService>().ToArray();
     }
 }

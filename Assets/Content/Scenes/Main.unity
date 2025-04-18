@@ -119,17 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &491511010 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 360507412736800733, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
-  m_PrefabInstance: {fileID: 8827723928086454987}
+--- !u!1 &518688551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8ca3da67a066a8449e08fbe365bf9f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 518688552}
+  m_Layer: 0
+  m_Name: AudioChannels
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &518688552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518688551}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1361138748}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &702701958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -363,48 +383,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1223821736 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8163728899374344124, guid: 2631353c9bcc6364b91cb1a8d2259f73, type: 3}
-  m_PrefabInstance: {fileID: 8827723928086454987}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4360bf5699d80741bb3a627dea27e38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1233095872
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1233095873}
-  m_Layer: 0
-  m_Name: AudioChannels
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1233095873
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1233095872}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1361138747
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +416,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 518688552}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1361138749
@@ -456,7 +435,7 @@ MonoBehaviour:
   _initialCapacity: 5
   _maxCapacity: 10
   _poolType: {fileID: 5227667460859718054, guid: 943729d0d6812194586114eeb8b494ba, type: 3}
-  _poolHolder: {fileID: 1233095873}
+  _poolHolder: {fileID: 518688552}
   _audioSet: {fileID: 11400000, guid: 1e425c078700eee4d9b7b7ae3c997d2d, type: 2}
   _highPriorityBufferSize: 0.2
 --- !u!114 &1361138750
@@ -528,8 +507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ac4d9ba55abb543a271cb7d04e6184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameOverScreen: {fileID: 491511010}
-  _progressTimer: {fileID: 1223821736}
 --- !u!114 &1361138752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,7 +531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfc7c6fbb15c82d4a86dee41ec519ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadedScenes: 
 --- !u!114 &1416108941 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2253730084499672600, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
@@ -1658,4 +1634,3 @@ SceneRoots:
   - {fileID: 800203686}
   - {fileID: 1424454388}
   - {fileID: 1361138748}
-  - {fileID: 1233095873}

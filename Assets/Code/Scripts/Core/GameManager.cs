@@ -16,22 +16,15 @@ namespace Core
     public class GameManager : MonoBehaviour, IService
     {
         private PlayerController _player;
-        [SerializeField] private GameOverScreen _gameOverScreen;
-        [SerializeField] private ProgressTimer _progressTimer;
+        private GameOverScreen _gameOverScreen;
+        private ProgressTimer _progressTimer;
 
         private void Awake()
         {
-            _player = FindFirstObjectByType<PlayerController>();
+            LoadReferences();
 
             _player.OnDeath += ShowGameOverScreen;
             _progressTimer.onTimerEnded += ShowGameOverScreen;
-        }
-
-        private void ShowGameOverScreen()
-        {
-            FreezeTime();
-            _gameOverScreen.ShowGameOverScreen();
-            _player.OnDeath -= ShowGameOverScreen; // Unsubscribe to prevent multiple calls
         }
 
         public void RestartGame()
@@ -39,31 +32,49 @@ namespace Core
             StartCoroutine(RestartGameCoroutine());
         }
 
+        public PlayerController GetPlayer()
+        {
+            return _player;
+        }
+
+        public void LoadReferences()
+        {
+            _player = FindFirstObjectByType<PlayerController>();
+            _gameOverScreen = FindFirstObjectByType<GameOverScreen>(FindObjectsInactive.Include);
+            _progressTimer = FindFirstObjectByType<ProgressTimer>();
+        }
+
+        private void ShowGameOverScreen()
+        {
+            FreezeTime();
+            _gameOverScreen.ShowGameOverScreen();
+            _player.OnDeath -= ShowGameOverScreen;
+        }
+
         private IEnumerator RestartGameCoroutine()
         {
             SceneManagement _sceneManagement = ServiceProvider.Get<SceneManagement>();
-            yield return _sceneManagement.ReloadCurrentScenes(); // Wait for scenes to reload
-            _player = FindFirstObjectByType<PlayerController>();
-            UnfreezeTime(); // Unfreeze time after reloading is complete
+            yield return _sceneManagement.ReloadCurrentScenes();
+
+            // reload all services after scene reload
+            foreach (var service in ServiceProvider.GetAll())
+            {
+                service.LoadReferences();
+            }
+
+            UnfreezeTime();
         }
 
-        public void FreezeTime()
+        private void FreezeTime()
         {
-            // Set the time scale to zero to freeze the game
             Time.timeScale = 0f;
             Debug.Log("Game time frozen.");
         }
 
-        public void UnfreezeTime()
+        private void UnfreezeTime()
         {
-            // Reset the time scale to 1 to resume the game
             Time.timeScale = 1f;
             Debug.Log("Game time resumed.");
-        }
-
-        public PlayerController GetPlayer()
-        {
-            return _player;
         }
     }
 }
