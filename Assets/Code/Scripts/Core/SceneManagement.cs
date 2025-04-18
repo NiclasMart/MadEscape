@@ -7,15 +7,7 @@ namespace Core
 {
     public class SceneManagement : MonoBehaviour, IService
     {
-        [SerializeField] private List<int> _loadedScenes = new();
-
-        private void Awake()
-        {
-            //only load scene list if the game was started with the main scene
-            if (SceneManager.GetActiveScene().buildIndex != 0) return;
-
-            LoadScenes();
-        }
+        private List<int> _loadedScenes = new();
 
         public IEnumerator ReloadCurrentScenes()
         {
@@ -47,22 +39,6 @@ namespace Core
             }
 
             yield return null; // Wait for the scenes to load
-        }
-        
-        private void LoadScenes()
-        {
-            foreach (var scene in _loadedScenes)
-            {
-                SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
-            }
-        }
-
-        private void UnloadActiveScenes()
-        {
-            foreach (var scene in _loadedScenes)
-            {
-                SceneManager.UnloadSceneAsync(scene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
-            }
         }
     }
 }

@@ -38,9 +38,9 @@ namespace UI
             if (sanity == null || vignette == null) return;
 
             float normalizedSanity = sanity.CurrentValue / sanity.MaxValue;
-            vignette.intensity.Override(1f - normalizedSanity); // Je niedriger die Sanity, desto stärker der Effekt
+            vignette.intensity.Override(1f - normalizedSanity); // Je niedriger die Sanity, desto stï¿½rker der Effekt
 
-            Debug.Log($"Sanity: {sanity.CurrentValue} / {sanity.MaxValue}, Normalized: {normalizedSanity}, Vignette: {vignette.intensity.value}");
+            //Debug.Log($"Sanity: {sanity.CurrentValue} / {sanity.MaxValue}, Normalized: {normalizedSanity}, Vignette: {vignette.intensity.value}");
         }
     }
 }

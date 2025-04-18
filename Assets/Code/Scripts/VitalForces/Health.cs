@@ -7,12 +7,8 @@
 // -------------------------------------------*/
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using Combat;
 using Stats;
-using UI;
 using UnityEngine;
 
 namespace VitalForces
@@ -23,7 +19,7 @@ namespace VitalForces
         private float life;
 
         private float armor;
-        public bool isAlive => CurrentValue > 0;
+        public bool IsAlive => CurrentValue > 0;
 
         public Action<GameObject> OnDeath;
         public Action<float> OnTakeDamage;
@@ -53,7 +49,7 @@ namespace VitalForces
             float damage = DamageCalculator.CalculateDamage(amount, armor);
             Change(-damage);
             OnTakeDamage?.Invoke(damage);
-            if (!isAlive) OnDeath(gameObject);
+            if (!IsAlive) OnDeath(gameObject);
         }
 
         public void RegenerateHealth(float regenAmount)
@@ -80,6 +76,7 @@ namespace VitalForces
             if (weapon != null)
             {
                 float damage = weapon.CalculateDamage();
+                Debug.Log($"Hit by bullet for {damage} damage");
                 TakeDamage(damage);
             }
         }

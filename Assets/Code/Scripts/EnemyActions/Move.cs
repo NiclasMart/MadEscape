@@ -18,7 +18,6 @@ namespace EnemyActions
     [RequireComponent(typeof(NavMeshAgent))]
     public class Move : Action
     {
-        private Transform _target;
         private NavMeshAgent _agent;
         private AgentBehaviour _pathingBehaviour;
 
