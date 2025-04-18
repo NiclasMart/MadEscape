@@ -21,10 +21,15 @@ namespace Core
 
         private void Awake()
         {
-            LoadReferences();
+            Reload();
 
             _player.OnDeath += ShowGameOverScreen;
             _progressTimer.onTimerEnded += ShowGameOverScreen;
+        }
+
+        void Start()
+        {
+            ServiceProvider.Get<StatisticTracker>().ResetStatistics();
         }
 
         public void RestartGame()
@@ -37,7 +42,7 @@ namespace Core
             return _player;
         }
 
-        public void LoadReferences()
+        public void Reload()
         {
             _player = FindFirstObjectByType<PlayerController>();
             _gameOverScreen = FindFirstObjectByType<GameOverScreen>(FindObjectsInactive.Include);
@@ -59,8 +64,9 @@ namespace Core
             // reload all services after scene reload
             foreach (var service in ServiceProvider.GetAll())
             {
-                service.LoadReferences();
+                service.Reload();
             }
+            ServiceProvider.Get<StatisticTracker>().ResetStatistics();
 
             UnfreezeTime();
         }

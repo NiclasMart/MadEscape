@@ -12,15 +12,15 @@ using UnityEngine;
 
 namespace Core
 {
-    public interface IService 
-    { 
-        public void LoadReferences(){} //Implement this in the service, if some references must be reloaded after reloading the scene
+    public interface IService
+    {
+        public void Reload() { } //Implement this in the service, if some references must be reloaded after reloading the scene
     }
 
     public class ServiceHandler : MonoBehaviour
     {
         ServiceHandler _instance;
-        
+
         void Awake()
         {
             if (_instance != null) Destroy(this);
