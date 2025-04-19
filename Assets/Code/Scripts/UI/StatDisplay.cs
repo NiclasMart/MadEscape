@@ -37,8 +37,8 @@ namespace UI
         public void DisplayStat(Stat stat, float value)
         {
             if (!_slots.ContainsKey(stat)) return;
-            
-            _slots[stat].SetStatDisplay(value);
+
+            _slots[stat].SetValueDisplay(value);
         }
 
         private void BuildSlotDictionary()

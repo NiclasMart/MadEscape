@@ -7,35 +7,31 @@
 // -------------------------------------------*/
 
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Core
 {
     public class StatisticTracker : MonoBehaviour, IService
     {
-        private int totalKills = 0;
-        public UnityEvent<int> OnKillCountUpdate;
-        private float totalDealtDamage = 0;
-        public UnityEvent<float> OnDealtDamageUpdate;
-        private float totalSufferedDamage = 0;
-        public UnityEvent<float> OnSufferedDamageUpdate;
+        [SerializeField] private StatisticsRecord _record;
 
         public void RegisterKill()
         {
-            totalKills++;
-            OnKillCountUpdate?.Invoke(totalKills);
+            _record.AddKill();
         }
 
         public void RegisterDealtDamage(float value)
         {
-            totalDealtDamage += value;
-            OnDealtDamageUpdate?.Invoke(totalDealtDamage);
+            _record.AddDealtDamage(value);
         }
 
         public void RegisterSufferedDamage(float value)
         {
-            totalSufferedDamage += value;
-            OnSufferedDamageUpdate?.Invoke(totalSufferedDamage);
+            _record.AddSufferedDamage(value);
+        }
+
+        public void ResetStatistics()
+        {
+            _record.Reset();
         }
     }
 }

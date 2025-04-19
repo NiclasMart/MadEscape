@@ -27,12 +27,12 @@ namespace UI
             SetTextDisplay("");
         }
 
-        public void SetStatDisplay(float value)
+        public void SetValueDisplay(float value)
         {
             SetTextDisplay(value.ToString("F2"));
         }
 
-        public void SetStatDisplay(int value)
+        public void SetValueDisplay(int value)
         {
             SetTextDisplay(value.ToString("F2"));
         }
