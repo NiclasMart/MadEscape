@@ -69,16 +69,5 @@ namespace VitalForces
             if (stat == Stat.LifeRegen) lifeRegen = newValue;
             if (stat == Stat.Armor) armor = newValue;
         }
-
-        private void OnParticleCollision(GameObject other)
-        {
-            Weapon weapon = other.transform.parent.GetComponent<Weapon>();
-            if (weapon != null)
-            {
-                float damage = weapon.CalculateDamage();
-                Debug.Log($"Hit by bullet for {damage} damage");
-                TakeDamage(damage);
-            }
-        }
     }
 }
