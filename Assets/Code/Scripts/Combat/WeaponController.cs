@@ -15,6 +15,7 @@ namespace Combat
 {
     public class WeaponController : MonoBehaviour
     {
+        [SerializeField] private Transform _weaponAttacheTransform;
         [SerializeField] private Sanity sanity;
         private EnemyFinderAll _enemyFinderAll;
         private Weapon _weapon;
@@ -36,7 +37,7 @@ namespace Combat
 
         public Weapon InitWeapon(WeaponTemplate weaponConfig, string targetLayer)
         {
-            if (_weapon == null) _weapon = Instantiate(weaponConfig.WeaponModel, transform).GetComponentInChildren<Weapon>();
+            if (_weapon == null) _weapon = Instantiate(weaponConfig.WeaponModel, _weaponAttacheTransform).GetComponentInChildren<Weapon>();
 
             int weaponID = weaponConfig.WeaponID;
             var statDict = WeaponBuilder.GetWeaponStats(weaponID);
