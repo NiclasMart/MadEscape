@@ -22,7 +22,7 @@ namespace Combat
         private float _timeSinceLastShot;
         private float sanityFactor;
 
-        public Action<Stat, float> OnStatChanged;
+        public event Action<Stat, float> OnStatChanged;
 
         const float SANITY_ATTACKSPEED_FACTOR = 2f;
 

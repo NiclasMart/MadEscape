@@ -21,8 +21,8 @@ namespace VitalForces
         private float armor;
         public bool IsAlive => CurrentValue > 0;
 
-        public Action<GameObject> OnDeath;
-        public Action<float> OnTakeDamage;
+        public event Action<GameObject> OnDeath;
+        public event Action<float> OnTakeDamage;
         private float timer = 0f;
 
         public void Initialize(CharacterStats stats)

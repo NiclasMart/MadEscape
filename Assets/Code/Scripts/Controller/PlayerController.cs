@@ -24,7 +24,7 @@ namespace Controller
         public ItemInventory Inventory => _inventory;
         private Sanity _sanity;
 
-        public Action OnDeath;
+        public event Action OnDeath;
 
         protected override void Awake()
         {
