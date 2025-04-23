@@ -24,7 +24,7 @@ namespace Core
             Reload();
 
             _player.OnDeath += ShowGameOverScreen;
-            _progressTimer.onTimerEnded += ShowGameOverScreen;
+            _progressTimer.OnTimerEnded += ShowGameOverScreen;
         }
 
         void Start()

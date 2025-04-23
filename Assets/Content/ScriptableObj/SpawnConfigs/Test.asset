@@ -16,43 +16,13 @@ MonoBehaviour:
   LootTable: {fileID: 11400000, guid: 098fa8e43dddd4f4aae713906f9fd75e, type: 2}
   SpawnWaves:
   - WaveName: WaveA
-    IsSingleWave: 1
+    IsSingleWave: 0
     SpawnStartTime: 0
-    SpawnEndTime: 0
-    SpawnInterval: 0
-    AmountOfGroupAreas: 4
+    SpawnEndTime: 30
+    SpawnInterval: 5
+    AmountOfGroupAreas: 1
     GroupSize: 2
     GroupSizeVariance: 0
     EnemiesToSpawn:
     - EnemyPrefab: {fileID: 7785059096381351574, guid: 1c41d1c6708b6a44ebfc25dcbc09b2d4, type: 3}
       RelativAmount: 2
-    - EnemyPrefab: {fileID: 7580646203357798575, guid: fa3b5062a28e67c40a5afb80b098997e, type: 3}
-      RelativAmount: 1
-  - WaveName: WaveB
-    IsSingleWave: 0
-    SpawnStartTime: 8
-    SpawnEndTime: 20
-    SpawnInterval: 5
-    AmountOfGroupAreas: 1
-    GroupSize: 3
-    GroupSizeVariance: 1
-    EnemiesToSpawn:
-    - EnemyPrefab: {fileID: 7785059096381351574, guid: 1c41d1c6708b6a44ebfc25dcbc09b2d4, type: 3}
-      RelativAmount: 1
-    - EnemyPrefab: {fileID: 5371823593654330720, guid: df3950c677ced004cae29c16d1500e6d, type: 3}
-      RelativAmount: 3
-  - WaveName: WaveC
-    IsSingleWave: 1
-    SpawnStartTime: 25
-    SpawnEndTime: 25
-    SpawnInterval: 0
-    AmountOfGroupAreas: 3
-    GroupSize: 3
-    GroupSizeVariance: 1
-    EnemiesToSpawn:
-    - EnemyPrefab: {fileID: 7580646203357798575, guid: fa3b5062a28e67c40a5afb80b098997e, type: 3}
-      RelativAmount: 1
-    - EnemyPrefab: {fileID: 5371823593654330720, guid: df3950c677ced004cae29c16d1500e6d, type: 3}
-      RelativAmount: 1
-    - EnemyPrefab: {fileID: 7785059096381351574, guid: 1c41d1c6708b6a44ebfc25dcbc09b2d4, type: 3}
-      RelativAmount: 1

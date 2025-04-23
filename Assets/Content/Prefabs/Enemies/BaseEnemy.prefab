@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1104908563727063817, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
       propertyPath: m_Name
-      value: SlowWalker
+      value: BaseEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 2741319752470344558, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763244388602220510, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
       propertyPath: _statID
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6601374956315167378, guid: 620309cf366b21241b9bd2ea5185260f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

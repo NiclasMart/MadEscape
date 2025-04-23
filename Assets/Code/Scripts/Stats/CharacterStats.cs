@@ -37,7 +37,7 @@ namespace Stats
     {
         private Dictionary<Stat, float> activeStats = new Dictionary<Stat, float>();
 
-        public Action<Stat, float> OnStatsChanged;
+        public event Action<Stat, float> OnStatsChanged;
 
         public void Initialize(Dictionary<Stat, float> baseStatDict)
         {

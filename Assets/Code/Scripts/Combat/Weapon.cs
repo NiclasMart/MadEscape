@@ -11,6 +11,8 @@ using UnityEngine;
 using Audio;
 using System.Collections.Generic;
 using System;
+using VitalForces;
+using UnityEngine.Purchasing;
 
 namespace Combat
 {
@@ -102,6 +104,19 @@ namespace Combat
             {
                 _shapeModule.angle = Mathf.Max(Mathf.Min(60f, -0.6f * value + 60f), 0); // 100 accuracy = 0 angle, 0 accuracy = 60 angle
             });
+        }
+
+        private List<ParticleCollisionEvent> _collisionEvents = new();
+        private void OnParticleCollision(GameObject hitObject)
+        {
+            if (hitObject.TryGetComponent<Health>(out Health health))
+            {
+                int amount = _bulletSystem.GetCollisionEvents(hitObject, _collisionEvents);
+                float damage = amount * CalculateDamage();
+                health.TakeDamage(damage);
+
+                Debug.Log($"BulletHits: {amount} on {hitObject.name} with {damage} damage");
+            }
         }
     }
 }

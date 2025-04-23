@@ -36,7 +36,7 @@ namespace Generation
         private Dictionary<int, ObjectPool> _enemyPools = new();
         private ObjectPool _spawnTesterPool;
 
-        public Action<float> onTimerUpdated;
+        public event Action<float> OnTimerUpdated;
 
         private void Awake()
         {
@@ -79,7 +79,7 @@ namespace Generation
 
                 }
                 _timer += 1;
-                onTimerUpdated?.Invoke(_timer);
+                OnTimerUpdated?.Invoke(_timer);
                 yield return delay;
             }
         }
