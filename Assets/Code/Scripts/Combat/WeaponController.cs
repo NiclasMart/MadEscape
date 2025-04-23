@@ -16,7 +16,7 @@ namespace Combat
     public class WeaponController : MonoBehaviour
     {
         [SerializeField] private Transform _weaponAttacheTransform;
-        [SerializeField] private Sanity sanity;
+        private Sanity sanity;
         private EnemyFinderAll _enemyFinderAll;
         private Weapon _weapon;
         private float _timeSinceLastShot;
@@ -29,10 +29,6 @@ namespace Combat
         private void Awake()
         {
             _enemyFinderAll = GetComponent<EnemyFinderAll>();
-            if (sanity == null)
-            {
-                sanity = FindFirstObjectByType<Sanity>();
-            }
         }
 
         public Weapon InitWeapon(WeaponTemplate weaponConfig, string targetLayer)
@@ -93,7 +89,8 @@ namespace Combat
 
         private void FireWeapon()
         {
-            sanityFactor = sanity.CurrentValue / sanity.MaxValue; // Wert zwischen 0 und 1
+            sanityFactor = sanity == null ? 1 : sanity.CurrentValue / sanity.MaxValue; // Wert zwischen 0 und 1
+
             if (_timeSinceLastShot > 1 / (_weapon.AttackSpeed * (SANITY_ATTACKSPEED_FACTOR - sanityFactor)))
             {
                 _weapon.Fire();
