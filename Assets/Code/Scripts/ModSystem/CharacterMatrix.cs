@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Combat;
 using NUnit.Framework;
 using Stats;
+using Unity.Properties;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 public class CharacterMatrix : MonoBehaviour
@@ -13,9 +16,9 @@ public class CharacterMatrix : MonoBehaviour
 
     List<List<Socket>> _matrix = new();
 
-    public event Action<GameObject> OnUpdate_CharacterMatrix;
+    public event Action OnUpdate_CharacterMatrix;
 
-    void Awake()
+    public void Initialize()
     {
         if (_matrixDataReference == null) Debug.LogError("The character has no assigned Skillset!"); //Todo: durch assert austauschen
 
@@ -24,10 +27,10 @@ public class CharacterMatrix : MonoBehaviour
             _matrix.Add(new List<Socket>());
             for (int c = 0; c < _matrixDataReference.Rows[r].Slots.Count; c++)
             {
-                CharacterMatrixTemplate.SocketInfo info = _matrixDataReference.GetSocketInfo(r, c);
+                CharacterMatrixTemplate.SocketInfo socketInfo = _matrixDataReference.GetSocketInfo(r, c);
 
                 //create new sockets according to the predefined socket types
-                switch (info.SocketType)
+                switch (socketInfo.SocketType)
                 {
                     case SocketType.Weapon:
                         _matrix[r].Add(new WeaponSocket(null, r, c));
@@ -36,7 +39,10 @@ public class CharacterMatrix : MonoBehaviour
                         _matrix[r].Add(new ModSocket(null, null, r, c));
                         break;
                     case SocketType.Mod | SocketType.Skill:
-                        Skill skill = new Skill(info.SocketSkill);
+                        // TODO: improve logic
+                        Type skillType = typeof(CharacterSkillLibrary).GetNestedType("DamageTaker");
+                        Skill skill = gameObject.AddComponent(skillType) as Skill;
+                        skill.Initialzize(socketInfo.SocketSkill.info, gameObject);
                         _matrix[r].Add(new ModSocket(null, skill, r, c));
                         break;
                     default:
@@ -50,7 +56,7 @@ public class CharacterMatrix : MonoBehaviour
 
     void Update()
     {
-        OnUpdate_CharacterMatrix?.Invoke(gameObject); // invoke all active skills
+        OnUpdate_CharacterMatrix?.Invoke(); // invoke all active skills
     }
 
     public void UnlockSkill(int rowIndex, int columnIndex)
@@ -58,7 +64,7 @@ public class CharacterMatrix : MonoBehaviour
         ModSocket socket = _matrix[rowIndex][columnIndex] as ModSocket;
         if (socket != null && socket.Skill != null)
         {
-            Action<GameObject> skill = socket.Skill.Unlock(gameObject);
+            Action skill = socket.Skill.Unlock();
             if (skill == null) return;
 
             OnUpdate_CharacterMatrix += skill;
@@ -136,36 +142,38 @@ public class Mod
 
 //public interface ISocketable { }
 
-public class Skill
+public abstract class Skill : MonoBehaviour
 {
+    protected GameObject _target;
     private string _name;
-    private event Action<GameObject> _skill; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
     private bool _unlocked = false;
     private bool _needsUpdate; // defines if the skill is only used on unlock or acts like a passive over time
 
-    public Skill(CharacterSkill skillInfo)
+    public virtual void Initialzize(CharacterSkill.SkillInfo info, GameObject target)
     {
-        _name = skillInfo.Skill.Name;
-        MethodInfo methodInfo = typeof(CharacterSkillLibrary).GetMethod(skillInfo.Skill.SkillRef);
-        _skill = methodInfo.CreateDelegate(typeof(Action<GameObject>)) as Action<GameObject>;
-        _needsUpdate = skillInfo.Skill.NeedsUpdateLoop;
+        _target = target;
+        _name = info.Name;
+        _needsUpdate = info.NeedsUpdateLoop;
     }
 
     // returns null if skill is instant use
     // returns the Action otherwise
-    public Action<GameObject> Unlock(GameObject unlocker)
+    public Action Unlock()
     {
         _unlocked = true;
         if (!_needsUpdate)
         {
-            _skill?.Invoke(unlocker);
+            SkillEffect();
             return null;
         }
         else
         {
-            return _skill;
+            return SkillEffect;
         }
     }
+
+    protected abstract void SkillEffect(/*params object[] args*/);
+
 }
 
 // public class StatSkill : Skill

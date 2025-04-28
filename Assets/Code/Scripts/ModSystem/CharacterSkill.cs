@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Skill", menuName = "Scriptable Objects/CharacterMatrix/Skill")]
 public class CharacterSkill : ScriptableObject
 {
-    public SkillInfo Skill;
+    public SkillInfo info;
 
     [Serializable]
     public class SkillInfo
