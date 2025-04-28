@@ -16,8 +16,12 @@ public class SkillInfoDrawer : PropertyDrawer
         var nameField = new PropertyField(property.FindPropertyRelative("Name"), "Skill Name");
         container.Add(nameField);
 
+        // Update loop check
+        var updateCheckerField = new PropertyField(property.FindPropertyRelative("NeedsUpdateLoop"), "Skill needs Update loop");
+        container.Add(updateCheckerField);
+
         // Skill
-        MethodInfo[] skillList = typeof(CharacterSkillLibrary).GetMethods();
+        MethodInfo[] skillList = typeof(CharacterSkillLibrary).GetMethods(BindingFlags.Public | BindingFlags.Static);
         List<string> dropdownOptions = new();
         foreach (var skill in skillList)
         {
@@ -33,6 +37,8 @@ public class SkillInfoDrawer : PropertyDrawer
             property.serializedObject.ApplyModifiedProperties();
         });
         container.Add(methodDropdown);
+
+
 
         // Description
         var descriptionField = new TextField("Description", 100, true, false, ' ');

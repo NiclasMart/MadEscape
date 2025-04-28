@@ -1,9 +1,10 @@
 using UnityEngine;
+using VitalForces;
 
 public class CharacterSkillLibrary
 {
-    public static void TestSkill()
+    public static void TestSkill(GameObject target)
     {
-        Debug.Log("This Ability is called");
+        target.GetComponent<Health>().TakeDamage(30 * Time.deltaTime);
     }
 }

@@ -11,6 +11,7 @@ public class CharacterSkill : ScriptableObject
     {
         public string Name;
         public string SkillRef; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
+        public bool NeedsUpdateLoop = false;
         public string Description;
     }
 

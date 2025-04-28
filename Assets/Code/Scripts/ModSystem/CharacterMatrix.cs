@@ -13,7 +13,7 @@ public class CharacterMatrix : MonoBehaviour
 
     List<List<Socket>> _matrix = new();
 
-    public event Action OnUpdate_CharacterMatrix;
+    public event Action<GameObject> OnUpdate_CharacterMatrix;
 
     void Awake()
     {
@@ -44,16 +44,25 @@ public class CharacterMatrix : MonoBehaviour
                 }
             }
         }
+
+        UnlockSkill(0, 0);
     }
 
     void Update()
     {
-        OnUpdate_CharacterMatrix?.Invoke();
+        OnUpdate_CharacterMatrix?.Invoke(gameObject); // invoke all active skills
     }
 
     public void UnlockSkill(int rowIndex, int columnIndex)
     {
+        ModSocket socket = _matrix[rowIndex][columnIndex] as ModSocket;
+        if (socket != null && socket.Skill != null)
+        {
+            Action<GameObject> skill = socket.Skill.Unlock(gameObject);
+            if (skill == null) return;
 
+            OnUpdate_CharacterMatrix += skill;
+        }
     }
 }
 
@@ -94,12 +103,12 @@ public class WeaponSocket : Socket
 public class ModSocket : Socket
 {
     Mod _mod;
-    Skill _skill = null;
+    public Skill Skill { get; private set; }
 
     public ModSocket(Mod mod, Skill skill, int rowIndex, int columnIndex) : base(rowIndex, columnIndex)
     {
         _mod = mod;
-        _skill = skill;
+        Skill = skill;
     }
 
     //returns previous mod if socket is not empty
@@ -127,27 +136,35 @@ public class Mod
 
 //public interface ISocketable { }
 
-public delegate void SkillDelegate();
 public class Skill
 {
     private string _name;
-    private Action _ability; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
+    private event Action<GameObject> _skill; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
     private bool _unlocked = false;
+    private bool _needsUpdate; // defines if the skill is only used on unlock or acts like a passive over time
 
     public Skill(CharacterSkill skillInfo)
     {
         _name = skillInfo.Skill.Name;
         MethodInfo methodInfo = typeof(CharacterSkillLibrary).GetMethod(skillInfo.Skill.SkillRef);
-        _ability = methodInfo.CreateDelegate(typeof(Action)) as Action;
-
-        _ability.Invoke();
+        _skill = methodInfo.CreateDelegate(typeof(Action<GameObject>)) as Action<GameObject>;
+        _needsUpdate = skillInfo.Skill.NeedsUpdateLoop;
     }
 
-    public void Unlock()
+    // returns null if skill is instant use
+    // returns the Action otherwise
+    public Action<GameObject> Unlock(GameObject unlocker)
     {
-        //Todo: do registration logic
-
         _unlocked = true;
+        if (!_needsUpdate)
+        {
+            _skill?.Invoke(unlocker);
+            return null;
+        }
+        else
+        {
+            return _skill;
+        }
     }
 }
 
