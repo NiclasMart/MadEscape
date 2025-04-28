@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Combat;
 using NUnit.Framework;
 using Stats;
@@ -8,11 +9,11 @@ using UnityEngine;
 
 public class CharacterMatrix : MonoBehaviour
 {
-    [SerializeField] CharacterMatrix_Template _matrixDataReference;
+    [SerializeField] CharacterMatrixTemplate _matrixDataReference;
 
     List<List<Socket>> _matrix = new();
 
-    public event Action OnUpdate;
+    public event Action OnUpdate_CharacterMatrix;
 
     void Awake()
     {
@@ -23,9 +24,10 @@ public class CharacterMatrix : MonoBehaviour
             _matrix.Add(new List<Socket>());
             for (int c = 0; c < _matrixDataReference.Rows[r].Slots.Count; c++)
             {
-                MatrixSocketInfo socketInfo = _matrixDataReference.GetSocketInfo(r, c);
+                CharacterMatrixTemplate.SocketInfo info = _matrixDataReference.GetSocketInfo(r, c);
 
-                switch (socketInfo.SocketType)
+                //create new sockets according to the predefined socket types
+                switch (info.SocketType)
                 {
                     case SocketType.Weapon:
                         _matrix[r].Add(new WeaponSocket(null, r, c));
@@ -34,7 +36,7 @@ public class CharacterMatrix : MonoBehaviour
                         _matrix[r].Add(new ModSocket(null, null, r, c));
                         break;
                     case SocketType.Mod | SocketType.Skill:
-                        Skill skill = new Skill(socketInfo);
+                        Skill skill = new Skill(info.SocketSkill);
                         _matrix[r].Add(new ModSocket(null, skill, r, c));
                         break;
                     default:
@@ -42,13 +44,11 @@ public class CharacterMatrix : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("Created matrix.");
     }
 
     void Update()
     {
-        OnUpdate.Invoke();
+        OnUpdate_CharacterMatrix?.Invoke();
     }
 
     public void UnlockSkill(int rowIndex, int columnIndex)
@@ -69,7 +69,7 @@ public enum SocketType
 
 }
 
-public class Socket
+public abstract class Socket
 {
     int _rowIndex, _columnIndex;
 
@@ -117,7 +117,7 @@ public class Mod
     Stat _stat;
     float _value;
 
-    public Mod(Mod_Template modTemplate)
+    public Mod(ModTemplate modTemplate)
     {
         _stat = modTemplate.ModifiedStat;
         _value = modTemplate.Value;
@@ -127,16 +127,20 @@ public class Mod
 
 //public interface ISocketable { }
 
+public delegate void SkillDelegate();
 public class Skill
 {
     private string _name;
     private Action _ability; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
     private bool _unlocked = false;
 
-    public Skill(MatrixSocketInfo skillInfo)
+    public Skill(CharacterSkill skillInfo)
     {
-        _name = skillInfo.Name;
-        _ability = skillInfo.Ability;
+        _name = skillInfo.Skill.Name;
+        MethodInfo methodInfo = typeof(CharacterSkillLibrary).GetMethod(skillInfo.Skill.SkillRef);
+        _ability = methodInfo.CreateDelegate(typeof(Action)) as Action;
+
+        _ability.Invoke();
     }
 
     public void Unlock()
