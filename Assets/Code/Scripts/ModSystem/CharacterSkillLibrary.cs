@@ -3,19 +3,13 @@ using VitalForces;
 
 public class CharacterSkillLibrary
 {
-    public static void TestSkill(GameObject target)
-    {
-        target.GetComponent<Health>().TakeDamage(30 * Time.deltaTime);
-    }
-
     public class DamageTaker : Skill
     {
         private Health _health;
 
-        public override void Initialzize(CharacterSkill.SkillInfo info, GameObject target)
+        public DamageTaker(CharacterSkill.SkillInfo info, GameObject user) : base(info, user)
         {
-            base.Initialzize(info, target);
-            _health = target.GetComponent<Health>();
+            _health = user.GetComponent<Health>();
         }
 
         protected override void SkillEffect(/*params object[] args*/)

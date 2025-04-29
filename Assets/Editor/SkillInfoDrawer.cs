@@ -17,11 +17,11 @@ public class SkillInfoDrawer : PropertyDrawer
         container.Add(nameField);
 
         // Update loop check
-        var updateCheckerField = new PropertyField(property.FindPropertyRelative("NeedsUpdateLoop"), "Skill needs Update loop");
+        var updateCheckerField = new PropertyField(property.FindPropertyRelative("OnlyActivatedOnceOnUnlock"), "Skill only acivates once when unlocked");
         container.Add(updateCheckerField);
 
         // Skill
-        MethodInfo[] skillList = typeof(CharacterSkillLibrary).GetMethods(BindingFlags.Public | BindingFlags.Static);
+        System.Type[] skillList = typeof(CharacterSkillLibrary).GetNestedTypes(BindingFlags.Public);
         List<string> dropdownOptions = new();
         foreach (var skill in skillList)
         {

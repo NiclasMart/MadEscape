@@ -39,14 +39,12 @@ public class CharacterMatrix : MonoBehaviour
                         _matrix[r].Add(new ModSocket(null, null, r, c));
                         break;
                     case SocketType.Mod | SocketType.Skill:
-                        // TODO: improve logic
-                        Type skillType = typeof(CharacterSkillLibrary).GetNestedType("DamageTaker");
-                        Skill skill = gameObject.AddComponent(skillType) as Skill;
-                        skill.Initialzize(socketInfo.SocketSkill.info, gameObject);
+                        Skill skill = Skill.CreateSkillFromInfo(socketInfo, gameObject);
                         _matrix[r].Add(new ModSocket(null, skill, r, c));
                         break;
                     default:
-                        throw new Exception($"Mod Type at position ({r},{c}) is not supported");
+                        Debug.LogError($"Mod Type at position ({r},{c}) is not supported");
+                        break;
                 }
             }
         }
@@ -62,7 +60,9 @@ public class CharacterMatrix : MonoBehaviour
     public void UnlockSkill(int rowIndex, int columnIndex)
     {
         ModSocket socket = _matrix[rowIndex][columnIndex] as ModSocket;
-        if (socket != null && socket.Skill != null)
+        Debug.Assert(socket != null, $"ASSERT: The used socket at index {rowIndex} : {columnIndex} is not assigned.");
+
+        if (socket.Skill != null)
         {
             Action skill = socket.Skill.Unlock();
             if (skill == null) return;
@@ -142,18 +142,32 @@ public class Mod
 
 //public interface ISocketable { }
 
-public abstract class Skill : MonoBehaviour
+public abstract class Skill
 {
-    protected GameObject _target;
-    private string _name;
-    private bool _unlocked = false;
-    private bool _needsUpdate; // defines if the skill is only used on unlock or acts like a passive over time
+    protected string _name;
+    protected GameObject _user;
+    [SerializeField] protected bool _unlocked = false;
 
-    public virtual void Initialzize(CharacterSkill.SkillInfo info, GameObject target)
+    [Tooltip("Set true if one time activation on unlock. If continues update is required, set to false.")]
+    protected bool _onlyActivatesOnUnlock; // defines if the skill is only used on unlock or acts like a passive over time
+
+    public static Skill CreateSkillFromInfo(CharacterMatrixTemplate.SocketInfo socketInfo, GameObject target)
     {
-        _target = target;
+        string skillRefName = socketInfo.SocketSkill.info.SkillRef;
+        Type skillType = typeof(CharacterSkillLibrary).GetNestedType(skillRefName);
+        Debug.Assert(skillType != null, $"ASSERT: Couldn't find the skill {skillRefName} in the Skill library.");
+
+        Skill skill = Activator.CreateInstance(skillType, socketInfo.SocketSkill.info, target) as Skill;
+        Debug.Assert(skill != null, $"ASSERT: Library skill {skillRefName} was of unexpected type. All Skills must inherit from Skill.");
+
+        return skill;
+    }
+
+    public Skill(CharacterSkill.SkillInfo info, GameObject target)
+    {
+        _user = target;
         _name = info.Name;
-        _needsUpdate = info.NeedsUpdateLoop;
+        _onlyActivatesOnUnlock = info.OnlyActivatedOnceOnUnlock;
     }
 
     // returns null if skill is instant use
@@ -161,7 +175,7 @@ public abstract class Skill : MonoBehaviour
     public Action Unlock()
     {
         _unlocked = true;
-        if (!_needsUpdate)
+        if (_onlyActivatesOnUnlock)
         {
             SkillEffect();
             return null;
