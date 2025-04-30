@@ -16,7 +16,7 @@ using UnityEngine.Purchasing;
 
 namespace Combat
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : MonoBehaviour, ISocketable
     {
         //stat values   
         private float _damage;

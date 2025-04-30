@@ -76,3 +76,5 @@ crashlytics-build.properties
 .vsconfig
 ignore.conf
 Assets/TextMesh Pro
+Assets/AssetInventory
+Assets/AssetInventory.meta

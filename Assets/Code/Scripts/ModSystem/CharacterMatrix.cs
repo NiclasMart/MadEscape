@@ -14,17 +14,17 @@ public class CharacterMatrix : MonoBehaviour
 {
     [SerializeField] CharacterMatrixTemplate _matrixDataReference;
 
-    List<List<Socket>> _matrix = new();
+    List<List<ISocket<ISocketable>>> _matrix = new();
 
     public event Action OnUpdate_CharacterMatrix;
 
     public void Initialize()
     {
-        if (_matrixDataReference == null) Debug.LogError("The character has no assigned Skillset!"); //Todo: durch assert austauschen
+        Debug.Assert(_matrixDataReference != null, "The character has no assigned Skillset!");
 
         for (int r = 0; r < _matrixDataReference.Rows.Count; r++)
         {
-            _matrix.Add(new List<Socket>());
+            _matrix.Add(new List<ISocket<ISocketable>>());
             for (int c = 0; c < _matrixDataReference.Rows[r].Slots.Count; c++)
             {
                 CharacterMatrixTemplate.SocketInfo socketInfo = _matrixDataReference.GetSocketInfo(r, c);
@@ -33,14 +33,13 @@ public class CharacterMatrix : MonoBehaviour
                 switch (socketInfo.SocketType)
                 {
                     case SocketType.Weapon:
-                        _matrix[r].Add(new WeaponSocket(null, r, c));
+                        Socket<Weapon> weaponSocket = new Socket<Weapon>(r, c);
+                        _matrix[r].Add(weaponSocket);
                         break;
                     case SocketType.Mod:
-                        _matrix[r].Add(new ModSocket(null, null, r, c));
-                        break;
                     case SocketType.Mod | SocketType.Skill:
-                        Skill skill = Skill.CreateSkillFromInfo(socketInfo, gameObject);
-                        _matrix[r].Add(new ModSocket(null, skill, r, c));
+                        Socket<Mod> modSocket = new Socket<Mod>(r, c);
+                        _matrix[r].Add(modSocket);
                         break;
                     default:
                         Debug.LogError($"Mod Type at position ({r},{c}) is not supported");
@@ -59,16 +58,10 @@ public class CharacterMatrix : MonoBehaviour
 
     public void UnlockSkill(int rowIndex, int columnIndex)
     {
-        ModSocket socket = _matrix[rowIndex][columnIndex] as ModSocket;
+        ISocket<ISocketable> socket = _matrix[rowIndex][columnIndex];
         Debug.Assert(socket != null, $"ASSERT: The used socket at index {rowIndex} : {columnIndex} is not assigned.");
 
-        if (socket.Skill != null)
-        {
-            Action skill = socket.Skill.Unlock();
-            if (skill == null) return;
-
-            OnUpdate_CharacterMatrix += skill;
-        }
+        OnUpdate_CharacterMatrix += socket?.Skill?.Unlock(); // registers skill to update loop
     }
 }
 
@@ -80,54 +73,41 @@ public enum SocketType
     None = 0,
     Weapon = 1,
     Mod = 2,
-    Skill = 4,
-
+    Skill = 4
 }
 
-public abstract class Socket
+public interface ISocketable { }
+
+public interface ISocket<out T> where T : ISocketable
+{
+    T SocketedItem { get; }
+    Skill Skill { get; }
+}
+
+public class Socket<T> : ISocket<T> where T : ISocketable
 {
     int _rowIndex, _columnIndex;
+    public T SocketedItem { get; private set; }
+    public Skill Skill { get; private set; }
 
-    protected Socket(int rowIndex, int columnIndex)
+    public Socket(int rowIndex, int columnIndex, Skill skill = null)
     {
         _rowIndex = rowIndex;
         _columnIndex = columnIndex;
+        Skill = skill;
         Debug.Log($"Created Socket at position {rowIndex} : {columnIndex}");
     }
 
-}
-
-public class WeaponSocket : Socket
-{
-    Weapon _weapon;
-    public WeaponSocket(Weapon weapon, int rowIndex, int columnIndex) : base(rowIndex, columnIndex)
+    public T SocketItem(T newItem)
     {
-        _weapon = weapon;
-    }
-}
-
-public class ModSocket : Socket
-{
-    Mod _mod;
-    public Skill Skill { get; private set; }
-
-    public ModSocket(Mod mod, Skill skill, int rowIndex, int columnIndex) : base(rowIndex, columnIndex)
-    {
-        _mod = mod;
-        Skill = skill;
+        T oldSocketedItem = SocketedItem;
+        SocketedItem = newItem;
+        return oldSocketedItem;
     }
 
-    //returns previous mod if socket is not empty
-    //else null
-    public Mod SocketMod(Mod newMod)
-    {
-        Mod oldMod = _mod;
-        _mod = newMod;
-        return oldMod;
-    }
 }
 
-public class Mod
+public class Mod : ISocketable
 {
     Stat _stat;
     float _value;
@@ -140,7 +120,7 @@ public class Mod
 
 }
 
-//public interface ISocketable { }
+
 
 public abstract class Skill
 {
@@ -189,16 +169,6 @@ public abstract class Skill
     protected abstract void SkillEffect(/*params object[] args*/);
 
 }
-
-// public class StatSkill : Skill
-// {
-
-// }
-
-// public class PassiveSkill : Skill
-// {
-
-// }
 
 
 
