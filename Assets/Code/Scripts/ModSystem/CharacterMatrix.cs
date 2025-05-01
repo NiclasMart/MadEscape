@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Combat;
-using NUnit.Framework;
 using Stats;
-using Unity.Properties;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 
 public class CharacterMatrix : MonoBehaviour
 {
@@ -38,7 +32,8 @@ public class CharacterMatrix : MonoBehaviour
                         break;
                     case SocketType.Mod:
                     case SocketType.Mod | SocketType.Skill:
-                        Socket<Mod> modSocket = new Socket<Mod>(r, c);
+                        Skill skill = Skill.CreateSkillFromInfo(socketInfo, gameObject);
+                        Socket<Mod> modSocket = new Socket<Mod>(r, c, skill);
                         _matrix[r].Add(modSocket);
                         break;
                     default:
@@ -58,10 +53,41 @@ public class CharacterMatrix : MonoBehaviour
 
     public void UnlockSkill(int rowIndex, int columnIndex)
     {
+        ISocket<ISocketable> socket = GetSocket(rowIndex, columnIndex);
+        OnUpdate_CharacterMatrix += socket?.Skill?.Unlock(); // registers skill to update loop
+    }
+
+    /// <summary>
+    /// Sockets the given weapon into the socket at the given position.
+    /// </summary>
+    /// <returns>The Weapon that was socketed before and null if the socket can't socket a weapon or if no previous weapon was set.</returns>
+    public Weapon SetWeapon(Weapon weapon, int rowIndex, int columnIndex)
+    {
+        ISocket<ISocketable> socket = GetSocket(rowIndex, columnIndex);
+        Socket<Weapon> weaponSocket = socket as Socket<Weapon>;
+
+        Weapon oldWeapon = weaponSocket?.SocketItem(weapon);
+        return oldWeapon;
+    }
+
+    /// <summary>
+    /// Sockets the given mod into the socket at the given position.
+    /// </summary>
+    /// <returns>The Mod that was socketed before and null if the socket can't socket a mod or if no previous Mod was set.</returns>
+    public Mod SetMod(Mod mod, int rowIndex, int columnIndex)
+    {
+        ISocket<ISocketable> socket = GetSocket(rowIndex, columnIndex);
+        Socket<Mod> modSocket = socket as Socket<Mod>;
+
+        Mod oldMod = modSocket?.SocketItem(mod);
+        return oldMod;
+    }
+
+    private ISocket<ISocketable> GetSocket(int rowIndex, int columnIndex)
+    {
         ISocket<ISocketable> socket = _matrix[rowIndex][columnIndex];
         Debug.Assert(socket != null, $"ASSERT: The used socket at index {rowIndex} : {columnIndex} is not assigned.");
-
-        OnUpdate_CharacterMatrix += socket?.Skill?.Unlock(); // registers skill to update loop
+        return socket;
     }
 }
 
@@ -107,6 +133,8 @@ public class Socket<T> : ISocket<T> where T : ISocketable
 
 }
 
+
+
 public class Mod : ISocketable
 {
     Stat _stat;
@@ -119,8 +147,6 @@ public class Mod : ISocketable
     }
 
 }
-
-
 
 public abstract class Skill
 {
