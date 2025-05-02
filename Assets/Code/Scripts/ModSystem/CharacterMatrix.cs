@@ -32,7 +32,7 @@ public class CharacterMatrix : MonoBehaviour
                         break;
                     case SocketType.Mod:
                     case SocketType.Mod | SocketType.Skill:
-                        Skill skill = Skill.CreateSkillFromInfo(socketInfo, gameObject);
+                        Skill skill = Skill.CreateSkillFromInfo(socketInfo.SocketSkill.info, gameObject);
                         Socket<Mod> modSocket = new Socket<Mod>(r, c, skill);
                         _matrix[r].Add(modSocket);
                         break;
@@ -157,13 +157,13 @@ public abstract class Skill
     [Tooltip("Set true if one time activation on unlock. If continues update is required, set to false.")]
     protected bool _onlyActivatesOnUnlock; // defines if the skill is only used on unlock or acts like a passive over time
 
-    public static Skill CreateSkillFromInfo(CharacterMatrixTemplate.SocketInfo socketInfo, GameObject target)
+    public static Skill CreateSkillFromInfo(CharacterSkill.SkillInfo skillInfo, GameObject target)
     {
-        string skillRefName = socketInfo.SocketSkill.info.SkillRef;
+        string skillRefName = skillInfo.SkillRef;
         Type skillType = typeof(CharacterSkillLibrary).GetNestedType(skillRefName);
         Debug.Assert(skillType != null, $"ASSERT: Couldn't find the skill {skillRefName} in the Skill library.");
 
-        Skill skill = Activator.CreateInstance(skillType, socketInfo.SocketSkill.info, target) as Skill;
+        Skill skill = Activator.CreateInstance(skillType, skillInfo, target) as Skill;
         Debug.Assert(skill != null, $"ASSERT: Library skill {skillRefName} was of unexpected type. All Skills must inherit from Skill.");
 
         return skill;
@@ -172,8 +172,8 @@ public abstract class Skill
     public Skill(CharacterSkill.SkillInfo info, GameObject target)
     {
         _user = target;
-        _name = info.Name;
-        _onlyActivatesOnUnlock = info.OnlyActivatedOnceOnUnlock;
+        _name = info?.Name;
+        _onlyActivatesOnUnlock = info?.OnlyActivatedOnceOnUnlock ?? false;
     }
 
     // returns null if skill is instant use
@@ -192,7 +192,7 @@ public abstract class Skill
         }
     }
 
-    protected abstract void SkillEffect(/*params object[] args*/);
+    protected abstract void SkillEffect();
 
 }
 

@@ -14,6 +14,7 @@ public class CharacterSkill : ScriptableObject
         public AnyValue[] Parameters;
         public bool OnlyActivatedOnceOnUnlock = false;
         public string Description;
+        public bool isDirty = true;
     }
 
 }

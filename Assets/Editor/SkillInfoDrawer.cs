@@ -15,7 +15,6 @@ public class SkillInfoDrawer : PropertyDrawer
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
         var container = new VisualElement();
-        container.style.flexDirection = FlexDirection.Column;
 
         // Name
         var nameField = new PropertyField(property.FindPropertyRelative("Name"), "Skill Name");
@@ -51,25 +50,27 @@ public class SkillInfoDrawer : PropertyDrawer
         methodDropdown.value = skillProperty.stringValue;
         methodDropdown.RegisterValueChangedCallback(evt =>
         {
+            property.FindPropertyRelative("isDirty").boolValue = true; // set data to dirty state
+            Debug.Log("Set Dirty");
+
             skillProperty.stringValue = methodDropdown.value;
             container.Children().Last().Clear();
-            container.Add(CreateParameterList(property, methodDropdown.value));
+            container.Add(CreateParameterList(property, skillList[methodDropdown.index]));
 
             property.serializedObject.ApplyModifiedProperties();
 
         });
         container.Add(methodDropdown);
-        container.Add(CreateParameterList(property, methodDropdown.value));
+        container.Add(CreateParameterList(property, skillList[methodDropdown.index]));
 
         return container;
     }
 
-    private VisualElement CreateParameterList(SerializedProperty property, string className)
+    private VisualElement CreateParameterList(SerializedProperty property, Type classType)
     {
         VisualElement paramContainer = new();
 
         // get selected skill class
-        Type classType = typeof(CharacterSkillLibrary).GetNestedType(className);
         if (classType == null)
         {
             Debug.LogWarning($"Couldn't find Skill of type {classType.Name}");
@@ -90,12 +91,26 @@ public class SkillInfoDrawer : PropertyDrawer
             ValueType paramType = (ValueType)typeProp.enumValueIndex;
             VisualElement field;
 
+            // set static value from skill class, if skill was changed
+            object classInstance = null;
+            if (property.FindPropertyRelative("isDirty").boolValue)
+            {
+                classInstance = Activator.CreateInstance(classType, new object[] { null, null });
+                // value = parameterList[i].GetValue(parameterList[i]);
+            }
+
+            // iterate over all parameters and create fields
             switch (paramType)
             {
                 case ValueType.Int:
                     SerializedProperty intProp = paramProp.FindPropertyRelative("IntValue");
                     IntegerField intField = new($"{parameterList[i].Name} (Int)");
-                    intField.value = intProp.intValue;
+
+                    // set values to the field
+                    if (classInstance != null) intField.value = (int)parameterList[i].GetValue(classInstance); // take base value from class
+                    else intField.value = intProp.intValue; // take saved value
+                    intProp.intValue = intField.value;
+
                     intField.RegisterValueChangedCallback(
                         evt =>
                         {
@@ -109,7 +124,12 @@ public class SkillInfoDrawer : PropertyDrawer
                 case ValueType.Float:
                     SerializedProperty floatProp = paramProp.FindPropertyRelative("FloatValue");
                     FloatField floatField = new($"{parameterList[i].Name} (Float)");
-                    floatField.value = floatProp.floatValue;
+
+                    // set values to the field
+                    if (classInstance != null) floatField.value = (float)parameterList[i].GetValue(classInstance); // take base value from class
+                    else floatField.value = floatProp.floatValue; // take saved value
+                    floatProp.floatValue = floatField.value;
+
                     floatField.RegisterValueChangedCallback(
                         evt =>
                         {
@@ -123,7 +143,12 @@ public class SkillInfoDrawer : PropertyDrawer
                 case ValueType.String:
                     SerializedProperty stringProp = paramProp.FindPropertyRelative("StringValue");
                     TextField stringField = new($"{parameterList[i].Name} (String)");
-                    stringField.value = stringProp.stringValue;
+
+                    // set values to the field
+                    if (classInstance != null) stringField.value = (string)parameterList[i].GetValue(classInstance); // take base value from class
+                    else stringField.value = stringProp.stringValue; // take saved value
+                    stringProp.stringValue = stringField.value;
+
                     stringField.RegisterValueChangedCallback(
                         evt =>
                         {
@@ -137,7 +162,12 @@ public class SkillInfoDrawer : PropertyDrawer
                 case ValueType.Bool:
                     SerializedProperty boolProp = paramProp.FindPropertyRelative("BoolValue");
                     Toggle boolField = new($"{parameterList[i].Name} (Bool)");
-                    boolField.value = boolProp.boolValue;
+
+                    // set values to the field
+                    if (classInstance != null) boolField.value = (bool)parameterList[i].GetValue(classInstance); // take base value from class
+                    else boolField.value = boolProp.boolValue; // take saved value
+                    boolProp.boolValue = boolField.value;
+
                     boolField.RegisterValueChangedCallback(
                         evt =>
                         {
@@ -151,7 +181,12 @@ public class SkillInfoDrawer : PropertyDrawer
                 case ValueType.Vector3:
                     SerializedProperty vector3Prop = paramProp.FindPropertyRelative("Vector3Value");
                     Vector3Field vector3Field = new($"{parameterList[i].Name} (Vector3)");
-                    vector3Field.value = vector3Prop.vector3Value;
+
+                    // set values to the field
+                    if (classInstance != null) vector3Field.value = (Vector3)parameterList[i].GetValue(classInstance); // take base value from class
+                    else vector3Field.value = vector3Prop.vector3Value; // take saved value
+                    vector3Prop.vector3Value = vector3Field.value;
+
                     vector3Field.RegisterValueChangedCallback(
                         evt =>
                         {
@@ -166,12 +201,12 @@ public class SkillInfoDrawer : PropertyDrawer
                     field = new Label($"{parameterList[i].Name}: Unsupported Type");
                     break;
             }
-
             paramContainer.Add(field);
         }
 
 
-
+        property.FindPropertyRelative("isDirty").boolValue = false; // set data as clean
+        Debug.Log("Set Clean");
         return paramContainer;
 
     }

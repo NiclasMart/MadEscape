@@ -7,10 +7,12 @@ public class CharacterSkillLibrary
     {
         private Health _health;
 
-        public int Amount;
+        public int Amount = 20;
+        public Vector3 Direction = Vector3.forward;
 
         public DamageTaker(CharacterSkill.SkillInfo info, GameObject user) : base(info, user)
         {
+            if (user == null) return;
             _health = user.GetComponent<Health>();
         }
 
@@ -25,11 +27,12 @@ public class CharacterSkillLibrary
     {
         private Health _health;
 
-        public int Amount;
-        public float Multiplier;
+        public static int Amount = 5;
+        public static float Multiplier = 10;
 
         public Healer(CharacterSkill.SkillInfo info, GameObject user) : base(info, user)
         {
+            if (user == null) return;
             _health = user.GetComponent<Health>();
         }
 
@@ -37,6 +40,18 @@ public class CharacterSkillLibrary
         {
             _health.TakeDamage(Amount * Time.deltaTime);
             Debug.Log("Apply Damage");
+        }
+    }
+
+    public class Test : Skill
+    {
+        public Test(CharacterSkill.SkillInfo info, GameObject target) : base(info, target)
+        {
+        }
+
+        protected override void SkillEffect()
+        {
+
         }
     }
 }
