@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Combat;
+using Core;
 using Stats;
 using UnityEngine;
 
@@ -9,8 +11,9 @@ public class CharacterMatrix : MonoBehaviour
     [SerializeField] CharacterMatrixTemplate _matrixDataReference;
 
     List<List<ISocket<ISocketable>>> _matrix = new();
-
     public event Action OnUpdate_CharacterMatrix;
+
+    bool isActive = true;
 
     public void Initialize()
     {
@@ -43,11 +46,13 @@ public class CharacterMatrix : MonoBehaviour
             }
         }
 
-        UnlockSkill(0, 0);
+        UnlockSkill(0, 0); //Todo: only for testing
+        ServiceProvider.Get<GameManager>().GetPlayer().OnDeath += () => isActive = false;
     }
 
     void Update()
     {
+        if (!isActive) return;
         OnUpdate_CharacterMatrix?.Invoke(); // invoke all active skills
     }
 
@@ -133,8 +138,6 @@ public class Socket<T> : ISocket<T> where T : ISocketable
 
 }
 
-
-
 public class Mod : ISocketable
 {
     Stat _stat;
@@ -163,8 +166,16 @@ public abstract class Skill
         Type skillType = typeof(CharacterSkillLibrary).GetNestedType(skillRefName);
         Debug.Assert(skillType != null, $"ASSERT: Couldn't find the skill {skillRefName} in the Skill library.");
 
+
         Skill skill = Activator.CreateInstance(skillType, skillInfo, target) as Skill;
         Debug.Assert(skill != null, $"ASSERT: Library skill {skillRefName} was of unexpected type. All Skills must inherit from Skill.");
+
+        FieldInfo[] parameterList = skillType.GetFields();
+        for (int i = 0; i < parameterList.Length; i++)
+        {
+
+            parameterList[i].SetValue(skill, skillInfo.Parameters[i].ConvertValue<object>());
+        }
 
         return skill;
     }

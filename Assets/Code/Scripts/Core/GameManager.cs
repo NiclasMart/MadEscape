@@ -19,17 +19,16 @@ namespace Core
         private GameOverScreen _gameOverScreen;
         private ProgressTimer _progressTimer;
 
-        private void Awake()
-        {
-            Reload();
+        
 
-            _player.OnDeath += ShowGameOverScreen;
-            _progressTimer.OnTimerEnded += ShowGameOverScreen;
-        }
 
         void Start()
         {
             ServiceProvider.Get<StatisticTracker>().ResetStatistics();
+            Reload();
+
+            _player.OnDeath += ShowGameOverScreen;
+            _progressTimer.OnTimerEnded += ShowGameOverScreen;
         }
 
         public void RestartGame()

@@ -19,7 +19,7 @@ public class CharacterSkillLibrary
         protected override void SkillEffect(/*params object[] args*/)
         {
             _health.TakeDamage(Amount * Time.deltaTime);
-            Debug.Log("Apply Damage");
+            Debug.Log($"Apply Damage {Amount} with direction {Direction}");
         }
     }
 
@@ -27,8 +27,8 @@ public class CharacterSkillLibrary
     {
         private Health _health;
 
-        public static int Amount = 5;
-        public static float Multiplier = 10;
+        public int Amount = 5;
+        public float Multiplier = 10;
 
         public Healer(CharacterSkill.SkillInfo info, GameObject user) : base(info, user)
         {
