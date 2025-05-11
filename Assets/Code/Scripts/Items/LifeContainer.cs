@@ -8,6 +8,7 @@
 
 using VitalForces;
 using UnityEngine;
+using System.Collections;
 
 namespace Items
 {
@@ -20,7 +21,7 @@ namespace Items
             Health health = user.GetComponent<Health>();
             if (health)
             {
-                health.RegenerateHealth(_restoreAmount);
+                health.StartCoroutine(health.RestoreHealthOverTime(_restoreAmount));
             }
             Destroy(this);
         }

@@ -10,6 +10,7 @@ using System;
 using Combat;
 using Stats;
 using UnityEngine;
+using System.Collections;
 
 namespace VitalForces
 {
@@ -18,12 +19,13 @@ namespace VitalForces
         private float lifeRegen;
         private float life;
 
+        [SerializeField] public float HealthRestoreTime = 0.5f;
+
         private float armor;
         public bool IsAlive => CurrentValue > 0;
 
         public event Action<GameObject> OnDeath;
         public event Action<float> OnTakeDamage;
-        private float timer = 0f;
 
         public void Initialize(CharacterStats stats)
         {
@@ -36,12 +38,10 @@ namespace VitalForces
 
         private void Update()
         {
-            if (timer > 1)
+            if (lifeRegen > 0)
             {
-                RegenerateHealth(lifeRegen);
-                timer = 0f;
+                RegenerateHealth(lifeRegen * Time.deltaTime);
             }
-            timer += Time.fixedDeltaTime;
         }
 
         public void TakeDamage(float amount)
@@ -56,7 +56,17 @@ namespace VitalForces
         {
             Change(regenAmount);
         }
-
+        public IEnumerator RestoreHealthOverTime(float totalAmount)
+        {
+            float elapsed = 0f;
+            while (elapsed < HealthRestoreTime)
+            {
+                float delta = (totalAmount / HealthRestoreTime) * Time.deltaTime;
+                RegenerateHealth(delta);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }
         public void UpdateHealthStat(Stat stat, float newValue)
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;
