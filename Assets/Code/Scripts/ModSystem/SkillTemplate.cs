@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Skill", menuName = "Scriptable Objects/CharacterMatrix/Skill")]
-public class CharacterSkill : ScriptableObject
+public class SkillTemplate : ScriptableObject
 {
     public SkillInfo info;
 
@@ -17,7 +17,5 @@ public class CharacterSkill : ScriptableObject
         public string Description;
         public bool isDirty = true;
     }
-
 }
 
-//implement as custom property drawer in CharacterMatrix_Template: https://www.youtube.com/watch?v=3w9iXT6wx5g

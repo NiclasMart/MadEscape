@@ -11,6 +11,7 @@ using UnityEngine;
 using Audio;
 using System.Collections.Generic;
 using System;
+using CharacterProgressionMatrix;
 using VitalForces;
 using UnityEngine.Purchasing;
 

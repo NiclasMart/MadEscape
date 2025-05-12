@@ -11,6 +11,7 @@ using UnityEngine;
 using Movement;
 using VitalForces;
 using System;
+using CharacterProgressionMatrix;
 using Stats;
 using Items;
 using Core;

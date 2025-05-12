@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
+using CharacterProgressionMatrix;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[CustomPropertyDrawer(typeof(CharacterSkill.SkillInfo))]
+[CustomPropertyDrawer(typeof(SkillTemplate.SkillInfo))]
 public class SkillInfoDrawer : PropertyDrawer
 {
     const int DESCRIPTION_WIDTH = 150;

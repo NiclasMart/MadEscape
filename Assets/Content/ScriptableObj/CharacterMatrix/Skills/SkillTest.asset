@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb430cb8b49f58743846d85adccba24d, type: 3}
-  m_Name: Skill1
+  m_Name: SkillTest
   m_EditorClassIdentifier: 
   info:
     Name: Damage Taker
-    SkillRef: DamageTaker
+    SkillRef: Healer
     Parameters:
     - type: 0
-      IntValue: 200
+      IntValue: 5
       FloatValue: 0
       BoolValue: 0
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
-    - type: 4
+    - type: 1
       IntValue: 0
       FloatValue: 10
       BoolValue: 0
       StringValue: 
-      Vector3Value: {x: 0, y: 2, z: 1}
+      Vector3Value: {x: 0, y: 0, z: 0}
     OnlyActivatedOnceOnUnlock: 0
     Description: asdsdfs
     isDirty: 0

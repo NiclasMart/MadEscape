@@ -1,29 +1,33 @@
 using System;
 using System.Collections.Generic;
+using CharacterProgressionMatrix;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MatrixTemplate", menuName = "Scriptable Objects/CharacterMatrix/MatrixTemplate")]
-public class CharacterMatrixTemplate : ScriptableObject
+namespace CharacterProgressionMatrix
 {
-    public string Name;
-    public List<MatrixRow> Rows = new();
-
-    [Serializable]
-    public class MatrixRow
+    [CreateAssetMenu(fileName = "MatrixTemplate", menuName = "Scriptable Objects/CharacterMatrix/MatrixTemplate")]
+    public class CharacterMatrixTemplate : ScriptableObject
     {
-        public MentalColorType RowColor;
-        public List<SocketInfo> Slots;
-    }
+        public string Name;
+        public List<MatrixRow> Rows = new();
 
-    [Serializable]
-    public class SocketInfo
-    {
-        public SocketType SocketType;
-        public CharacterSkill SocketSkill;
-    }
+        [Serializable]
+        public class MatrixRow
+        {
+            public MentalColorType RowColor;
+            public List<SocketInfo> Slots;
+        }
 
-    public SocketInfo GetSocketInfo(int rowIndex, int columnIndex)
-    {
-        return Rows[rowIndex].Slots[columnIndex];
+        [Serializable]
+        public class SocketInfo
+        {
+            public SocketType SocketType;
+            public SkillTemplate SocketSkillTemplate;
+        }
+
+        public SocketInfo GetSocketInfo(int rowIndex, int columnIndex)
+        {
+            return Rows[rowIndex].Slots[columnIndex];
+        }
     }
 }
