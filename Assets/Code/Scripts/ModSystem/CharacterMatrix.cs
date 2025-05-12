@@ -35,6 +35,7 @@ namespace CharacterProgressionMatrix
                             break;
                         case SocketType.Mod:
                         case SocketType.Mod | SocketType.Skill:
+                            Debug.Assert(socketInfo.SocketSkillTemplate != null, $"The skill socket at position {r} : {c} in the {_matrixDataReference.Name} matrix has no skill assigned.");
                             Skill skill = Skill.CreateSkillFromTemplate(socketInfo.SocketSkillTemplate.info, gameObject);
                             Socket<Mod> modSocket = new Socket<Mod>(r, c, skill);
                             _matrix[r].Add(modSocket);

@@ -33,15 +33,12 @@ namespace VitalForces
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             armor = stats.GetStat(Stat.Armor);
             stats.OnStatsChanged += UpdateHealthStat;
-            Initialize(life, life);
+            base.Initialize(life, life);
         }
 
         private void Update()
         {
-            if (lifeRegen > 0)
-            {
-                RegenerateHealth(lifeRegen * Time.deltaTime);
-            }
+            RegenerateHealth(lifeRegen * Time.deltaTime);
         }
 
         public void TakeDamage(float amount)
@@ -54,8 +51,10 @@ namespace VitalForces
 
         public void RegenerateHealth(float regenAmount)
         {
+            if (lifeRegen < 0) return;
             Change(regenAmount);
         }
+        
         public IEnumerator RestoreHealthOverTime(float totalAmount)
         {
             float elapsed = 0f;
@@ -67,6 +66,7 @@ namespace VitalForces
                 yield return null;
             }
         }
+        
         public void UpdateHealthStat(Stat stat, float newValue)
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;
