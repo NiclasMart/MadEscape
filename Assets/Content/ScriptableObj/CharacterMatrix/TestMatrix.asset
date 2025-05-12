@@ -17,4 +17,4 @@ MonoBehaviour:
   - RowColor: 1
     Slots:
     - SocketType: 6
-      SocketSkill: {fileID: 11400000, guid: bfe8fca424f44aa4c881284cdfdcc6c2, type: 2}
+      SocketSkillTemplate: {fileID: 11400000, guid: bfe8fca424f44aa4c881284cdfdcc6c2, type: 2}
