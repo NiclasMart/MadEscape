@@ -14,7 +14,7 @@ namespace Core
 {
     public interface IService
     {
-        public void Reload() { } //Implement this in the service, if some references must be reloaded after reloading the scene
+        public void Load() { } //Implement this in the service, if some references must be reloaded after reloading the scene
     }
 
     public class ServiceHandler : MonoBehaviour

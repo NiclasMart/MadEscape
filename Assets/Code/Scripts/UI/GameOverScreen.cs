@@ -15,7 +15,7 @@ namespace UI
 {
     public class GameOverScreen : MonoBehaviour
     {
-        public void ShowGameOverScreen()
+        public void SetActive()
         {
             gameObject.SetActive(true);
         }

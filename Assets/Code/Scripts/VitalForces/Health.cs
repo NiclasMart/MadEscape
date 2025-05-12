@@ -10,6 +10,7 @@ using System;
 using Combat;
 using Stats;
 using UnityEngine;
+using System.Collections;
 
 namespace VitalForces
 {
@@ -18,12 +19,13 @@ namespace VitalForces
         private float lifeRegen;
         private float life;
 
+        [SerializeField] public float HealthRestoreTime = 0.5f;
+
         private float armor;
         public bool IsAlive => CurrentValue > 0;
 
         public event Action<GameObject> OnDeath;
         public event Action<float> OnTakeDamage;
-        private float timer = 0f;
 
         public void Initialize(CharacterStats stats)
         {
@@ -31,17 +33,12 @@ namespace VitalForces
             lifeRegen = stats.GetStat(Stat.LifeRegen);
             armor = stats.GetStat(Stat.Armor);
             stats.OnStatsChanged += UpdateHealthStat;
-            Initialize(life, life);
+            base.Initialize(life, life);
         }
 
         private void Update()
         {
-            if (timer > 1)
-            {
-                RegenerateHealth(lifeRegen);
-                timer = 0f;
-            }
-            timer += Time.fixedDeltaTime;
+            RegenerateHealth(lifeRegen * Time.deltaTime);
         }
 
         public void TakeDamage(float amount)
@@ -49,14 +46,27 @@ namespace VitalForces
             float damage = DamageCalculator.CalculateDamage(amount, armor);
             Change(-damage);
             OnTakeDamage?.Invoke(damage);
-            if (!IsAlive) OnDeath(gameObject);
+            if (!IsAlive) OnDeath?.Invoke(gameObject);
         }
 
         public void RegenerateHealth(float regenAmount)
         {
+            if (lifeRegen < 0) return;
             Change(regenAmount);
         }
-
+        
+        public IEnumerator RestoreHealthOverTime(float totalAmount)
+        {
+            float elapsed = 0f;
+            while (elapsed < HealthRestoreTime)
+            {
+                float delta = (totalAmount / HealthRestoreTime) * Time.deltaTime;
+                RegenerateHealth(delta);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+        }
+        
         public void UpdateHealthStat(Stat stat, float newValue)
         {
             if (stat != Stat.Life && stat != Stat.LifeRegen && stat != Stat.Armor) return;

@@ -11,12 +11,13 @@ using UnityEngine;
 using Audio;
 using System.Collections.Generic;
 using System;
+using CharacterProgressionMatrix;
 using VitalForces;
 using UnityEngine.Purchasing;
 
 namespace Combat
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : MonoBehaviour, ISocketable
     {
         //stat values   
         private float _damage;

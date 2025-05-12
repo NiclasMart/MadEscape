@@ -11,6 +11,7 @@ using UnityEngine;
 using Movement;
 using VitalForces;
 using System;
+using CharacterProgressionMatrix;
 using Stats;
 using Items;
 using Core;
@@ -23,6 +24,7 @@ namespace Controller
         private ItemInventory _inventory;
         public ItemInventory Inventory => _inventory;
         private Sanity _sanity;
+        private CharacterMatrix _characterMatrix;
 
         public event Action OnDeath;
 
@@ -32,6 +34,8 @@ namespace Controller
             _mover = GetComponent<PlayerMover>();
             _sanity = GetComponent<Sanity>();
             _inventory = GetComponentInChildren<ItemInventory>();
+
+            _characterMatrix = GetComponent<CharacterMatrix>();
         }
 
         protected override void OnEnable()
@@ -61,6 +65,7 @@ namespace Controller
             _mover.Initialize(_stats);
             _sanity.Initialize(_stats); //TODO: connect SanityDecSpeed
             _inventory.Initialize(gameObject);
+            _characterMatrix.Initialize();
 
             MountWeapon(null, "Enemy");
         }
