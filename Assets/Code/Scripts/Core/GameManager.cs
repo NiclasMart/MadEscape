@@ -19,18 +19,6 @@ namespace Core
         private GameOverScreen _gameOverScreen;
         private ProgressTimer _progressTimer;
 
-        
-
-
-        void Start()
-        {
-            ServiceProvider.Get<StatisticTracker>().ResetStatistics();
-            Reload();
-
-            _player.OnDeath += ShowGameOverScreen;
-            _progressTimer.OnTimerEnded += ShowGameOverScreen;
-        }
-
         public void RestartGame()
         {
             StartCoroutine(RestartGameCoroutine());
@@ -41,18 +29,23 @@ namespace Core
             return _player;
         }
 
-        public void Reload()
+        public void Load()
         {
             _player = FindFirstObjectByType<PlayerController>();
             _gameOverScreen = FindFirstObjectByType<GameOverScreen>(FindObjectsInactive.Include);
             _progressTimer = FindFirstObjectByType<ProgressTimer>();
+
+            _player.OnDeath += ShowGameOverScreen;
+            _progressTimer.OnTimerEnded += ShowGameOverScreen;
         }
 
         private void ShowGameOverScreen()
         {
             FreezeTime();
-            _gameOverScreen.ShowGameOverScreen();
+            _gameOverScreen.SetActive();
+
             _player.OnDeath -= ShowGameOverScreen;
+            _progressTimer.OnTimerEnded -= ShowGameOverScreen;
         }
 
         private IEnumerator RestartGameCoroutine()
@@ -63,7 +56,7 @@ namespace Core
             // reload all services after scene reload
             foreach (var service in ServiceProvider.GetAll())
             {
-                service.Reload();
+                service.Load();
             }
             ServiceProvider.Get<StatisticTracker>().ResetStatistics();
 

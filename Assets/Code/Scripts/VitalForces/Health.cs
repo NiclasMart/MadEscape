@@ -49,7 +49,7 @@ namespace VitalForces
             float damage = DamageCalculator.CalculateDamage(amount, armor);
             Change(-damage);
             OnTakeDamage?.Invoke(damage);
-            if (!IsAlive) OnDeath(gameObject);
+            if (!IsAlive) OnDeath?.Invoke(gameObject);
         }
 
         public void RegenerateHealth(float regenAmount)

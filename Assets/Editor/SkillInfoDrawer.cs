@@ -47,7 +47,18 @@ public class SkillInfoDrawer : PropertyDrawer
         var methodDropdown = new DropdownField("Skill", dropdownOptions, 0);
 
         SerializedProperty skillProperty = property.FindPropertyRelative("SkillRef");
-        methodDropdown.value = skillProperty.stringValue;
+        
+        // set value from scriptable object if Skill class is available
+        if (methodDropdown.choices.Contains(skillProperty.stringValue))
+        {
+            methodDropdown.value = skillProperty.stringValue;
+        }
+        else
+        {
+            methodDropdown.index = 0;
+            Debug.LogWarning($"The skill {skillProperty.stringValue} can't be found in the skill library. The skill {methodDropdown.value} was selected as placeholder");
+        }
+        
         methodDropdown.RegisterValueChangedCallback(evt =>
         {
             property.FindPropertyRelative("isDirty").boolValue = true; // set data to dirty state

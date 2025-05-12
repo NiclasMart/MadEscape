@@ -29,6 +29,7 @@ public static class ServiceProvider
         }
 
         _services[typeof(T)] = service;
+        (service as IService).Load();
 
         if (go != null)
         {
