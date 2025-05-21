@@ -24,5 +24,5 @@ MonoBehaviour:
     GroupSize: 2
     GroupSizeVariance: 0
     EnemiesToSpawn:
-    - EnemyPrefab: {fileID: 7785059096381351574, guid: 1c41d1c6708b6a44ebfc25dcbc09b2d4, type: 3}
+    - EnemyPrefab: {fileID: 5439661545404851123, guid: b676c00458664944bac80ef5052fa6d7, type: 3}
       RelativAmount: 2
