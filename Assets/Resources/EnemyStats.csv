@@ -2,3 +2,4 @@ id;name;BaseDamage;AttackSpeed;Life;LifeRegen;Armor;MovementSpeed;AttackRange
 0;BaseEnemy;100;1;100;0;0;2;0,8
 1;SlowWalker;200;0,5;150;0;0;1,5;0,8
 2;BaseShooter;100;1;50;0;0;1;5
+3;Stalker;200;2;100;0;0;1,5;0,8
