@@ -38,7 +38,7 @@ public class SkillInfoDrawer : PropertyDrawer
         container.Add(updateCheckerField);
 
         // Skill
-        Type[] skillList = typeof(CharacterSkillLibrary).GetNestedTypes(BindingFlags.Public);
+        Type[] skillList = typeof(SkillLibrary).GetNestedTypes(BindingFlags.Public);
         List<string> dropdownOptions = new();
         foreach (var skill in skillList)
         {
@@ -206,6 +206,25 @@ public class SkillInfoDrawer : PropertyDrawer
                         }
                     );
                     field = vector3Field;
+                    break;
+                
+                case ValueType.GameObject:
+                    SerializedProperty gameObjectProp = paramProp.FindPropertyRelative("GameObjectValue");
+                    ObjectField gameObjectField = new($"{parameterList[i].Name} (GameObject)");
+
+                    // set values to the field
+                    if (classInstance != null) gameObjectField.value = (GameObject)parameterList[i].GetValue(classInstance); // take base value from class
+                    else gameObjectField.value = gameObjectProp.objectReferenceValue; // take saved value
+                    gameObjectProp.objectReferenceValue = gameObjectField.value;
+
+                    gameObjectField.RegisterValueChangedCallback(
+                        evt =>
+                        {
+                            gameObjectProp.objectReferenceValue = evt.newValue;
+                            parameterProperty.serializedObject.ApplyModifiedProperties();
+                        }
+                    );
+                    field = gameObjectField;
                     break;
 
                 default:

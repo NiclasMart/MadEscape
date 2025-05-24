@@ -6,9 +6,13 @@ namespace CharacterProgressionMatrix
 {
     public abstract class Skill
     {
-        protected string _name;
-        protected GameObject _user;
-        [SerializeField] protected bool _unlocked = false;
+        public float Duration;
+        public float Cooldown;
+        private float _lastCastTime;
+        private bool _active;
+        
+        protected string Name;
+        protected GameObject User;
 
         [Tooltip("Set true if one time activation on unlock. If continues update is required, set to false.")]
         protected bool _onlyActivatesOnUnlock; // defines if the skill is only used on unlock or acts like a passive over time
@@ -16,7 +20,7 @@ namespace CharacterProgressionMatrix
         public static Skill CreateSkillFromTemplate(SkillTemplate.SkillInfo skillInfo, GameObject target)
         {
             string skillRefName = skillInfo.SkillRef;
-            Type skillType = typeof(CharacterSkillLibrary).GetNestedType(skillRefName);
+            Type skillType = typeof(SkillLibrary).GetNestedType(skillRefName);
             Debug.Assert(skillType != null, $"ASSERT: Couldn't find the skill {skillRefName} in the Skill library.");
 
 
@@ -35,27 +39,47 @@ namespace CharacterProgressionMatrix
 
         protected Skill(SkillTemplate.SkillInfo info, GameObject target)
         {
-            _user = target;
-            _name = info?.Name;
-            _onlyActivatesOnUnlock = info?.OnlyActivatedOnceOnUnlock ?? false;
+            User = target;
+            Name = info.Name;
+            _lastCastTime = Time.time;
+            _onlyActivatesOnUnlock = info.OnlyActivatedOnceOnUnlock;
+        }
+
+        private void CastSkill()
+        {
+            if (_active)
+            {
+                SkillEffect();
+                if (_lastCastTime + Duration <= Time.time) _active = false;
+            }
+            
+            if (_lastCastTime + Duration + Cooldown < Time.time)
+            {
+                _active = true;
+                _lastCastTime = Time.time;
+            }
         }
         
         protected abstract void SkillEffect();
 
         // returns null if skill is instant use
         // returns the Action otherwise
-        public Action Unlock()
+        public Action RegisterSkill()
         {
-            _unlocked = true;
             if (_onlyActivatesOnUnlock)
             {
-                SkillEffect();
+                CastSkill();
                 return null;
             }
             else
             {
-                return SkillEffect;
+                return CastSkill;
             }
         }
+    }
+
+    public abstract class ActiveSkill : Skill
+    {
+        protected ActiveSkill(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
     }
 }

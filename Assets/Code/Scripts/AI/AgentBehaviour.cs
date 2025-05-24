@@ -6,9 +6,12 @@
 // ---------------------------------------------
 // -------------------------------------------*/
 
+using System;
+using CharacterProgressionMatrix;
 using Generator;
 using Stats;
 using Unity.AI.Navigation;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,10 +21,15 @@ namespace AI
     public abstract class AgentBehaviour : MonoBehaviour
     {
         private const float PathUpdateThreshold = 1f;
+
+        [SerializeField] private SkillTemplate UsedSkill;
         
         protected bool DisableThresholdCheck = false;
         protected NavMeshAgent Agent { get; private set; }
         protected Room RoomRef { get; private set; }
+        
+        protected Skill Skill;
+        private Action _skillAction;
         
         private Vector3 _targetPosition = Vector3.positiveInfinity;
         
@@ -29,10 +37,18 @@ namespace AI
         {
             Agent = GetComponent<NavMeshAgent>();
             RoomRef = FindFirstObjectByType<Room>();
+
+            if (UsedSkill != null)
+            {
+                Skill = Skill.CreateSkillFromTemplate(UsedSkill.info, gameObject);
+                _skillAction = Skill.RegisterSkill();
+            }
         }
 
         void Update()
         {
+            _skillAction?.Invoke();
+            
             // ensures, that the path is only updated, when the position exceeds a certain threshold
             Vector3 newTargetPosition = CalculateNewTargetPosition();
             if (!DisableThresholdCheck && (_targetPosition - newTargetPosition).sqrMagnitude < PathUpdateThreshold) return;
@@ -52,6 +68,8 @@ namespace AI
         {
             return Agent.remainingDistance <= Agent.stoppingDistance && !Agent.pathPending;
         }
+
+
         
         protected abstract Vector3 CalculateNewTargetPosition();
     }

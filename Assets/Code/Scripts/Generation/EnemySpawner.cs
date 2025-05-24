@@ -26,13 +26,14 @@ namespace Generation
         const float GROUP_AREA_SIZE = 3f;
         const int INITIAL_POOL_SIZE = 10;
         const int MAX_POOL_SIZE = 100;
+        
         [SerializeField] private SpawnTester _spawnTesterPrefab;
         [SerializeField] private EnemySpawnConfig _spawnConfig;
 
         private LootGenerator _lootGenerator;
         private List<StatRecord> _enemyInfo = new();
         private float _timer = 0;
-        private Vector2 _spawnArea;
+        private Room _room;
         private Dictionary<int, ObjectPool> _enemyPools = new();
         private ObjectPool _spawnTesterPool;
 
@@ -41,7 +42,7 @@ namespace Generation
         private void Awake()
         {
             _enemyInfo = LoadStats.LoadEnemyStats();
-            _spawnArea = FindFirstObjectByType<RoomGenerator>().RoomSize;
+            _room = FindFirstObjectByType<Room>();
             _spawnTesterPool = CreateNewSpawnPool(_spawnTesterPrefab.gameObject, INITIAL_POOL_SIZE, MAX_POOL_SIZE);
             _lootGenerator = new LootGenerator(_spawnConfig.LootTable);
         }
@@ -94,7 +95,7 @@ namespace Generation
                 {
                     //find random point in the room
                     bool foundValidPoint = false;
-                    foundValidPoint = GetRandomSpawnPointInRoom(out Vector3 spawnArea);
+                    foundValidPoint = _room.GetRandomPointInRoom(out Vector3 spawnArea);
                     if (!foundValidPoint) continue;
 
                     //loop defines how many enemies are spawned in a group
@@ -152,20 +153,6 @@ namespace Generation
 
             Item drop = _lootGenerator.Generate();
             enemyController.Initialize(type.statDict, drop);
-        }
-
-        private bool GetRandomSpawnPointInRoom(out Vector3 point)
-        {
-            float x = (_spawnArea.x - 1) / 2f * Random.Range(-1f, 1f);
-            float z = (_spawnArea.y - 1) / 2f * Random.Range(-1f, 1f);
-
-            if (NavMesh.SamplePosition(new Vector3(x, 0, z), out NavMeshHit hit, 1, NavMesh.AllAreas))
-            {
-                point = hit.position;
-                return true;
-            }
-            point = Vector3.zero;
-            return false;
         }
 
         private bool GetRandomSpawnPointInArea(Vector3 area, out Vector3 point)
