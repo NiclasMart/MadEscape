@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 8316086176406284804}
   - component: {fileID: 7048340397587110591}
   - component: {fileID: 2763244388602220510}
-  - component: {fileID: 6129764440616980411}
   - component: {fileID: 6316735774093415265}
   - component: {fileID: 2464137127678816844}
   - component: {fileID: 6522628611787515273}
@@ -228,20 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _statID: 0
   _startWeapon: {fileID: 0}
-  _activeAgentBehaviour: {fileID: 7301201054532181616}
   _drop: {fileID: 0}
---- !u!114 &6129764440616980411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1104908563727063817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48387e7fd8d75a84883c2263f9feb553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6316735774093415265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,6 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedDisplay: {fileID: 9211133397523055458}
+  HealthRestoreTime: 0.5
 --- !u!114 &6907234524639393962
 MonoBehaviour:
   m_ObjectHideFlags: 0

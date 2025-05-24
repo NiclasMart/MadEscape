@@ -17,25 +17,25 @@ using Combat;
 using Core;
 using AI;
 
-//TODO: Check if another partent class (Controller) should be created, from which this class and a potential PlayerController can inherit
 namespace Controller
 {
     public class EnemyController : BaseController, IPoolable
     {
+        [HideInInspector] public Item _drop;
+        
         //TODO: switch transform to find player in scene
         private Transform _target;
-        private Move _mover;
-        [SerializeField] private AgentBehaviour _activeAgentBehaviour;
-        private Attack _attack;
-        [HideInInspector] public Item _drop;
+        private AgentBehaviour _activeAgentBehaviour;
+        private Attack _baseAttack;
 
         public event System.Action<IPoolable> OnDestroy;
 
         protected override void Awake()
         {
             base.Awake();
-            _mover = GetComponent<Move>();
-            _attack = GetComponent<Attack>();
+            _baseAttack = GetComponent<Attack>();
+            _activeAgentBehaviour = GetComponent<AgentBehaviour>();
+
         }
 
         protected override void OnEnable()
@@ -70,12 +70,10 @@ namespace Controller
             Weapon weapon = MountWeapon(_target.gameObject, "Player");
             if (weapon) _stats.SetStat(Stat.AttackRange, weapon.AttackRange);
 
-            _mover.Initialize(_stats);
-            _mover.ChangeBehaviour(_activeAgentBehaviour);
-            _mover.Activate();
+            _activeAgentBehaviour.Initialize(_stats);
 
-            _attack.Initialize(_stats);
-            _attack.Activate();
+            _baseAttack.Initialize(_stats);
+            _baseAttack.Activate();
 
             _drop = drop; //Todo: don't tie loot to enemy, but to enemy spawner
         }
