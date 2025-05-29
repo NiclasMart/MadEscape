@@ -10,14 +10,15 @@ namespace CharacterProgressionMatrix
             private Health _health;
 
             public int Amount = 5;
-            
+
+            public Healer() { }
 
             public Healer(SkillTemplate.SkillInfo info, GameObject user) : base(info, user)
             {
                 _health = user.GetComponent<Health>();
             }
 
-            public override void InitializeAfterTemplateCreation() { }
+            protected override void InitializeAfterTemplateCreation() { }
 
             protected override void StartSkillEffect() { }
 
@@ -36,10 +37,11 @@ namespace CharacterProgressionMatrix
 
             private GameObject _areaRef;
 
+            public DamageArea() { }
 
             public DamageArea(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
 
-            public override void InitializeAfterTemplateCreation()
+            protected override void InitializeAfterTemplateCreation()
             {
                 _areaRef = Object.Instantiate(AreaVisualsPrefab, User.transform.position, Quaternion.identity, User.transform);
                 _areaRef.SetActive(false);

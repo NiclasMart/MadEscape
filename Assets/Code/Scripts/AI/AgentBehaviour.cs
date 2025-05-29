@@ -41,7 +41,6 @@ namespace AI
             if (UsedSkill != null)
             {
                 Skill = Skill.CreateSkillFromTemplate(UsedSkill.info, gameObject);
-                _skillCastAction = Skill.RegisterSkill();
             }
         }
 
@@ -57,13 +56,23 @@ namespace AI
             _targetPosition = newTargetPosition;
             Agent.destination = newTargetPosition;
         }
-        
+
+        private void OnEnable()
+        {
+            _skillCastAction = Skill?.RegisterSkill();
+        }
+
+        private void OnDisable()
+        {
+            Skill.Disable();
+        }
+
         public void Initialize(CharacterStats stats)
         {
             Agent.speed = stats.GetStat(Stat.MovementSpeed);
             Agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
             
-            //Todo: Reset Skill
+            Skill.Reset();
         }
         
         // this is true on game start and when the agent reached its destination

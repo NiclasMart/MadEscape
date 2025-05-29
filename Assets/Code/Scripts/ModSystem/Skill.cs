@@ -6,17 +6,18 @@ namespace CharacterProgressionMatrix
 {
     public abstract class Skill
     {
-        public float Duration;
-        public float Cooldown;
-        private float _lastCastTime;
         public bool IsActive { get; private set; }
         
-        protected string Name;
         protected GameObject User;
+        
+        private string _name;
+        private float _duration;
+        private float _cooldown;
+        private bool _onlyActivatesOnUnlock; // defines if the skill is only used on unlock or acts like a passive over time
+        private bool _alwaysActive;
 
-        [Tooltip("Set true if one time activation on unlock. If continues update is required, set to false.")]
-        protected bool _onlyActivatesOnUnlock; // defines if the skill is only used on unlock or acts like a passive over time
-
+        private float _lastCastTime;
+        
         public static Skill CreateSkillFromTemplate(SkillTemplate.SkillInfo skillInfo, GameObject target)
         {
             string skillRefName = skillInfo.SkillRef;
@@ -37,18 +38,18 @@ namespace CharacterProgressionMatrix
             skill.InitializeAfterTemplateCreation();
             return skill;
         }
-        
-        /// <summary>
-        /// Is called after the Skill is created from a template, and should be used to initialize internal state that depends on public fields.
-        /// </summary>
-        public abstract void InitializeAfterTemplateCreation();
+
+        public Skill() { }
 
         protected Skill(SkillTemplate.SkillInfo info, GameObject target)
         {
             User = target;
-            Name = info?.Name;
-            _lastCastTime = Time.time;
+            _name = info?.Name;
+            _cooldown = info?.Cooldown ?? 0;
+            _duration = info?.Duration ?? 0;
             _onlyActivatesOnUnlock = info?.OnlyActivatedOnceOnUnlock ?? false;
+            _alwaysActive = info?.AlwaysActive ?? false;
+            _lastCastTime = Time.time;
         }
 
         /// <summary>
@@ -59,12 +60,11 @@ namespace CharacterProgressionMatrix
         {
             if (_onlyActivatesOnUnlock)
             {
-                SkillEffect();
+                StartSkillEffect();
                 return null;
             }
             
             return UpdateSkillState;
-            
         }
     
         /// <summary>
@@ -73,8 +73,25 @@ namespace CharacterProgressionMatrix
         /// <returns>true if skill is ready, false otherwise</returns>
         public bool ReadyToCast()
         {
-            return _lastCastTime + Duration + Cooldown < Time.time;
+            return (_lastCastTime + _duration + _cooldown < Time.time) || _alwaysActive;
         }
+        
+        public void Disable()
+        {
+            EndSkillEffect();
+            IsActive = false;
+        }
+        
+        public void Reset()
+        {
+            IsActive = false;
+            _lastCastTime = Time.deltaTime;
+        }
+        
+        /// <summary>
+        /// Is called after the Skill is created from a template, and should be used to initialize internal state that depends on public fields.
+        /// </summary>
+        protected abstract void InitializeAfterTemplateCreation();
 
         protected abstract void StartSkillEffect();
         
@@ -86,18 +103,22 @@ namespace CharacterProgressionMatrix
         {
             switch (IsActive)
             {
-                case true when _lastCastTime + Duration <= Time.time:
-                    EndSkillEffect();
-                    IsActive = false;
-                    break;
-                case true:
-                    SkillEffect();
-                    break;
+                // currently not active but ready to cast
                 case false when ReadyToCast():
                     IsActive = true;
                     _lastCastTime = Time.time;
                     StartSkillEffect();
                     break;
+                // active and skill duration is reached,
+                case true when !_alwaysActive && _lastCastTime + _duration <= Time.time:
+                    EndSkillEffect();
+                    IsActive = false;
+                    break;
+                // active effect
+                case true:
+                    SkillEffect();
+                    break;
+                
             }
         }
     }
