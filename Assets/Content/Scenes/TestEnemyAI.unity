@@ -1197,7 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f24d0659384ced43b1f8e1a194866c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomSize: {x: 30, y: 30}
+  <RoomSize>k__BackingField: {x: 30, y: 30}
 --- !u!1 &2094056950
 GameObject:
   m_ObjectHideFlags: 0

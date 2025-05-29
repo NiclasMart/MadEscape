@@ -29,7 +29,7 @@ namespace AI
         protected Room RoomRef { get; private set; }
         
         protected Skill Skill;
-        private Action _skillAction;
+        private Action _skillCastAction;
         
         private Vector3 _targetPosition = Vector3.positiveInfinity;
         
@@ -41,18 +41,19 @@ namespace AI
             if (UsedSkill != null)
             {
                 Skill = Skill.CreateSkillFromTemplate(UsedSkill.info, gameObject);
-                _skillAction = Skill.RegisterSkill();
+                _skillCastAction = Skill.RegisterSkill();
             }
         }
 
         void Update()
         {
-            _skillAction?.Invoke();
-            
+           _skillCastAction?.Invoke();
+           
             // ensures, that the path is only updated, when the position exceeds a certain threshold
             Vector3 newTargetPosition = CalculateNewTargetPosition();
             if (!DisableThresholdCheck && (_targetPosition - newTargetPosition).sqrMagnitude < PathUpdateThreshold) return;
             
+            // update target
             _targetPosition = newTargetPosition;
             Agent.destination = newTargetPosition;
         }
@@ -61,6 +62,8 @@ namespace AI
         {
             Agent.speed = stats.GetStat(Stat.MovementSpeed);
             Agent.stoppingDistance = stats.GetStat(Stat.AttackRange);
+            
+            //Todo: Reset Skill
         }
         
         // this is true on game start and when the agent reached its destination
@@ -68,8 +71,6 @@ namespace AI
         {
             return Agent.remainingDistance <= Agent.stoppingDistance && !Agent.pathPending;
         }
-
-
         
         protected abstract Vector3 CalculateNewTargetPosition();
     }

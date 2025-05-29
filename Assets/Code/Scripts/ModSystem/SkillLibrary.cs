@@ -10,34 +10,54 @@ namespace CharacterProgressionMatrix
             private Health _health;
 
             public int Amount = 5;
-            public float Multiplier = 10;
-            public GameObject _objectRef;
+            
 
             public Healer(SkillTemplate.SkillInfo info, GameObject user) : base(info, user)
             {
-                if (user == null) return;
                 _health = user.GetComponent<Health>();
             }
 
-            protected override void SkillEffect( /*params object[] args*/)
+            public override void InitializeAfterTemplateCreation() { }
+
+            protected override void StartSkillEffect() { }
+
+            protected override void SkillEffect()
             {
-                _health.TakeDamage(Amount * Time.deltaTime);
-                Debug.Log("Apply Damage");
+                _health.RegenerateHealth(Amount * Time.deltaTime);
             }
+
+            protected override void EndSkillEffect() { }
         }
 
-        public class DamageArea : ActiveSkill
+        public class DamageArea : Skill
         {
             public float Size;
-            
-            public DamageArea(SkillTemplate.SkillInfo info, GameObject target) : base(info, target)
+            public GameObject AreaVisualsPrefab;
+
+            private GameObject _areaRef;
+
+
+            public DamageArea(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
+
+            public override void InitializeAfterTemplateCreation()
             {
-                
+                _areaRef = Object.Instantiate(AreaVisualsPrefab, User.transform.position, Quaternion.identity, User.transform);
+                _areaRef.SetActive(false);
+            }
+
+            protected override void StartSkillEffect()
+            {
+                _areaRef.SetActive(true);
             }
 
             protected override void SkillEffect()
             {
-                Debug.Log($"Activate Area {User.gameObject.GetInstanceID()}");
+                
+            }
+
+            protected override void EndSkillEffect()
+            {
+                _areaRef.SetActive(false);
             }
         }
     }

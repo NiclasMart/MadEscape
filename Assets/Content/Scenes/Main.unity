@@ -185,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 729231206346974393, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: _startWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 6c7289a20b0b28d439c67de4d6b8bcce, type: 2}
+      objectReference: {fileID: 11400000, guid: 750cff232c863c545a0477d8a91c33f6, type: 2}
     - target: {fileID: 2366386277362078477, guid: 96d55fd7aa0ac6e4cb146deea892b8fb, type: 3}
       propertyPath: connectedDisplay
       value: 

@@ -9,7 +9,7 @@ namespace CharacterProgressionMatrix
         public float Duration;
         public float Cooldown;
         private float _lastCastTime;
-        private bool _active;
+        public bool IsActive { get; private set; }
         
         protected string Name;
         protected GameObject User;
@@ -33,9 +33,15 @@ namespace CharacterProgressionMatrix
 
                 parameterList[i].SetValue(skill, skillInfo.Parameters[i].ConvertValue<object>());
             }
-
+            
+            skill.InitializeAfterTemplateCreation();
             return skill;
         }
+        
+        /// <summary>
+        /// Is called after the Skill is created from a template, and should be used to initialize internal state that depends on public fields.
+        /// </summary>
+        public abstract void InitializeAfterTemplateCreation();
 
         protected Skill(SkillTemplate.SkillInfo info, GameObject target)
         {
@@ -45,41 +51,59 @@ namespace CharacterProgressionMatrix
             _onlyActivatesOnUnlock = info?.OnlyActivatedOnceOnUnlock ?? false;
         }
 
-        private void CastSkill()
-        {
-            if (_active)
-            {
-                SkillEffect();
-                if (_lastCastTime + Duration <= Time.time) _active = false;
-            }
-            
-            if (_lastCastTime + Duration + Cooldown < Time.time)
-            {
-                _active = true;
-                _lastCastTime = Time.time;
-            }
-        }
-        
-        protected abstract void SkillEffect();
-
-        // returns null if skill is instant use
-        // returns the Action otherwise
+        /// <summary>
+        /// Registers the Skill and returns the skill action. If the skill is only one time activation, it is cast immediately and null is returned.
+        /// </summary>
+        /// <returns>The Skill Action if it is an active skill, null otherwise.</returns>
         public Action RegisterSkill()
         {
             if (_onlyActivatesOnUnlock)
             {
-                CastSkill();
+                SkillEffect();
                 return null;
             }
-            else
+            
+            return UpdateSkillState;
+            
+        }
+    
+        /// <summary>
+        /// Checks if the Skill is ready to use
+        /// </summary>
+        /// <returns>true if skill is ready, false otherwise</returns>
+        public bool ReadyToCast()
+        {
+            return _lastCastTime + Duration + Cooldown < Time.time;
+        }
+
+        protected abstract void StartSkillEffect();
+        
+        protected abstract void SkillEffect();
+
+        protected abstract void EndSkillEffect();
+        
+        private void UpdateSkillState()
+        {
+            switch (IsActive)
             {
-                return CastSkill;
+                case true when _lastCastTime + Duration <= Time.time:
+                    EndSkillEffect();
+                    IsActive = false;
+                    break;
+                case true:
+                    SkillEffect();
+                    break;
+                case false when ReadyToCast():
+                    IsActive = true;
+                    _lastCastTime = Time.time;
+                    StartSkillEffect();
+                    break;
             }
         }
     }
 
-    public abstract class ActiveSkill : Skill
-    {
-        protected ActiveSkill(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
-    }
+    // public abstract class ActiveSkill : Skill
+    // {
+    //     protected ActiveSkill(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
+    // }
 }
