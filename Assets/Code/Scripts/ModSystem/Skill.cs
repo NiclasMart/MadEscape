@@ -40,9 +40,9 @@ namespace CharacterProgressionMatrix
         protected Skill(SkillTemplate.SkillInfo info, GameObject target)
         {
             User = target;
-            Name = info.Name;
+            Name = info?.Name;
             _lastCastTime = Time.time;
-            _onlyActivatesOnUnlock = info.OnlyActivatedOnceOnUnlock;
+            _onlyActivatesOnUnlock = info?.OnlyActivatedOnceOnUnlock ?? false;
         }
 
         private void CastSkill()
