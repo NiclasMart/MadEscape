@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3f81b2dcb4b1844f83947508f7561ea, type: 3}
-  m_Name: Shotgun
+  m_Name: NO_DAMAGE_WEAPON
   m_EditorClassIdentifier: 
-  WeaponID: 3
-  BulletColor: {r: 0, g: 0, b: 0, a: 0.9372549}
+  WeaponID: 0
+  BulletColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   ShootSFX: 300
   WeaponModel: {fileID: 4687268025117751084, guid: 481a121370b3e09479454b5f0b400ab9, type: 3}
