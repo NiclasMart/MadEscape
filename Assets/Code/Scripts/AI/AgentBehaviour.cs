@@ -10,8 +10,6 @@ using System;
 using CharacterProgressionMatrix;
 using Generator;
 using Stats;
-using Unity.AI.Navigation;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,12 +22,13 @@ namespace AI
 
         [SerializeField] private SkillTemplate UsedSkill;
         
-        protected bool DisableThresholdCheck = false;
+        [SerializeField] protected bool DisableDistanceThresholdCheck = false;
+        [SerializeField] protected bool PauseAgentDuringSkillUse = false;
         protected NavMeshAgent Agent { get; private set; }
         protected Room RoomRef { get; private set; }
         
         protected Skill Skill;
-        private Action _skillCastAction;
+        private Func<bool> _skillCastAction;
         
         private Vector3 _targetPosition = Vector3.positiveInfinity;
         
@@ -46,15 +45,21 @@ namespace AI
 
         void Update()
         {
-           _skillCastAction?.Invoke();
+           bool SkillWasCasted = _skillCastAction?.Invoke() ?? false;
+           if (PauseAgentDuringSkillUse && SkillWasCasted)
+           {
+               Agent.enabled = false;
+               return;
+           }
+           Agent.enabled = true;
            
-            // ensures, that the path is only updated, when the position exceeds a certain threshold
-            Vector3 newTargetPosition = CalculateNewTargetPosition();
-            if (!DisableThresholdCheck && (_targetPosition - newTargetPosition).sqrMagnitude < PathUpdateThreshold) return;
+           // ensures, that the path is only updated, when the position exceeds a certain threshold
+           Vector3 newTargetPosition = CalculateNewTargetPosition();
+           if (!DisableDistanceThresholdCheck && (_targetPosition - newTargetPosition).sqrMagnitude < PathUpdateThreshold) return;
             
-            // update target
-            _targetPosition = newTargetPosition;
-            Agent.destination = newTargetPosition;
+           // update target
+           _targetPosition = newTargetPosition; 
+           Agent.destination = newTargetPosition;
         }
 
         private void OnEnable()
@@ -64,6 +69,7 @@ namespace AI
 
         private void OnDisable()
         {
+            _skillCastAction = null;
             Skill.Disable();
         }
 

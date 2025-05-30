@@ -56,7 +56,7 @@ namespace CharacterProgressionMatrix
         /// Registers the Skill and returns the skill action. If the skill is only one time activation, it is cast immediately and null is returned.
         /// </summary>
         /// <returns>The Skill Action if it is an active skill, null otherwise.</returns>
-        public Action RegisterSkill()
+        public Func<bool> RegisterSkill()
         {
             if (_onlyActivatesOnUnlock)
             {
@@ -71,7 +71,7 @@ namespace CharacterProgressionMatrix
         /// Checks if the Skill is ready to use
         /// </summary>
         /// <returns>true if skill is ready, false otherwise</returns>
-        public bool ReadyToCast()
+        public virtual bool ReadyToCast()
         {
             return (_lastCastTime + _duration + _cooldown < Time.time) || _alwaysActive;
         }
@@ -92,14 +92,14 @@ namespace CharacterProgressionMatrix
         /// Is called after the Skill is created from a template, and should be used to initialize internal state that depends on public fields.
         /// </summary>
         protected abstract void InitializeAfterTemplateCreation();
-
+        
         protected abstract void StartSkillEffect();
         
         protected abstract void SkillEffect();
 
         protected abstract void EndSkillEffect();
         
-        private void UpdateSkillState()
+        private bool UpdateSkillState()
         {
             switch (IsActive)
             {
@@ -108,23 +108,20 @@ namespace CharacterProgressionMatrix
                     IsActive = true;
                     _lastCastTime = Time.time;
                     StartSkillEffect();
-                    break;
+                    return true;
                 // active and skill duration is reached,
                 case true when !_alwaysActive && _lastCastTime + _duration <= Time.time:
                     EndSkillEffect();
                     IsActive = false;
-                    break;
+                    return true;
                 // active effect
                 case true:
                     SkillEffect();
-                    break;
-                
+                    return true;
+                // skill is inactive
+                default:
+                    return false;
             }
         }
     }
-
-    // public abstract class ActiveSkill : Skill
-    // {
-    //     protected ActiveSkill(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
-    // }
 }

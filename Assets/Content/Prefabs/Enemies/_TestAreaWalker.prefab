@@ -79,3 +79,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UsedSkill: {fileID: 11400000, guid: bfe8fca424f44aa4c881284cdfdcc6c2, type: 2}
+  DisableDistanceThresholdCheck: 0
+  PauseAgentDuringSkillUse: 1

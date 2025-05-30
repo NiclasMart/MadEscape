@@ -24,26 +24,15 @@ MonoBehaviour:
       Vector3Value: {x: 0, y: 0, z: 0}
       GameObjectValue: {fileID: 0}
     - type: 5
-      IntValue: 0
-      FloatValue: 10
+      IntValue: 5
+      FloatValue: 0
       BoolValue: 0
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       GameObjectValue: {fileID: 2206372060321429187, guid: 3f9628cd6cc95b643ba141e8b9dfe85b, type: 3}
-    - type: 1
-      IntValue: 0
-      FloatValue: 2
-      BoolValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      GameObjectValue: {fileID: 0}
-    - type: 1
-      IntValue: 0
-      FloatValue: 4
-      BoolValue: 0
-      StringValue: 
-      Vector3Value: {x: 0, y: 0, z: 0}
-      GameObjectValue: {fileID: 0}
     OnlyActivatedOnceOnUnlock: 0
+    AlwaysActive: 0
+    Duration: 3
+    Cooldown: 3
     Description: asdsdfs
     isDirty: 0
