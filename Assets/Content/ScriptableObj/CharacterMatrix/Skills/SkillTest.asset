@@ -18,14 +18,28 @@ MonoBehaviour:
     Parameters:
     - type: 1
       IntValue: 5
-      FloatValue: 0
+      FloatValue: 10
+      BoolValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      GameObjectValue: {fileID: 0}
+    - type: 1
+      IntValue: 5
+      FloatValue: 0.5
+      BoolValue: 0
+      StringValue: 
+      Vector3Value: {x: 0, y: 0, z: 0}
+      GameObjectValue: {fileID: 0}
+    - type: 1
+      IntValue: 5
+      FloatValue: 30
       BoolValue: 0
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}
       GameObjectValue: {fileID: 0}
     - type: 5
       IntValue: 5
-      FloatValue: 0
+      FloatValue: 3
       BoolValue: 0
       StringValue: 
       Vector3Value: {x: 0, y: 0, z: 0}

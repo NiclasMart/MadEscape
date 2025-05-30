@@ -51,7 +51,7 @@ namespace VitalForces
         {
             if (context.performed && (playerHealth.CurrentValue > convertedHealthAmount))
             {
-                playerHealth.TakeDamage(convertedHealthAmount);
+                playerHealth.ApplyDamage(convertedHealthAmount);
                 float sanityGain = convertedHealthAmount * sanityConversionFactor;
                 StartCoroutine(RestoreSanityOverTime(sanityGain, sanityRestoreTime));
             }

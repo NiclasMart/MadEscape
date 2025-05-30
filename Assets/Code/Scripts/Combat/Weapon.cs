@@ -114,7 +114,7 @@ namespace Combat
             {
                 int amount = _bulletSystem.GetCollisionEvents(hitObject, _collisionEvents);
                 float damage = amount * CalculateDamage();
-                health.TakeDamage(damage);
+                health.ApplyDamage(damage);
 
                 Debug.Log($"BulletHits: {amount} on {hitObject.name} with {damage} damage");
             }

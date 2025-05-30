@@ -43,9 +43,9 @@ namespace Controller
             base.OnEnable(); // Calls BaseController's OnEnable to handle HandleDeath subscription
 
             // Subscribe to additional callbacks specific to EnemyController
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
+                Health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
             }
         }
 
@@ -54,9 +54,9 @@ namespace Controller
             base.OnDisable(); // Calls BaseController's OnDisable to handle HandleDeath unsubscription
 
             // Unsubscribe from additional callbacks specific to EnemyController
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
+                Health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterDealtDamage;
             }
         }
 

@@ -82,7 +82,7 @@ namespace CharacterProgressionMatrix
             IsActive = false;
         }
         
-        public void Reset()
+        public virtual void Reset()
         {
             IsActive = false;
             _lastCastTime = Time.deltaTime;
