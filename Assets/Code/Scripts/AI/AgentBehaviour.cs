@@ -22,8 +22,8 @@ namespace AI
 
         [SerializeField] private SkillTemplate UsedSkill;
         
-        [SerializeField] protected bool DisableDistanceThresholdCheck = false;
-        [SerializeField] protected bool PauseAgentDuringSkillUse = false;
+        [SerializeField] private bool DisableDistanceThresholdCheck = false;
+        [SerializeField] private bool PauseAgentDuringSkillUse = false;
         protected NavMeshAgent Agent { get; private set; }
         protected Room RoomRef { get; private set; }
         

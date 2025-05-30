@@ -41,18 +41,23 @@ namespace CharacterProgressionMatrix
 
             private int _targetLayerMask;
             private GameObject _areaRef;
+            private Collider[] _hitBuffer;
             private float _lastDamageTime = Mathf.NegativeInfinity;
 
             public DamageArea() { }
 
-            public DamageArea(SkillTemplate.SkillInfo info, GameObject target) : base(info, target) { }
+            public DamageArea(SkillTemplate.SkillInfo info, GameObject target) : base(info, target)
+            {
+                GameManager gameManager = ServiceProvider.Get<GameManager>();
+                _hitBuffer = new Collider[gameManager.PlayerCount];
+                _targetLayerMask = gameManager.GetPlayer().gameObject.layer;
+            }
 
             protected override void InitializeAfterTemplateCreation()
             {
                 _areaRef = Object.Instantiate(AreaVisualsPrefab, User.transform.position, Quaternion.identity, User.transform);
                 _areaRef.transform.localScale = new Vector3(Size, _areaRef.transform.localScale.y, Size);
                 _areaRef.SetActive(false);
-                _targetLayerMask = ServiceProvider.Get<GameManager>().GetPlayer().gameObject.layer;
             }
 
             protected override void StartSkillEffect()
@@ -62,22 +67,18 @@ namespace CharacterProgressionMatrix
 
             protected override void SkillEffect()
             {
-                if (_lastDamageTime + DamageRate < Time.time)
+                if (!(_lastDamageTime + DamageRate < Time.time)) return;
+                
+                int hitCount = Physics.OverlapSphereNonAlloc(User.transform.position, Size, _hitBuffer, 1 << _targetLayerMask);
+
+                for (int i = 0; i < hitCount; i++)
                 {
-                    var targetHits = Physics.OverlapSphere(User.transform.position, Size, 1 << _targetLayerMask);
-
-                    foreach (var targets in targetHits)
-                    {
-                        var player = targets.GetComponent<PlayerController>();
-                        if (player != null)
-                        {
-                            player.Health.ApplyDamage(Damage);
-                            Debug.Log("Apply damage to player");
-                        }
-                    }
-
-                    _lastDamageTime = Time.time;
+                    var player = _hitBuffer[i].GetComponent<PlayerController>();
+                    if (player == null) continue;
+                    
+                    player.Health.ApplyDamage(Damage);
                 }
+                _lastDamageTime = Time.time;
             }
             
             protected override void EndSkillEffect()
