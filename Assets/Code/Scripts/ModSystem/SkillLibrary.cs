@@ -69,7 +69,7 @@ namespace CharacterProgressionMatrix
             {
                 if (!(_lastDamageTime + DamageRate < Time.time)) return;
                 
-                int hitCount = Physics.OverlapSphereNonAlloc(User.transform.position, Size, _hitBuffer, 1 << _targetLayerMask);
+                int hitCount = Physics.OverlapSphereNonAlloc(User.transform.position, Size / 2f, _hitBuffer, 1 << _targetLayerMask);
 
                 for (int i = 0; i < hitCount; i++)
                 {
