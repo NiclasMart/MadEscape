@@ -21,11 +21,11 @@ namespace AI
         private const float PathUpdateThreshold = 1f;
 
         [SerializeField] private SkillTemplate UsedSkill;
-        
-        [SerializeField] private bool DisableDistanceThresholdCheck = false;
         [SerializeField] private bool PauseAgentDuringSkillUse = false;
+        
         protected NavMeshAgent Agent { get; private set; }
         protected Room RoomRef { get; private set; }
+        protected bool DisableDistanceThresholdCheck = false;
         
         protected Skill Skill;
         private Func<bool> _skillCastAction;
