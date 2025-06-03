@@ -7,6 +7,16 @@ namespace CharacterProgressionMatrix
 {
     public class SkillLibrary
     {
+        public class RESET : Skill
+        {
+            protected override void InitializeAfterTemplateCreation() { }
+
+            protected override void StartSkillEffect() { }
+
+            protected override void SkillEffect() { }
+
+            protected override void EndSkillEffect() { }
+        }
         public class Healer : Skill
         {
             private Health _health;
@@ -64,7 +74,8 @@ namespace CharacterProgressionMatrix
             {
                 _areaRef.SetActive(true);
             }
-
+            
+            //Todo: Multiplayer implementation
             protected override void SkillEffect()
             {
                 if (!(_lastDamageTime + DamageRate < Time.time)) return;
