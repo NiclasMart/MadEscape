@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CharacterProgressionMatrix;
+using TMPro;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -19,6 +20,44 @@ public class SkillInfoDrawer : PropertyDrawer
         // Name
         var nameField = new PropertyField(property.FindPropertyRelative("Name"), "Skill Name");
         container.Add(nameField);
+        
+        // Erstellen der PropertyFields für Duration und Cooldown
+        var durationValueField = new PropertyField(property.FindPropertyRelative("Duration"), "Duration");
+        var cooldownField = new PropertyField(property.FindPropertyRelative("Cooldown"), "Cooldown");
+
+        // Erstellen der PropertyFields für die Checkboxes
+        var activateOnceCheckbox = new PropertyField(property.FindPropertyRelative("OnlyActivatedOnceOnUnlock"), "Activate Once");
+        var alwaysActiveCheckbox = new PropertyField(property.FindPropertyRelative("AlwaysActive"), "Always Active");
+
+        // Hinzufügen der Felder zum Container
+        container.Add(activateOnceCheckbox);
+        container.Add(alwaysActiveCheckbox);
+        container.Add(durationValueField);
+        container.Add(cooldownField);
+        
+
+        // Initiale Sichtbarkeitssteuerung
+        UpdateFieldsVisibility(property, durationValueField, cooldownField);
+
+        // Callback für Änderungen an der "Activate Once"-Checkbox
+        activateOnceCheckbox.RegisterCallback<ChangeEvent<bool>>(e =>
+        {
+            // Wenn "Activate Once" aktiviert wird, deaktiviere "Always Active"
+            alwaysActiveCheckbox.SetEnabled(value: !e.newValue);
+            
+            // Sichtbarkeit der Felder aktualisieren
+            UpdateFieldsVisibility(property, durationValueField, cooldownField);
+        });
+
+        // Callback für Änderungen an der "Always Active"-Checkbox
+        alwaysActiveCheckbox.RegisterCallback<ChangeEvent<bool>>(e =>
+        {
+            // Wenn "Always Active" aktiviert wird, deaktiviere "Activate Once"
+            activateOnceCheckbox.SetEnabled(value: !e.newValue);
+            
+            // Sichtbarkeit der Felder aktualisieren
+            UpdateFieldsVisibility(property, durationValueField, cooldownField);
+        });
 
         // Description
         var descriptionField = new TextField("Description", 100, true, false, ' ');
@@ -31,14 +70,22 @@ public class SkillInfoDrawer : PropertyDrawer
             property.serializedObject.ApplyModifiedProperties();
         });
         container.Add(descriptionField);
+        
+        var gap = new VisualElement();
+        gap.style.height = 30; // Setzt die Höhe der Lücke
+        container.Add(gap);
 
-        // Update loop check
-        var updateCheckerField = new PropertyField(property.FindPropertyRelative("OnlyActivatedOnceOnUnlock"), "ActivatedOnce");
-        updateCheckerField.tooltip = "Should be checked, if the skill is only activated once one unlock like for stat increasements";
-        container.Add(updateCheckerField);
-
+        // Überschrift hinzufügen
+        var heading = new Label("Skill Specifics");
+        heading.style.fontSize = 14;  // Schriftgröße
+        container.Add(heading);
+        
+        var gap2 = new VisualElement();
+        gap2.style.height = 10; // Setzt die Höhe der Lücke
+        container.Add(gap2);
+        
         // Skill
-        Type[] skillList = typeof(CharacterSkillLibrary).GetNestedTypes(BindingFlags.Public);
+        Type[] skillList = typeof(SkillLibrary).GetNestedTypes(BindingFlags.Public);
         List<string> dropdownOptions = new();
         foreach (var skill in skillList)
         {
@@ -106,7 +153,7 @@ public class SkillInfoDrawer : PropertyDrawer
             object classInstance = null;
             if (property.FindPropertyRelative("isDirty").boolValue)
             {
-                classInstance = Activator.CreateInstance(classType, new object[] { null, null });
+                classInstance = Activator.CreateInstance(classType, null);
                 // value = parameterList[i].GetValue(parameterList[i]);
             }
 
@@ -207,6 +254,25 @@ public class SkillInfoDrawer : PropertyDrawer
                     );
                     field = vector3Field;
                     break;
+                
+                case ValueType.GameObject:
+                    SerializedProperty gameObjectProp = paramProp.FindPropertyRelative("GameObjectValue");
+                    ObjectField gameObjectField = new($"{parameterList[i].Name} (GameObject)");
+
+                    // set values to the field
+                    if (classInstance != null) gameObjectField.value = (GameObject)parameterList[i].GetValue(classInstance); // take base value from class
+                    else gameObjectField.value = gameObjectProp.objectReferenceValue; // take saved value
+                    gameObjectProp.objectReferenceValue = gameObjectField.value;
+
+                    gameObjectField.RegisterValueChangedCallback(
+                        evt =>
+                        {
+                            gameObjectProp.objectReferenceValue = evt.newValue;
+                            parameterProperty.serializedObject.ApplyModifiedProperties();
+                        }
+                    );
+                    field = gameObjectField;
+                    break;
 
                 default:
                     field = new Label($"{parameterList[i].Name}: Unsupported Type");
@@ -220,5 +286,19 @@ public class SkillInfoDrawer : PropertyDrawer
         Debug.Log("Set Clean");
         return paramContainer;
 
+    }
+    
+    private void UpdateFieldsVisibility(SerializedProperty property, VisualElement durationValueField, VisualElement cooldownField)
+    {
+        // Zugriff auf die aktuellen Werte der Checkboxen über SerializedProperty
+        bool isActivateOnceChecked = property.FindPropertyRelative("OnlyActivatedOnceOnUnlock").boolValue;
+        bool isAlwaysActiveChecked = property.FindPropertyRelative("AlwaysActive").boolValue;
+
+        // Zeige die Felder nur, wenn beide Checkboxen deaktiviert sind
+        bool showFields = !(isActivateOnceChecked || isAlwaysActiveChecked);
+
+        // Sichtbarkeit der Felder festlegen
+        durationValueField.style.display = showFields ? DisplayStyle.Flex : DisplayStyle.None;
+        cooldownField.style.display = showFields ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }

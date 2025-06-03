@@ -20,36 +20,36 @@ namespace Controller
         public int ID => _statID;
         [SerializeField] protected WeaponTemplate _startWeapon;
         protected CharacterStats _stats;
-        protected Health _health;
+        public Health Health { get; private set; }
 
         protected virtual void Awake()
         {
             _stats = GetComponent<CharacterStats>();
-            _health = GetComponent<Health>();
+            Health = GetComponent<Health>();
         }
 
         protected virtual void OnEnable()
         {
             // Subscribe to callbacks when the object is enabled
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnDeath += HandleDeath;
+                Health.OnDeath += HandleDeath;
             }
         }
 
         protected virtual void OnDisable()
         {
             // Unsubscribe from callbacks when the object is disabled
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnDeath -= HandleDeath;
+                Health.OnDeath -= HandleDeath;
             }
         }
 
         public void Initialize(Dictionary<Stat, float> baseStats)
         {
             _stats.Initialize(baseStats);
-            _health.Initialize(_stats);
+            Health.Initialize(_stats);
         }
 
         protected Weapon MountWeapon(GameObject target, string targetLayer)

@@ -15,6 +15,8 @@ namespace Core
 {
     public class GameManager : MonoBehaviour, IService
     {
+        public readonly int PlayerCount = 1;
+        
         private PlayerController _player;
         private GameOverScreen _gameOverScreen;
         private ProgressTimer _progressTimer;

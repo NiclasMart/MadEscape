@@ -58,7 +58,7 @@ namespace CharacterProgressionMatrix
         public void UnlockSkill(int rowIndex, int columnIndex)
         {
             ISocket<ISocketable> socket = GetSocket(rowIndex, columnIndex);
-            OnUpdateCharacterMatrix += socket?.Skill?.Unlock(); // registers skill to update loop
+            // OnUpdateCharacterMatrix += socket?.Skill?.Unlock(); // registers skill to update loop
         }
 
         /// <summary>

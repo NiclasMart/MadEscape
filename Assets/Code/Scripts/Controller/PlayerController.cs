@@ -42,9 +42,9 @@ namespace Controller
         {
             base.OnEnable();
 
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
+                Health.OnTakeDamage += ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
             }
         }
 
@@ -52,9 +52,9 @@ namespace Controller
         {
             base.OnDisable();
 
-            if (_health != null)
+            if (Health != null)
             {
-                _health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
+                Health.OnTakeDamage -= ServiceProvider.Get<StatisticTracker>().RegisterSufferedDamage;
             }
         }
 

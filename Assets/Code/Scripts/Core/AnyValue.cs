@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum ValueType { Int, Float, Bool, String, Vector3 }
+public enum ValueType { Int, Float, Bool, String, Vector3, GameObject }
 
 [Serializable]
 public struct AnyValue
@@ -14,6 +14,7 @@ public struct AnyValue
     public bool BoolValue;
     public string StringValue;
     public Vector3 Vector3Value;
+    public GameObject GameObjectValue;
 
 
     // Implicit conversion operators to convert TypeValue to different types
@@ -22,6 +23,7 @@ public struct AnyValue
     public static implicit operator bool(AnyValue value) => value.ConvertValue<bool>();
     public static implicit operator string(AnyValue value) => value.ConvertValue<string>();
     public static implicit operator Vector3(AnyValue value) => value.ConvertValue<Vector3>();
+    public static implicit operator GameObject(AnyValue value) => value.ConvertValue<GameObject>();
 
     public T ConvertValue<T>()
     {
@@ -54,6 +56,7 @@ public struct AnyValue
             ValueType.Float => typeof(float),
             ValueType.String => typeof(string),
             ValueType.Vector3 => typeof(Vector3),
+            ValueType.GameObject => typeof(GameObject),
             _ => throw new NotSupportedException($"Unsupported ValueType: {valueType}")
         };
     }
@@ -68,6 +71,7 @@ public struct AnyValue
             _ when type == typeof(float) => ValueType.Float,
             _ when type == typeof(string) => ValueType.String,
             _ when type == typeof(Vector3) => ValueType.Vector3,
+            _ when type == typeof(GameObject) => ValueType.GameObject,
             _ => throw new NotSupportedException($"Unsupported type: {type}")
         };
     }
@@ -81,6 +85,7 @@ public struct AnyValue
             ValueType.Bool => (T)(object)BoolValue,
             ValueType.String => (T)(object)StringValue,
             ValueType.Vector3 => (T)(object)Vector3Value,
+            ValueType.GameObject => (T)(object)GameObjectValue,
             _ => throw new InvalidCastException($"Cannot convert AnyValue of type {type} to {typeof(T).Name}")
         };
     }

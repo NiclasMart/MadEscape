@@ -14,6 +14,9 @@ public class SkillTemplate : ScriptableObject
         public string SkillRef; //look into video: https://www.youtube.com/watch?v=jvokCXXYHCg
         public AnyValue[] Parameters;
         public bool OnlyActivatedOnceOnUnlock = false;
+        public bool AlwaysActive = false;
+        public float Duration;
+        public float Cooldown;
         public string Description;
         public bool isDirty = true;
     }

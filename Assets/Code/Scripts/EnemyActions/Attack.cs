@@ -54,7 +54,7 @@ namespace EnemyActions
                 {
                     //TODO: maybe we can add a function to get the health directly via the player controller, so we only need one GetComponent call
                     Health targetHealth = target.GetComponent<Health>();
-                    targetHealth.TakeDamage(_attackDamage);
+                    targetHealth.ApplyDamage(_attackDamage);
                     _nextAttackTime = Time.time + _attackInterval;
                     _attacked = true;
                 }

@@ -41,7 +41,7 @@ namespace VitalForces
             RegenerateHealth(lifeRegen * Time.deltaTime);
         }
 
-        public void TakeDamage(float amount)
+        public void ApplyDamage(float amount)
         {
             float damage = DamageCalculator.CalculateDamage(amount, armor);
             Change(-damage);
